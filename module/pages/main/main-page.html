@@ -1,0 +1,26 @@
+<h4 id="h2Id">
+    teleport-my-module-main-page
+    <br>
+    <img src="../img/shoutpoint.png">
+</h4>
+
+<teleport-search-bar></teleport-search-bar>
+
+<md-card>
+
+    <p>Please Login</p>
+    <md-input-container>
+        <input mdInput type="text" placeholder="Username" [(ngModel)]="formData.username">
+    </md-input-container>
+
+    <p>Password</p>
+    <md-input-container>
+        <input mdInput type="password" placeholder="Password" [(ngModel)]="formData.password">
+    </md-input-container>
+
+    <p>
+        <button md-raised-button (click)="onLogin()">Login</button>
+        <button md-raised-button (click)="onCancel()">Cancel</button>
+    </p>
+
+</md-card>

@@ -1,0 +1,9 @@
+demo/
+module/
+
+.*
+gulpfile.js
+karma*
+tsconfig.json
+tslint.json
+webpack*
