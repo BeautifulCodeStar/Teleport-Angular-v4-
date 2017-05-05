@@ -11,10 +11,12 @@ import { MessageService }                           from "../../../services/mess
 
 
 @Component({
-    selector   : "ui-data-logs",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/data/data.logs.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-data-logs",
+    templateUrl: "data.logs.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UIDataLogs implements OnInit, OnDestroy {
+export class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
 
     public filters: ILogsRequest;
 
@@ -57,7 +59,7 @@ export class UIDataLogs implements OnInit, OnDestroy {
         @Inject(ApplicationService) private apps: ApplicationService,
         @Inject(MessageService)     private messages: MessageService,
         @Inject(Router)             private router: Router,
-        @Inject(Location)           private location: Location
+        @Inject(Location)           private location: Location,
     ) {}
 
 
@@ -83,7 +85,7 @@ export class UIDataLogs implements OnInit, OnDestroy {
 
         this.location.replaceState(
             (window.location as any).pathname,
-            Object.keys(this.filters).reduce((p: string, c: string) => `${p}&${c}=${encodeURIComponent(String((this.filters as any)[c]))}`, `sortOn=${this._sortOn}`)
+            Object.keys(this.filters).reduce((p: string, c: string) => `${p}&${c}=${encodeURIComponent(String((this.filters as any)[c]))}`, `sortOn=${this._sortOn}`),
         );
     }
 
@@ -119,8 +121,8 @@ export class UIDataLogs implements OnInit, OnDestroy {
         if (this._subscriptions) {
             this._subscriptions.forEach(s => s.unsubscribe());
         }
-        this._logs = undefined;
-        this._apps = undefined;
+        delete this._logs;
+        delete this._apps;
     }
 
     public get isBusy () {

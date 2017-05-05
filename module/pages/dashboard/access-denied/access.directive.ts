@@ -1,7 +1,5 @@
 
-import {Directive, ElementRef, Input, Renderer, Inject, AfterViewInit} from "@angular/core";
-
-import { IUserPermissions } from "../../../models/interfaces";
+import { Directive, ElementRef, Input, Renderer2, Inject, AfterViewInit } from "@angular/core";
 
 import { validate }       from "../../../utils/Permissions";
 import { SessionService } from "../../../services/session.service";
@@ -12,25 +10,24 @@ import { SessionService } from "../../../services/session.service";
 })
 export class AllowAccessDirective implements AfterViewInit {
 
-    @Input("allowAccess") private permissions: string;
+    @Input("allowAccess") private allowAccess: string;
 
     constructor(
         @Inject(ElementRef)     private el: ElementRef,
-        @Inject(Renderer)       private renderer: Renderer,
+        @Inject(Renderer2)      private renderer: Renderer2,
         @Inject(SessionService) private session: SessionService,
     ) {
-        renderer.setElementClass(el.nativeElement, "block-access", true);
+        renderer.addClass(el.nativeElement, "block-access");
     }
 
     public ngAfterViewInit () {
 
-        // console.log("PERMISSIONS =>", this.permissions, this.el.nativeElement);
         this.session.Observable
             .first(s => !! s && !! s.developer)
             .subscribe (s => {
 
-                if (this.permissions.split(" ").some(p => validate(s.developer.permissions, { [p]: true }))) {
-                    this.renderer.setElementClass(this.el.nativeElement, "block-access", false);
+                if (this.allowAccess.split(" ").some(p => s !== null && validate(s.developer.permissions, { [p]: true }))) {
+                    this.renderer.removeClass(this.el.nativeElement, "block-access");
                 }
             });
     }

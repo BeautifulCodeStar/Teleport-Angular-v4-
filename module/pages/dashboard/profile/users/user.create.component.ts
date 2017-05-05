@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { Router }                               from "@angular/router";
 
-import {IUser, IDeveloper} from "../../../../models/interfaces";
+import { IUser, IDeveloper } from "../../../../models/interfaces";
 
 import { AccountService } from "../../../../services/account.service";
 import { UserService }    from "../../../../services/user.service";
@@ -12,16 +12,18 @@ import * as Permissions   from "../../../../utils/Permissions";
 
 
 @Component({
-    selector   : "ui-user-create",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/profile/users/user.create.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-user-create",
+    templateUrl: "user.create.html",
+    styleUrls  : [ "../../../../css/bootswatch.css", "../../../../css/main.min.css" ],
 })
-export class UIUserCreate implements OnInit, OnDestroy {
+export class TeleportDevPortalUserCreateComponent implements OnInit, OnDestroy {
 
     public isBusy = false;
     public isSendInvite = true;
+    public User: IUser;
 
     private _developer: IDeveloper;
-    private User: IUser;
 
     constructor (
         @Inject(Router)         private router: Router,
@@ -59,7 +61,7 @@ export class UIUserCreate implements OnInit, OnDestroy {
                     this.isBusy = false;
 
                 } else {
-                    this.router.navigate(["/dashboard/access-denied"], { queryParams: { perms: "account.users.create" }});
+                    return this.router.navigate(["/dashboard/access-denied"], { queryParams: { perms: "account.users.create" }});
                 }
             });
     }
@@ -68,8 +70,8 @@ export class UIUserCreate implements OnInit, OnDestroy {
     public ngOnDestroy () {
 
         console.log("UIUserCreate Destroy");
-        this._developer = undefined;
-        this.User = undefined;
+        delete this._developer;
+        delete this.User;
     }
 
 
@@ -98,14 +100,14 @@ export class UIUserCreate implements OnInit, OnDestroy {
                     this.users.sendInvite(user);
                     this.messages.info("Email Invite Sent", "An email invitation has been sent to the user.");
                 }
-                this.router.navigateByUrl("/dashboard/account/users");
+                this.router.navigateByUrl("/dashboard/account/users").catch(err => console.error(err));
             })
             .catch(err => {
                 this.isBusy = false;
                 this.messages.error(
                     "New User Failure",
                     "An unexpected error prevented the user from being created. Try again or contact support.",
-                    err
+                    err,
                 );
             });
     }

@@ -1,8 +1,9 @@
 
 import { NgModule } from "@angular/core";
 
-import { RolePickerWidget, RolePickerRow } from "./role-picker.component";
-import {SharedModule} from "../../../../shared.module";
+import { SharedModule } from "../../../../shared.module";
+
+import { TeleportDevPortalRolePickerComponent, TeleportDevPortalRolePickerRowComponent } from "./role-picker.component";
 
 
 @NgModule({
@@ -10,12 +11,12 @@ import {SharedModule} from "../../../../shared.module";
         SharedModule,
     ],
     declarations: [
-        RolePickerWidget,
-        RolePickerRow,
+        TeleportDevPortalRolePickerComponent,
+        TeleportDevPortalRolePickerRowComponent,
     ],
     exports: [
-        RolePickerWidget,
-        RolePickerRow,
+        TeleportDevPortalRolePickerComponent,
+        TeleportDevPortalRolePickerRowComponent,
     ],
 })
 export class RolePickerModule {}

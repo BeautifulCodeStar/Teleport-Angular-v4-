@@ -8,10 +8,12 @@ import { Modal }         from "../../../services/modal.service";
 
 
 @Component({
-    selector   : "ui-alerts",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/profile/profile.alerts.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-alerts",
+    templateUrl: "profile.alerts.html",
+    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
 })
-export class UIProfileAlerts implements OnInit, OnDestroy {
+export class TeleportDevPortalProfileAlertsComponent implements OnInit, OnDestroy {
 
     private _subscription: Subscription;
 
@@ -20,7 +22,7 @@ export class UIProfileAlerts implements OnInit, OnDestroy {
 
     constructor (
         @Inject(AlertsService) private alerts: AlertsService,
-        @Inject(Modal.Service) private modal: Modal.Service
+        @Inject(Modal.Service) private modal: Modal.Service,
     ) {}
 
     public ngOnInit () {
@@ -52,7 +54,7 @@ export class UIProfileAlerts implements OnInit, OnDestroy {
     }
 
     public refresh () {
-        this.alerts.refresh();
+        this.alerts.refresh().catch(err => console.error(err));
     }
 
     public onDelete(alert: IAlert) {

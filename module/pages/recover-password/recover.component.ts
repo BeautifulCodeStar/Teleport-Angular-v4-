@@ -12,10 +12,12 @@ import { EmailValidator } from "../../utils/EmailValidator";
 
 
 @Component({
-    selector   : "ui-recover-password",
-    templateUrl: DOC_BASE_HREF + "/directives/recover-password/recover.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-recover-password",
+    templateUrl: "recover.html",
+    styleUrls  : [ "../css/bootswatch.css", "../css/main.min.css" ],
 })
-export class UIRecoverPassword implements OnInit, OnDestroy {
+export class TeleportDevPortalRecoverPasswordComponent implements OnInit, OnDestroy {
 
     public isBusy = false;
     public isSuccess = false;
@@ -32,7 +34,7 @@ export class UIRecoverPassword implements OnInit, OnDestroy {
     constructor (
         @Inject(ActivatedRoute) private route: ActivatedRoute,
         @Inject(LoginService)   private logins: LoginService,
-        @Inject(MessageService) private messages: MessageService
+        @Inject(MessageService) private messages: MessageService,
     ) {}
 
     public ngOnInit () {

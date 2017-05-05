@@ -12,13 +12,13 @@ import { MessageService }                    from "../../../services/message.ser
 import { UsageService, IUsageRequest, IUsageResponse } from "../../../services/usage.service";
 
 
-interface IFilters {
+export interface IFilters {
     beginDate: string;
     endDate: string;
     appId: string;
 }
 
-interface IUsageView {
+export interface IUsageView {
     type: "total" | "service" | "location" | "item";
     description: string;
     quantity: number;
@@ -27,10 +27,12 @@ interface IUsageView {
 }
 
 @Component({
-    selector   : "ui-data-usage",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/data/data.usage.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-data-usage",
+    templateUrl: "data.usage.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UIDataUsage implements OnInit, OnDestroy {
+export class TeleportDevPortalDataUsageComponent implements OnInit, OnDestroy {
 
     public filters: IFilters;
 
@@ -42,7 +44,7 @@ export class UIDataUsage implements OnInit, OnDestroy {
 
 
     constructor (
-        @Inject(UsageService)       private usage: UsageService,
+        @Inject(UsageService)       public usage: UsageService,
         @Inject(ApplicationService) private apps: ApplicationService,
         @Inject(MessageService)     private messages: MessageService,
         @Inject(Router)             private router: Router,
@@ -91,8 +93,8 @@ export class UIDataUsage implements OnInit, OnDestroy {
         if (this._subscription) {
             this._subscription.unsubscribe();
         }
-        this._usage = undefined;
-        this._apps = undefined;
+        delete this._usage;
+        delete this._apps;
     }
 
 

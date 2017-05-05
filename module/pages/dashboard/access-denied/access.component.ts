@@ -10,10 +10,12 @@ import { validate } from "../../../utils/Permissions";
 
 
 @Component({
-    selector    : "ui-access-denied",
-    templateUrl : DOC_BASE_HREF + "/directives/dashboard/access-denied/access.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-access-denied",
+    templateUrl: "access.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UIAccessDenied implements OnInit, OnDestroy {
+export class TeleportDevPortalAccessDeniedComponent implements OnInit, OnDestroy {
 
     private _reqPerms: string[] = [];
     private _devPerms: IUserPermissions = {};
@@ -32,7 +34,7 @@ export class UIAccessDenied implements OnInit, OnDestroy {
         this.session.Observable
             .skipWhile(s => ! s)
             .take(1)
-            .subscribe(s => this._devPerms = s.developer.permissions);
+            .subscribe(s => { if ( s !== null) { this._devPerms = s.developer.permissions; } });
     }
 
 
@@ -50,5 +52,4 @@ export class UIAccessDenied implements OnInit, OnDestroy {
     public hasPermission (perm: string) {
         return validate (this._devPerms, { [perm]: true });
     }
-
 }

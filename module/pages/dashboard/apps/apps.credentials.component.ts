@@ -6,15 +6,17 @@ import { Modal }                         from "../../../services/modal.service";
 
 
 @Component({
-    selector   : "ui-dashboard-app-credentials",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/apps/apps.credentials.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-app-credentials",
+    templateUrl: "apps.credentials.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UIAppCredentials implements OnDestroy {
+export class TeleportDevPortalAppCredentialsComponent implements OnDestroy {
 
     @Input() public set app (a: IApplication) {
         this.Credentials = a.credentials;
         this._app = a;
-    };
+    }
 
     public isBusy = false;
     public Credentials: IAppCredentials[] = [];
@@ -23,14 +25,14 @@ export class UIAppCredentials implements OnDestroy {
 
     constructor (
         @Inject(ApplicationService) private applications: ApplicationService,
-        @Inject(Modal.Service)      private modal: Modal.Service
+        @Inject(Modal.Service)      private modal: Modal.Service,
     ) {
         console.log("new UIAppCredentials ()", this._app, arguments);
     }
 
 
     public ngOnDestroy () {
-        this._app = undefined;
+        delete this._app;
         this.Credentials = [];
     }
 
@@ -65,11 +67,11 @@ export class UIAppCredentials implements OnDestroy {
     }
 
     public apiKeyInputFocus (event: FocusEvent) {
-        (<HTMLInputElement> event.target).type = "text";
-        (<HTMLInputElement> event.target).select();
+        (event.target as HTMLInputElement).type = "text";
+        (event.target as HTMLInputElement).select();
     }
 
     public apiKeyInputBlur (event: FocusEvent) {
-        (<HTMLInputElement> event.target).type = "password";
+        (event.target as HTMLInputElement).type = "password";
     }
 }

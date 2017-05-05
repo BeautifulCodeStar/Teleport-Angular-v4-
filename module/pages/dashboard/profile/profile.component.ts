@@ -12,10 +12,12 @@ import { Developer }      from "../../../models/Developer";
 import { EmailValidator } from "../../../utils/EmailValidator";
 
 @Component({
-    selector   : "ui-profile",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/profile/profile.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-profile",
+    templateUrl: "profile.html",
+    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
 })
-export class UIProfile implements OnInit, OnDestroy {
+export class TeleportDevPortalProfileComponent implements OnInit, OnDestroy {
 
     public Developer: IDeveloper;
 
@@ -55,8 +57,8 @@ export class UIProfile implements OnInit, OnDestroy {
     public ngOnDestroy () {
         console.log("UIProfile Destroy");
         if (this._subscription) { this._subscription.unsubscribe(); }
-        this.Developer = undefined;
-        this._developer = undefined;
+        delete this.Developer;
+        delete this._developer;
     }
 
 
@@ -97,7 +99,7 @@ export class UIProfile implements OnInit, OnDestroy {
                     this.account.deleteAccount(this._developer.id)
                         .then(() => {
                             this.messages.warning("Account Deleted", "Your account has been deleted.");
-                            this.router.navigateByUrl("/logout");
+                            return this.router.navigateByUrl("/logout");
                         })
                         .catch(err => {
                             this.isBusy = false;

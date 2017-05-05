@@ -1,5 +1,5 @@
 
-<div class="row app-menu">
+<!--div class="row app-menu">
 
     <div class="col-xs-3 text-left">
         <a [routerLink]="['/']"><img class="logo" src="img/shoutpoint_logo.png"></a>
@@ -16,7 +16,7 @@
         <span></span>
     </div>
 
-</div>
+</div-->
 
 <div class="row">
 
@@ -27,7 +27,7 @@
 
                 <h4 class="text-center">Forgot Password</h4>
 
-                <form class="form-horizontal" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+                <form class="form-horizontal" (ngSubmit)="onRecoverPassword()" #loginForm="ngForm">
 
                     <div class="form-group" [class.has-error]="! isEmailValid(username.value)">
                         <label class="col-md-2 control-label" for="dev-login-username">Email</label>
@@ -39,13 +39,13 @@
 
                     <div class="form-group">
                         <div class="col-md-10 col-md-offset-2">
-                            <sp-recaptcha theme="light" sitekey="6Lf3RBETAAAAAKtkTgxjrn9AnYlhcfvh0tS7hFZo" [onReset]="resetCaptchaObservable()" (callback)="onCaptcha($event, true)" (expiredCallback)="onCaptcha($event, false)"></sp-recaptcha>
+                            <teleport-sp-recaptcha theme="light" sitekey="6Lf3RBETAAAAAKtkTgxjrn9AnYlhcfvh0tS7hFZo" [onReset]="resetCaptchaObservable()" (callback)="onCaptcha($event, true)" (expiredCallback)="onCaptcha($event, false)"></teleport-sp-recaptcha>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-md-12 text-center">
-                            <button class="btn btn-success" type="button" [disabled]="! (loginForm.form.valid && isCaptchaOk && isEmailValid(username.value))" (click)="onRecoverPassword()">Recover My Password</button>
+                            <button class="btn btn-success" type="submit" [disabled]="! (loginForm.form.valid && isCaptchaOk && isEmailValid(username.value))">Recover My Password</button>
                         </div>
                     </div>
 

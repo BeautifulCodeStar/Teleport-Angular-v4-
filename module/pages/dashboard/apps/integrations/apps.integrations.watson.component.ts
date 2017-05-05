@@ -9,10 +9,12 @@ import { MessageService }                               from "../../../../servic
 
 
 @Component({
-    selector    : "ui-dashboard-app-integrations-watson",
-    templateUrl : DOC_BASE_HREF + "/directives/dashboard/apps/integrations/apps.integrations.watson.html",
+    moduleId   : String(module.id),
+    selector    : "teleport-dev-portal-app-integrations-watson",
+    templateUrl : "apps.integrations.watson.html",
+    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
 })
-export class UIAppIntegrationWatson implements OnDestroy {
+export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy {
 
     public isBusy = false;
     public isEditing = false;
@@ -49,12 +51,13 @@ export class UIAppIntegrationWatson implements OnDestroy {
                     .catch(err => {
                         this.message.error("Watson Credentials Failure", err.message, err);
                     });
-            });
+            })
+            .catch(err => console.error(err));
     }
 
     public ngOnDestroy () {
-        this._application = undefined;
-        this._watson = undefined;
+        delete this._application;
+        delete this._watson;
         this.isBusy = false;
         this.isEditing = false;
         this.username = "";

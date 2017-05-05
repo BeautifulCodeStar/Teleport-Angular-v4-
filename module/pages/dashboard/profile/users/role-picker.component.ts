@@ -1,9 +1,9 @@
 import {
-    Component, OnInit, OnDestroy, Input, EventEmitter, Output, Inject,
+    Component, OnInit, OnDestroy, Input, Inject,
 } from "@angular/core";
 
 import {
-    IUser, IDeveloper, IUserRole, IUserPermissionsTree,
+    IUser, IDeveloper, IUserRole, IUserPermissionsTree, IUserPermissions,
 } from "../../../../models/interfaces";
 
 import { AccountService } from "../../../../services/account.service";
@@ -13,18 +13,20 @@ import * as Permissions from "../../../../utils/Permissions";
 
 
 @Component({
-    selector   : "role-picker",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/profile/users/role-picker.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-role-picker",
+    templateUrl: "role-picker.html",
+    styleUrls  : [ "../../../../css/bootswatch.css", "../../../../css/main.min.css" ],
 })
-export class RolePickerWidget implements OnInit, OnDestroy {
+export class TeleportDevPortalRolePickerComponent implements OnInit, OnDestroy {
 
     @Input("user")  public user: IUser;
 
     public isRolesSelectorOpen = false;
-    public role: IUserRole;
+    public role: IUserRole | undefined;
 
     public Roles: IUserRole[] = [];
-    public Template = Permissions.Template;
+    public Template: IUserPermissions = Permissions.Template;
     public Tree = Permissions.Tree.subTree;
 
     private _developer: IDeveloper;
@@ -54,8 +56,8 @@ export class RolePickerWidget implements OnInit, OnDestroy {
 
     public ngOnDestroy() {
 
-        this._developer = undefined;
-        this.user = undefined;
+        delete this._developer;
+        delete this.user;
     }
 
     public get Developer () {
@@ -69,7 +71,7 @@ export class RolePickerWidget implements OnInit, OnDestroy {
      */
     public isRoleEvery (role: IUserRole): boolean {
 
-        return role.permissions.length === Object.keys(this.user.permissions).length && role.permissions.every(p => this.user.permissions[p]);
+        return role.permissions.length === Object.keys(this.user.permissions).length && role.permissions.every(p => !! this.user.permissions[p]);
     }
 
     public onRolesSelector () {
@@ -89,7 +91,7 @@ export class RolePickerWidget implements OnInit, OnDestroy {
 
 
 @Component({
-    selector : "role-picker-row",
+    selector : "teleport-dev-portal-role-picker-row",
     template : `
         <ul>
             <li *ngFor="let node of Nodes" [ngClass]="{ collapsed: isCollapsed(node) }">
@@ -102,17 +104,17 @@ export class RolePickerWidget implements OnInit, OnDestroy {
                         [ngClass]="{ 'glyphicon-unchecked': ! hasPerm(node, a) && isPermAvailable(node, a), 'glyphicon-ok-sign': hasPerm(node, a), 'glyphicon-minus disabled': ! isPermAvailable(node, a), exact: hasExactPerm(node, a) }"
                     ></span>
                 </span>
-                <role-picker-row [dev]="dev" [user]="user" [tree]="tree[node].subTree" [readOnly]="isReadOnly"></role-picker-row>
+                <role-picker-row [dev]="dev" [user]="user" [tree]="tree[node].subTree" [readOnly]="readOnly"></role-picker-row>
             </li>
         </ul>
     `,
 })
-export class RolePickerRow implements OnInit {
+export class TeleportDevPortalRolePickerRowComponent implements OnInit {
 
-    @Input("dev")  public dev: IDeveloper;
-    @Input("user") public user: IUser;
-    @Input("tree") public tree: { [key: string]: IUserPermissionsTree };
-    @Input("readOnly") public isReadOnly: boolean;
+    @Input("dev")      public dev: IDeveloper;
+    @Input("user")     public user: IUser;
+    @Input("tree")     public tree: { [key: string]: IUserPermissionsTree };
+    @Input("readOnly") public readOnly: boolean;
 
     private _isCollapsed: { [key: string]: boolean };
 
@@ -161,18 +163,18 @@ export class RolePickerRow implements OnInit {
 
     public hasExactPerm (node: string, action: string) {
 
-        return this.user.permissions[this.tree[node].actions.find(a => a.endsWith(action))];
+        return this.user.permissions[this.tree[node].actions.find(a => a.endsWith(action)) || ""];
     }
 
 
     public onPermClick (node: string, action: string) {
 
-        if (this.isReadOnly) {
+        if (this.readOnly) {
             this.modal.show(
                 "Permissions Locked",
                 `<p>If you would like to set custom permissions for this user, change the <strong>User Role</strong> to <strong>"Custom Permissions..."</strong>.</p>`,
                 { type: "alert" },
-            );
+            ).catch(err => console.error(err));
             return;
         }
 

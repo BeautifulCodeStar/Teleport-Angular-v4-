@@ -1,5 +1,5 @@
 
-import {Component, Inject, Input, AfterViewInit, OnDestroy} from "@angular/core";
+import { Component, Inject, AfterViewInit, OnDestroy } from "@angular/core";
 
 import { IUserBasicAuth } from "../../../models/interfaces";
 
@@ -10,10 +10,12 @@ import { Modal }                     from "../../../services/modal.service";
 
 
 @Component({
-    selector   : "ui-dashboard-profile-basic-auth",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/profile/profile.basic-auth.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-dashboard-profile-basic-auth",
+    templateUrl: "profile.basic-auth.html",
+    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
 })
-export class UIProfileBasicAuth implements AfterViewInit, OnDestroy {
+export class TeleportDevPortalProfileBasicAuthComponent implements AfterViewInit, OnDestroy {
 
     public isBusy = false;
     public Credentials: IUserBasicAuth[] = [];
@@ -24,7 +26,7 @@ export class UIProfileBasicAuth implements AfterViewInit, OnDestroy {
         @Inject(AccountService)            private account: AccountService,
         @Inject(AccountCredentialsService) private creds: AccountCredentialsService,
         @Inject(Modal.Service)             private modal: Modal.Service,
-        @Inject(MessageService)            private messages: MessageService
+        @Inject(MessageService)            private messages: MessageService,
     ) {
         console.log("new UIProfileBasicAuth ()", this._userId);
         this.isBusy = true;
@@ -59,8 +61,8 @@ export class UIProfileBasicAuth implements AfterViewInit, OnDestroy {
     }
 
     public ngOnDestroy () {
-        this.Credentials = [];
-        this._userId = undefined;
+        delete this.Credentials;
+        delete this._userId;
     }
 
 
@@ -113,11 +115,11 @@ export class UIProfileBasicAuth implements AfterViewInit, OnDestroy {
     }
 
     public apiKeyInputFocus (event: FocusEvent) {
-        (<HTMLInputElement> event.target).type = "text";
-        (<HTMLInputElement> event.target).select();
+        (event.target as HTMLInputElement).type = "text";
+        (event.target as HTMLInputElement).select();
     }
 
     public apiKeyInputBlur (event: FocusEvent) {
-        (<HTMLInputElement> event.target).type = "password";
+        (event.target as HTMLInputElement).type = "password";
     }
 }

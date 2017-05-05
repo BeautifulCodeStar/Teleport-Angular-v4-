@@ -1,5 +1,5 @@
-import { Component, Inject }             from "@angular/core";
-import { Http, RequestOptions, Headers } from "@angular/http";
+import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
+import { Http, RequestOptions, Headers }        from "@angular/http";
 
 import { Observable } from "rxjs/Observable";
 import { Observer }   from "rxjs/Observer";
@@ -9,14 +9,18 @@ import { MessageService }     from "../../../services/message.service";
 import { ApplicationService } from "../../../services/application.service";
 import { IApplication }       from "../../../models/interfaces";
 
-import {EmailValidator} from "../../../utils/EmailValidator";
+import { EmailValidator } from "../../../utils/EmailValidator";
+
+const API_BASE_URL = "http://localhost:8080";
 
 
 @Component({
-    selector   : "ui-support-form",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/support/support.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-support-form",
+    templateUrl: "support.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UISupportForm {
+export class TeleportDevPortalSupportFormComponent implements OnInit, OnDestroy {
 
     public form = {
         account: "",
@@ -42,7 +46,7 @@ export class UISupportForm {
     
     constructor (
         @Inject(Http)               private http: Http,
-        @Inject(AccountService)     private account: AccountService,
+        @Inject(AccountService)     public account: AccountService,
         @Inject(ApplicationService) private apps: ApplicationService,
         @Inject(MessageService)     private messages: MessageService,
     ) {
@@ -61,7 +65,7 @@ export class UISupportForm {
                 this.form.account = a.id;
                 this.form.name = `${a.firstName} ${a.lastName}`;
                 this.form.email = a.email;
-                this.form.phone = a.phone;
+                this.form.phone = a.phone || "";
             });
 
         this.apps.Observable
@@ -95,7 +99,7 @@ export class UISupportForm {
         this.isSubmitted = true;
 
         let headers = new Headers({ "Content-Type": "application/json" });
-        let options = new RequestOptions({ headers: headers, withCredentials: true });
+        let options = new RequestOptions({ headers, withCredentials: true });
 
         this.http
             .post(`${API_BASE_URL}/support`, JSON.stringify(this.form), options)

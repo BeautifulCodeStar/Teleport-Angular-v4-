@@ -226,7 +226,7 @@ export function copyTree (): IUserPermissionsTree {
  * @param {IUserPermissions} target
  * @returns {boolean} True if valid.
  */
-export function validate (grantor: IUserPermissions, target: IUserPermissions) {
+export function validate (grantor: IUserPermissions, target: IUserPermissions): boolean {
 
     if (! grantor || ! target) { return false; }
 

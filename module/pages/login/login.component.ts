@@ -11,13 +11,13 @@ import { EmailValidator } from "../../utils/EmailValidator";
 import { IDeveloper }     from "../../models/interfaces";
 
 
-
 @Component({
     moduleId   : String(module.id),
-    selector   : "teleport-login-page-component",
+    selector   : "teleport-login",
     templateUrl: "login.html",
+    styleUrls  : [ "../css/bootswatch.css", "../css/main.min.css" ],
 })
-export class TeleportLoginPageComponent {
+export class TeleportDevPortalLoginComponent {
     
     public userName = "";
     public passWord = "";

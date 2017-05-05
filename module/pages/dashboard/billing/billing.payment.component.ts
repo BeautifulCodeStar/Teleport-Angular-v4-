@@ -6,18 +6,20 @@ import { BillingService } from "../../../services/billing.service";
 import { MessageService } from "../../../services/message.service";
 import { Modal }          from "../../../services/modal.service";
 
-declare var braintree: any;
+declare const braintree: any;
 
 
 @Component({
-    selector   : "ui-billing-payment",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/billing/billing.payment.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-billing-payment",
+    templateUrl: "/billing.payment.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UIBillingPayment implements AfterViewInit, OnDestroy {
+export class TeleportDevPortalBillingPaymentComponent implements AfterViewInit, OnDestroy {
 
     public isReady = false;
     public isBusy = false;
-    public amount: number = 10;
+    public amount = 10;
 
     private _checkout: any;
     
@@ -26,7 +28,7 @@ export class UIBillingPayment implements AfterViewInit, OnDestroy {
         @Inject(BillingService) private billing: BillingService,
         @Inject(MessageService) private messages: MessageService,
         @Inject(Modal.Service)  private modal: Modal.Service,
-        @Inject(NgZone)         private zone: NgZone
+        @Inject(NgZone)         private zone: NgZone,
     ) {}
 
     public ngAfterViewInit () {
@@ -73,7 +75,7 @@ export class UIBillingPayment implements AfterViewInit, OnDestroy {
     }
 
     public onCancel () {
-        this.router.navigate(["/dashboard/account/payments"]);
+        this.router.navigate(["/dashboard/account/payments"]).catch(err => console.error(err));
     }
 
     public onSubmit (nonce: string, method: string, type: string, lastFour: string) {
@@ -88,8 +90,8 @@ export class UIBillingPayment implements AfterViewInit, OnDestroy {
         this.billing.makePayment(this.amount, nonce, method, type, lastFour)
             .then(() => {
                 this.messages.info("Payment Accepted!", `A payment of $${this.amount} was credited to your account.`);
-                this.router.navigate(["/dashboard/account/payments"]);
                 this.isBusy = false;
+                return this.router.navigate(["/dashboard/account/payments"]);
             })
             .catch(err => {
                 this.messages.warning("Payment Failure", err.message, err);

@@ -9,10 +9,12 @@ import { MessageService }                         from "../../../../services/mes
 
 
 @Component({
-    selector    : "ui-dashboard-app-integrations-aws",
-    templateUrl : DOC_BASE_HREF + "/directives/dashboard/apps/integrations/apps.integrations.aws.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-app-integrations-aws",
+    templateUrl: "apps.integrations.aws.html",
+    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
 })
-export class UIAppIntegrationAws implements OnDestroy {
+export class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
 
     public isBusy = false;
     public isEditing = false;
@@ -51,12 +53,13 @@ export class UIAppIntegrationAws implements OnDestroy {
                 .catch(err => {
                     this.message.error("AWS Credentials Failure", err.message, err);
                 });
-            });
+            })
+            .catch(err => console.error(err));
     }
 
     public ngOnDestroy () {
-        this._application = undefined;
-        this._aws = undefined;
+        delete this._application;
+        delete this._aws;
         this.isBusy = false;
         this.isEditing = false;
         this.accessKey = "";

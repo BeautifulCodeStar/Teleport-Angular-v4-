@@ -1,5 +1,5 @@
 
-<div class="row app-menu">
+<!--div class="row app-menu">
 
     <div class="col-xs-3 text-left">
         <a [routerLink]="['/']"><img class="logo" src="img/shoutpoint_logo.png"></a>
@@ -16,7 +16,7 @@
         <span></span>
     </div>
 
-</div>
+</div-->
 
 <div class="row">
 
@@ -65,7 +65,7 @@
 
                         <div class="form-group">
                             <div class="col-md-9 col-md-offset-3">
-                                <sp-recaptcha theme="light" sitekey="6Lf3RBETAAAAAKtkTgxjrn9AnYlhcfvh0tS7hFZo" [onReset]="resetCaptchaObservable()" (callback)="onCaptcha($event, true)" (expiredCallback)="onCaptcha($event, false)"></sp-recaptcha>
+                                <teleport-sp-recaptcha theme="light" sitekey="6Lf3RBETAAAAAKtkTgxjrn9AnYlhcfvh0tS7hFZo" [onReset]="resetCaptchaObservable()" (callback)="onCaptcha($event, true)" (expiredCallback)="onCaptcha($event, false)"></teleport-sp-recaptcha>
                             </div>
                         </div>
 

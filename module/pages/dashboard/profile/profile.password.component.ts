@@ -1,4 +1,4 @@
-import {Component, Inject, Output, EventEmitter, Input} from "@angular/core";
+import { Component, Inject, Output, EventEmitter, Input } from "@angular/core";
 
 import { IUser }          from "../../../models/interfaces";
 import { AccountService } from "../../../services/account.service";
@@ -8,21 +8,23 @@ import PasswordUtil       from "../../../utils/PasswordUtil";
 
 
 @Component({
-    selector   : "ui-profile-password",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/profile/profile.password.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-profile-password",
+    templateUrl: "profile.password.html",
+    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
 })
-export class UIProfilePassword {
+export class TeleportDevPortalProfilePasswordComponent {
 
     public isBusy = false;
-    public password: string = "";
-    public newPassword: string = "";
-    public newPasswordVerify: string = "";
+    public password = "";
+    public newPassword = "";
+    public newPasswordVerify = "";
 
-    @Output() private onComplete = new EventEmitter();
+    @Output() private onComplete = new EventEmitter<void>();
 
     constructor(
         @Inject(AccountService) private account: AccountService,
-        @Inject(MessageService) private messages: MessageService
+        @Inject(MessageService) private messages: MessageService,
     ) {}
 
 
@@ -61,7 +63,7 @@ export class UIProfilePassword {
         this.account.updatePassword(this.password, this.newPassword)
             .then(() => {
                 this.messages.info("Password Change Success", "Your password has been updated.");
-                this.onComplete.emit(null);
+                this.onComplete.emit();
             })
             .catch(err => {
                 this.messages.error("Password Change Failure", err.message, err);
@@ -71,29 +73,31 @@ export class UIProfilePassword {
 
     public onCancel () {
         this.isBusy = false;
-        this.onComplete.emit(null);
+        this.onComplete.emit();
     }
 }
 
 
 @Component({
-    selector   : "ui-user-profile-password",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/profile/profile.password.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-user-profile-password",
+    templateUrl: "profile.password.html",
+    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
 })
-export class UIUserProfilePassword {
+export class TeleportDevPortalUserProfilePasswordComponent {
 
     @Input("user") public user: IUser;
 
     public isBusy = false;
-    public password: string = "";
-    public newPassword: string = "";
-    public newPasswordVerify: string = "";
+    public password = "";
+    public newPassword = "";
+    public newPasswordVerify = "";
 
-    @Output() private onComplete = new EventEmitter();
+    @Output() private onComplete = new EventEmitter<void>();
 
     constructor(
         @Inject(UserService) private users: UserService,
-        @Inject(MessageService) private messages: MessageService
+        @Inject(MessageService) private messages: MessageService,
     ) {}
 
 
@@ -132,7 +136,7 @@ export class UIUserProfilePassword {
         this.users.updatePassword(this.user, this.password, this.newPassword)
             .then(() => {
                 this.messages.info("Password Change Success", "Your password has been updated.");
-                this.onComplete.emit(null);
+                this.onComplete.emit();
             })
             .catch(err => {
                 this.messages.error("Password Change Failure", err.message, err);
@@ -142,6 +146,6 @@ export class UIUserProfilePassword {
 
     public onCancel () {
         this.isBusy = false;
-        this.onComplete.emit(null);
+        this.onComplete.emit();
     }
 }

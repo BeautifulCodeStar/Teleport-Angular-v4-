@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router }               from "@angular/router";
 
-import {IUser, IDeveloper} from "../../../../models/interfaces";
+import { IUser, IDeveloper } from "../../../../models/interfaces";
 
 import { AccountService } from "../../../../services/account.service";
 import { UserService }    from "../../../../services/user.service";
@@ -13,10 +13,12 @@ import * as Permissions   from "../../../../utils/Permissions";
 
 
 @Component({
-    selector   : "ui-user-update",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/profile/users/user.update.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-user-update",
+    templateUrl: "user.update.html",
+    styleUrls  : [ "../../../../css/bootswatch.css", "../../../../css/main.min.css" ],
 })
-export class UIUserUpdate implements OnInit, OnDestroy {
+export class TeleportDevPortalUserUpdateComponent implements OnInit, OnDestroy {
 
     public isBusy = false;
     public isEditing = false;
@@ -50,8 +52,7 @@ export class UIUserUpdate implements OnInit, OnDestroy {
 
                 if (this._developer.portalUser && this._developer.portalUser.id === userId ) {
                     this.messages.warning("That way madness lies!", "You cannot edit your own user here.");
-                    this.router.navigateByUrl("/dashboard/account/users");
-                    return;
+                    return this.router.navigateByUrl("/dashboard/account/users");
                 }
 
                 if (["account.users.delete", "account.users.update"].some(p => Permissions.validate(dev.permissions, { [p]: true }))) {
@@ -72,20 +73,18 @@ export class UIUserUpdate implements OnInit, OnDestroy {
                         })
                         .catch(err => {
                             this.messages.error("Failed to Load User", err.message, err);
-                            this.router.navigateByUrl("/dashboard/account/users");
+                            return this.router.navigateByUrl("/dashboard/account/users");
                         });
 
                 } else {
-                    this.router.navigate(["/dashboard/access-denied"], { queryParams: { perms: "account.users.update account.users.delete" }});
+                    return this.router.navigate(["/dashboard/access-denied"], { queryParams: { perms: "account.users.update account.users.delete" }});
                 }
             });
     }
 
 
     public ngOnDestroy () {
-
-        console.log("UIUserUpdate Destroy");
-        this._user = undefined;
+        delete this._user;
     }
 
 
@@ -108,7 +107,7 @@ export class UIUserUpdate implements OnInit, OnDestroy {
                     this.users.remove(this._user)
                         .then(() => {
                             this.messages.warning("User Deleted", `Alas, poor ${this._user.firstName}! I knew him, ${this._developer.firstName}.`);
-                            this.router.navigate(["/dashboard/account/users"]);
+                            return this.router.navigate(["/dashboard/account/users"]);
                         })
                         .catch(err => {
                             this.isBusy = false;

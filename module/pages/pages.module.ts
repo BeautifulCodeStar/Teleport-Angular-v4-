@@ -7,44 +7,42 @@ import { FormsModule }             from "@angular/forms";
 import { HttpModule }              from "@angular/http";
 import { RouterModule }            from "@angular/router";
 
-// Third-party libs.
-import { MaterialModule } from "@angular/material";
-
 // Modules
-// import { moduleRouting } from "./module.routing";
+import { DevPortalDashboardModule } from "./dashboard/dashboard.module";
 
 // Components
-import { TeleportLoginPageComponent } from "./login/login.component";
+import { TeleportDevPortalForgotPasswordComponent } from "./forgot-password/forgot.component";
+import { TeleportDevPortalLoginComponent } from "./login/login.component";
+import { TeleportDevPortalRecoverPasswordComponent } from "./recover-password/recover.component";
+import { TeleportDevPortalRegisterComponent } from "./register/register.component";
 
+// Directives
 import { directives } from "shoutpoint-teleport-core";
 
 
 @NgModule({
-    // Remove the modules your module will not use.
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
         HttpModule,
         RouterModule,
-        // moduleRouting,
-        MaterialModule,
         directives.PublicDirectivesModule,
+
+        DevPortalDashboardModule,
     ],
     declarations: [
-        TeleportLoginPageComponent,
+        TeleportDevPortalForgotPasswordComponent,
+        TeleportDevPortalLoginComponent,
+        TeleportDevPortalRecoverPasswordComponent,
+        TeleportDevPortalRegisterComponent,
     ],
-    // Any services that are used in this module.
-    providers: [
-
-    ],
-    // Export any Components you'd like to expose to an importing app.
-    // You'll likely want to choose unique names to avoid conflicts.
     exports: [
-        // BrowserModule,
-        // FormsModule,
-        // HttpModule,
-        RouterModule,
+        DevPortalDashboardModule,
+        TeleportDevPortalForgotPasswordComponent,
+        TeleportDevPortalLoginComponent,
+        TeleportDevPortalRecoverPasswordComponent,
+        TeleportDevPortalRegisterComponent,
     ],
 })
 export class DevPortalPagesModule { }

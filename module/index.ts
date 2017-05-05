@@ -41,7 +41,6 @@ import * as devPortalModelsImport from "./models/index";
         DevPortalServicesModule,
     ],
 })
-// Change this class name to match your module's package name. Pascal case. Ends with "Module".
 export class DevPortalModule { }
 
 

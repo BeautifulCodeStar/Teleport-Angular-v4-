@@ -15,10 +15,12 @@ import { EmailValidator } from "../../../utils/EmailValidator";
 
 
 @Component({
-    selector   : "ui-user-profile",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/profile/profile.user.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-user-profile",
+    templateUrl: "profile.user.html",
+    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
 })
-export class UIUserProfile implements OnInit, OnDestroy {
+export class TeleportDevPortalUserProfileComponent implements OnInit, OnDestroy {
 
     public User: IUser;
 
@@ -34,15 +36,19 @@ export class UIUserProfile implements OnInit, OnDestroy {
         @Inject(AccountService) private account: AccountService,
         @Inject(UserService)    private users: UserService,
         @Inject(Modal.Service)  private modal: Modal.Service,
-        @Inject(MessageService) private messages: MessageService
+        @Inject(MessageService) private messages: MessageService,
     ) {}
 
     public ngOnInit () {
-        // console.log("UIUserProfile Init");
+
         this._subscription = this.account.Observable
             .filter(d => !! d)
             .subscribe(dev => {
-                this._user = new Developer(dev).toJSON().portalUser;
+                const user = new Developer(dev).toJSON().portalUser;
+                if (user === undefined) {
+                    throw new ReferenceError("The PortalUser was undefined on the Developer object.");
+                }
+                this._user = user;
                 if (! this.isEditProfile) {
                     this.User = Object.assign({}, this._user);
                     console.log(this.User);
@@ -53,8 +59,8 @@ export class UIUserProfile implements OnInit, OnDestroy {
     public ngOnDestroy () {
         // console.log("UIUserProfile Destroy");
         if (this._subscription) { this._subscription.unsubscribe(); }
-        this.User = undefined;
-        this._user = undefined;
+        delete this.User;
+        delete this._user;
     }
 
 
@@ -95,7 +101,7 @@ export class UIUserProfile implements OnInit, OnDestroy {
                     this.users.remove(this._user)
                         .then(() => {
                             this.messages.warning("User Account Deleted", "Your user account has been deleted.");
-                            this.router.navigateByUrl("/logout");
+                            return this.router.navigateByUrl("/logout");
                         })
                         .catch(err => {
                             this.isBusy = false;

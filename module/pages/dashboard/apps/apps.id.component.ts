@@ -7,10 +7,12 @@ import { Modal }              from "../../../services/modal.service";
 
 
 @Component({
-    selector   : "ui-dashboard-app-detail",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/apps/apps.id.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-app-detail",
+    templateUrl: "apps.id.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UIAppById implements OnDestroy {
+export class TeleportDevPortalAppByIdComponent implements OnDestroy {
 
     public isBusy = false;
     public isEditing = false;
@@ -37,11 +39,12 @@ export class UIAppById implements OnDestroy {
                         this._application = app;
                         this.isBusy = false;
                     });
-            });
+            })
+            .catch(err => console.error(err));
     }
 
     public ngOnDestroy () {
-        this._application = undefined;
+        delete this._application;
         this.isBusy = false;
         this.isEditing = false;
         this.appName = "";

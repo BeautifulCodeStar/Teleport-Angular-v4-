@@ -1,5 +1,5 @@
 import { Component, Inject } from "@angular/core";
-import  {Router }             from "@angular/router";
+import { Router }            from "@angular/router";
 
 import { Observable } from "rxjs/Observable";
 import { Observer }   from "rxjs/Observer";
@@ -12,12 +12,14 @@ import { EmailValidator } from "../../utils/EmailValidator";
 
 
 @Component({
-    selector   : "ui-forgot-password",
-    templateUrl: DOC_BASE_HREF + "/directives/forgot-password/forgot.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-forgot-password",
+    templateUrl: "forgot.html",
+    styleUrls  : [ "../css/bootswatch.css", "../css/main.min.css" ],
 })
-export class UIForgotPassword {
+export class TeleportDevPortalForgotPasswordComponent {
     
-    public userName: string = "";
+    public userName = "";
 
     public isBusy = false;
     public isCaptchaOk = false;
@@ -26,10 +28,11 @@ export class UIForgotPassword {
     private _resetCaptchaObservable: Observable<boolean>;
     private _resetCaptchaObserver: Observer<boolean>;
 
+
     constructor (
         @Inject(Router)         private router: Router,
         @Inject(LoginService)   private logins: LoginService,
-        @Inject(MessageService) private messages: MessageService
+        @Inject(MessageService) private messages: MessageService,
     ) {
         this._resetCaptchaObservable = Observable.create((observer: Observer<boolean>) => this._resetCaptchaObserver = observer);
     }
@@ -59,7 +62,7 @@ export class UIForgotPassword {
             .then(resp => {
                 console.log("Password Recovery Success", resp);
                 this.messages.info("Password Recovery Success", `An email will be sent with recovery instructions.`);
-                this.router.navigateByUrl("/login");
+                this.router.navigateByUrl("/login").catch(err => console.error(err));
             })
             .catch(err => {
                 console.error("Password Recovery Failure", err);

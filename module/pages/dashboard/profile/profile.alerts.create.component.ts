@@ -6,10 +6,12 @@ import { AlertsService } from "../../../services/alerts.service";
 
 
 @Component({
-    selector   : "ui-alerts-create",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/profile/profile.alerts.create.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-alerts-create",
+    templateUrl: "profile.alerts.create.html",
+    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
 })
-export class UIProfileAlertsCreate implements OnInit {
+export class TeleportDevPortalProfileAlertsCreateComponent implements OnInit {
 
     public Alert: IAlert & any = null;
 
@@ -24,7 +26,7 @@ export class UIProfileAlertsCreate implements OnInit {
 
     constructor (
         @Inject(Router)        private router: Router,
-        @Inject(AlertsService) private alerts: AlertsService
+        @Inject(AlertsService) private alerts: AlertsService,
     ) {}
 
     public ngOnInit () {

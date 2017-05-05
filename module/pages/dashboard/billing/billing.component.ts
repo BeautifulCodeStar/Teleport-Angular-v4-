@@ -7,10 +7,12 @@ import { BillingService, IBillingPayload } from "../../../services/billing.servi
 
 
 @Component({
-    selector   : "ui-billing",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/billing/billing.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-billing",
+    templateUrl: "billing.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UIBilling implements OnInit, OnDestroy {
+export class TeleportDevPortalBillingComponent implements OnInit, OnDestroy {
 
     public view = {
         historyFrom: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
@@ -22,11 +24,13 @@ export class UIBilling implements OnInit, OnDestroy {
     private _subscription: Subscription;
 
     private _balance: number;
-    private _payments: IPayment[] = null;
+    private _payments: IPayment[];
+
 
     constructor (
         @Inject(BillingService) private billing: BillingService,
     ) {}
+
 
     public ngOnInit () {
 
@@ -42,41 +46,50 @@ export class UIBilling implements OnInit, OnDestroy {
             });
     }
 
+
     public ngOnDestroy () {
         if (this._subscription) {
             this._subscription.unsubscribe();
-            this._subscription = undefined;
+            delete this._subscription;
         }
-        this._balance = undefined;
-        this._payments = null;
+        delete this._balance;
+        delete this._payments;
     }
+
 
     public get historyTo (): string {
         return this.view.historyTo.toISOString().substr(0, 10);
     }
+
+
     public set historyTo (v: string) {
         this.view.historyTo = new Date(v);
     }
 
+
     public get historyFrom (): string {
         return this.view.historyFrom.toISOString().substr(0, 10);
     }
+
+
     public set historyFrom (v: string) {
         this.view.historyFrom = new Date(v);
     }
+
 
     public get balance (): number {
         return this._balance;
     }
 
+
     public get Payments (): IPayment[] {
         return this._payments;
     }
+
 
     public async reloadPaymentHistory () {
         this.view.isBusy = true;
         await this.billing.refreshPayments(this.view.historyFrom.getTime(), this.view.historyTo.getTime());
         this.view.isBusy = false;
-            // .then(() => this.view.isBusy = false, () => this.view.isBusy = false);
     }
 }

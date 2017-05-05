@@ -2,21 +2,22 @@
 import { Component, Inject, AfterViewInit } from "@angular/core";
 import { BillingService }                   from "../../../services/billing.service";
 
-
 declare const braintree: any;
 
+
 @Component({
-    selector   : "ui-billing-settings",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/billing/billing.settings.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-billing-settings",
+    templateUrl: "billing.settings.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UIBillingSettings implements AfterViewInit {
+export class TeleportDevPortalBillingSettingsComponent implements AfterViewInit {
 
     constructor (
         @Inject(BillingService) private billing: BillingService,
     ) {}
 
     public ngAfterViewInit () {
-
 
         this.billing.getBraintreeClientToken()
             .then(token => {

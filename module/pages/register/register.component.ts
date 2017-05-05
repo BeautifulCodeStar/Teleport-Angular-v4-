@@ -1,19 +1,22 @@
-import {Component, Inject, OnInit, OnDestroy} from "@angular/core";
+import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 
-import {LoginService}    from "../../services/login.service";
-import {MessageService}  from "../../services/message.service";
+import { LoginService }    from "../../services/login.service";
+import { MessageService }  from "../../services/message.service";
 
-import PasswordUtil from "../../utils/PasswordUtil";
-import {EmailValidator} from "../../utils/EmailValidator";
+import PasswordUtil       from "../../utils/PasswordUtil";
+import { EmailValidator } from "../../utils/EmailValidator";
 
-import {Observable} from "rxjs/Observable";
-import {Observer}   from "rxjs/Observer";
+import { Observable } from "rxjs/Observable";
+import { Observer }   from "rxjs/Observer";
+
 
 @Component({
-    selector   : "ui-register",
-    templateUrl: DOC_BASE_HREF + "/directives/register/register.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-register",
+    templateUrl: "register.html",
+    styleUrls  : [ "../css/bootswatch.css", "../css/main.min.css" ],
 })
-export class UIRegister implements OnInit, OnDestroy {
+export class TeleportDevPortalRegisterComponent implements OnInit, OnDestroy {
 
     public form = {
         firstName: "",

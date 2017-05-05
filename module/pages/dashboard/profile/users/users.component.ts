@@ -10,10 +10,12 @@ import * as Permissions   from "../../../../utils/Permissions";
 
 
 @Component({
-    selector   : "ui-users",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/profile/users/users.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-users",
+    templateUrl: "users.html",
+    styleUrls  : [ "../../../../css/bootswatch.css", "../../../../css/main.min.css" ],
 })
-export class UIUsers implements OnInit, OnDestroy {
+export class TeleportDevPortalUsersComponent implements OnInit, OnDestroy {
 
     public isBusy = false;
 
@@ -29,7 +31,6 @@ export class UIUsers implements OnInit, OnDestroy {
 
     public ngOnInit () {
 
-        console.log("UIUsers Init");
         this.isBusy = true;
 
         this.account.Observable
@@ -50,8 +51,7 @@ export class UIUsers implements OnInit, OnDestroy {
 
 
     public ngOnDestroy () {
-        console.log("UIUsers Destroy");
-        this._users = undefined;
+        delete this._users;
     }
 
 

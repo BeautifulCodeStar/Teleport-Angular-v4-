@@ -7,14 +7,14 @@ import { MessageService } from "../../../services/message.service";
 
 import { ITopUp } from "../../../models/interfaces";
 
-declare const braintree: any;
-
 
 @Component({
-    selector   : "tp-top-up",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/top-up/top-up.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-top-up",
+    templateUrl: "top-up.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UITopUp implements OnInit, OnDestroy {
+export class TeleportDevPortalTopUpComponent implements OnInit, OnDestroy {
 
     public TopUp: ITopUp;
 
@@ -45,7 +45,7 @@ export class UITopUp implements OnInit, OnDestroy {
                     this.messages.error("Top Up Error", err.message, err);
                     this.isBusy = false;
                     this.TopUp = Object.assign({}, this._topup);
-                }
+                },
             );
     }
 

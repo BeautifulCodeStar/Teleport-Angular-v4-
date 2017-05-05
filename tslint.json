@@ -3,7 +3,6 @@
     "node_modules/codelyzer"
   ],
   "rules":{
-    "directive-selector": [true, "attribute", "tp", "camelCase"],
     "component-selector": [true, "element", "teleport", "kebab-case"],
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
@@ -14,7 +13,6 @@
     "no-forward-ref": true,
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
-    "pipe-naming": [true, "camelCase", "tp"],
     "component-class-suffix": true,
     "directive-class-suffix": true,
     "import-destructuring-spacing": true,
@@ -22,9 +20,7 @@
     "no-access-missing-member": true,
     "invoke-injectable": true,
 
-
-
-    "align": [false, "arguments", "parameters", "statements"],
+    "align": false,
     "class-name": true,
     "comment-format": [true, "check-space"],
     "curly": true,

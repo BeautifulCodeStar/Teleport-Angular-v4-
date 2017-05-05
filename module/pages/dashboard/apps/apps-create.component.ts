@@ -5,10 +5,12 @@ import { ApplicationService } from "../../../services/application.service";
 
 
 @Component({
-    selector   : "ui-apps-create",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/apps/apps-create.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-apps-create",
+    templateUrl: "apps-create.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UIAppsCreate {
+export class TeleportDevPortalAppsCreateComponent {
 
     public isBusy = false;
     public appName = "";
@@ -18,7 +20,7 @@ export class UIAppsCreate {
 
     constructor (
         @Inject(Router)             private router: Router,
-        @Inject(ApplicationService) private applications: ApplicationService
+        @Inject(ApplicationService) private applications: ApplicationService,
     ) {}
 
 
@@ -35,7 +37,7 @@ export class UIAppsCreate {
         this.applications.createApp(this.appName, this.appNotes, this.reCaptchaResponse)
             .then(app => {
                 this.isBusy = false;
-                this.router.navigate(["/dashboard/applications", app.name]);
+                return this.router.navigate(["/dashboard/applications", app.name]);
             })
             .catch(() => {
                 this.isBusy = false;

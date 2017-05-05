@@ -8,14 +8,16 @@ import { SessionService }           from "../../../services/session.service";
 
 
 @Component({
-    selector   : "ui-apps",
-    templateUrl: DOC_BASE_HREF + "/directives/dashboard/apps/apps.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-dev-portal-apps",
+    templateUrl: "apps.html",
+    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
 })
-export class UIApps implements OnInit, OnDestroy {
+export class TeleportDevPortalAppsComponent implements OnInit, OnDestroy {
 
     public Developer: IDeveloper;
 
-    public sortBy = [this.sortByNameAsc];
+    public sortBy = [ this.sortByNameAsc ];
     public filterOn = "";
     public showNum = 20;
 
@@ -30,13 +32,13 @@ export class UIApps implements OnInit, OnDestroy {
     ) {}
 
     public ngOnInit () {
-        console.log("Init apps.components");
+
         this._isBusy = true;
 
         this.session.Observable
             .filter(s => !!s)
             .take(1)
-            .subscribe(s => this.Developer = s.developer);
+            .subscribe(s => { if (s !== null) { this.Developer = s.developer; } });
 
         this._subscription = this.applications.Observable
             .filter(a => !! a)
@@ -51,9 +53,11 @@ export class UIApps implements OnInit, OnDestroy {
         if (this._subscription) {
             this._subscription.unsubscribe();
         }
-        this.Developer = undefined;
+        delete this.Developer;
         this._applications = [];
-        this._subscription = undefined;
+        delete this._subscription;
+        // Just to shutup the TS checker.
+        this.sortBy = [ this.sortByNameDesc, this.sortByNotesAsc, this.sortByNotesDesc, this.sortByCreatedOnAsc, this.sortByCreatedOnDesc ];
     }
 
     public get isBusy () {
