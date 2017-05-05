@@ -1,20 +1,20 @@
 
 // Remove the modules your module will not use.
-import { NgModule }      from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule }     from "@angular/platform-browser/animations";
-import { FormsModule }   from "@angular/forms";
-import { HttpModule }    from "@angular/http";
-import { RouterModule }  from "@angular/router";
+import { NgModule }                from "@angular/core";
+import { BrowserModule }           from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { FormsModule }             from "@angular/forms";
+import { HttpModule }              from "@angular/http";
+import { RouterModule }            from "@angular/router";
 
 // Third-party libs.
 import { MaterialModule } from "@angular/material";
 
 // Modules
-import { moduleRouting } from "./module.routing";
+// import { moduleRouting } from "./module.routing";
 
 // Components
-import { MyModuleMainPageComponent } from "./main/main-page.component";
+import { TeleportLoginPageComponent } from "./login/login.component";
 
 import { directives } from "shoutpoint-teleport-core";
 
@@ -27,12 +27,12 @@ import { directives } from "shoutpoint-teleport-core";
         FormsModule,
         HttpModule,
         RouterModule,
-        moduleRouting,
+        // moduleRouting,
         MaterialModule,
         directives.PublicDirectivesModule,
     ],
     declarations: [
-        MyModuleMainPageComponent,
+        TeleportLoginPageComponent,
     ],
     // Any services that are used in this module.
     providers: [
@@ -47,4 +47,4 @@ import { directives } from "shoutpoint-teleport-core";
         RouterModule,
     ],
 })
-export class PagesModule { }
+export class DevPortalPagesModule { }

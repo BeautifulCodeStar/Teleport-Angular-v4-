@@ -2,7 +2,6 @@
 import { Injectable, Inject } from "@angular/core";
 import {
     ActivatedRouteSnapshot,
-    RouterStateSnapshot,
     CanActivateChild,
     Router,
 } from "@angular/router";
@@ -25,9 +24,9 @@ export class PermsGuardCanActivate implements CanActivateChild {
         @Inject(Router)         private router: Router,
     ) {}
 
-    public canActivateChild (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    public canActivateChild (route: ActivatedRouteSnapshot) {
 
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
 
             this.account.Observable
                 .first(d => !!d)
@@ -37,8 +36,9 @@ export class PermsGuardCanActivate implements CanActivateChild {
 
                     if (routeData.perms && ! validate(dev.permissions, routeData.perms.reduce((p: IUserPermissions, c: string) => (p[c] = true) && p, {}))) {
 
-                        this.router.navigate(["/dashboard/access-denied"], { queryParams: { perms: routeData.perms.join("|") } });
-                        return resolve(false);
+                        this.router.navigate(["/dashboard/access-denied"], { queryParams: { perms: routeData.perms.join("|") } })
+                            .then(() => resolve(false))
+                            .catch(err => reject(err));
                     }
 
                     return resolve(true);

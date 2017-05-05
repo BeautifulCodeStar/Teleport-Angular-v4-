@@ -4,8 +4,10 @@ import { Http, RequestOptions, Headers } from "@angular/http";
 
 import { Observable }      from "rxjs/Observable";
 
-import { IAWS, IDeveloper} from "../models/interfaces";
-import { AccountService }  from "./account.service";
+import { IAWS, IDeveloper } from "../models/interfaces";
+import { AccountService }   from "./account.service";
+
+const API_BASE_URL = "http://localhost:8080";
 
 
 export interface IAWSPutRequest {
@@ -21,15 +23,14 @@ export interface IAWSPutRequest {
 @Injectable()
 export class IntegrationsAWSService {
 
-    private _developer: IDeveloper = null;
+    private _developer: IDeveloper;
 
     constructor(
         @Inject(Http)           private http: Http,
         @Inject(AccountService) private account: AccountService,
     ) {
-        console.log("new IntegrationsService()", arguments);
 
-        account.Observable.first(d => !!d).subscribe(d => this._developer = d);
+        this.account.Observable.first(d => !!d).subscribe(d => this._developer = d);
     }
 
 
@@ -51,7 +52,7 @@ export class IntegrationsAWSService {
     public putAWS (appId: string, aws: IAWSPutRequest): Promise<IAWS> {
 
         let headers = new Headers({ "Content-Type": "application/json" });
-        let options = new RequestOptions({ headers: headers, withCredentials: true });
+        let options = new RequestOptions({ headers, withCredentials: true });
 
         const url = [
             API_BASE_URL, "developers", encodeURIComponent(this._developer.id),

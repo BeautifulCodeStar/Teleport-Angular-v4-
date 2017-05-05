@@ -6,10 +6,12 @@ import { Observable }      from "rxjs/Observable";
 import { Observer }        from "rxjs/Observer";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-import { IPayment, IBillingRate, IDeveloper } from "../models/interfaces";
+import { IPayment, IDeveloper } from "../models/interfaces";
 
 import { MessageService } from "./message.service";
 import { AccountService } from "./account.service";
+
+const API_BASE_URL = "http://localhost:8080";
 
 
 export interface IBillingPayload {
@@ -24,7 +26,7 @@ export interface IBillingPayload {
 @Injectable()
 export class BillingService {
 
-    private _developer: IDeveloper = null;
+    private _developer: IDeveloper;
 
     private _observable: Observable<IBillingPayload>;
     private _observer: Observer<IBillingPayload>;
@@ -39,10 +41,10 @@ export class BillingService {
     constructor(
         @Inject(Http)           private http: Http,
         @Inject(MessageService) private message: MessageService,
-        @Inject(AccountService) private account: AccountService
+        @Inject(AccountService) private account: AccountService,
     ) {
-        console.log("new BillingService()", arguments);
-        account.Observable
+
+        this.account.Observable
             .first(d => !! d)
             .subscribe (d => this._developer = d);
     }
@@ -66,13 +68,13 @@ export class BillingService {
                 .refCount();
         }
         
-        this.refresh();
+        this.refresh().catch(err => this._observer.error(err));
         return this._observable;
     }
 
     public refresh (): Promise<IBillingPayload> {
 
-        if (this._lastRefresh > Date.now() - 500) { return; }
+        if (this._lastRefresh > Date.now() - 500) { return Promise.resolve(this._billingPayload); }
         this._lastRefresh = Date.now();
 
         return new Promise((resolve, reject) => {
@@ -170,7 +172,7 @@ export class BillingService {
         ].join("/");
 
         let headers = new Headers({ "Content-Type": "application/json" });
-        let options = new RequestOptions({ headers: headers, withCredentials: true });
+        let options = new RequestOptions({ headers, withCredentials: true });
 
         return this.http.post(url, JSON.stringify({amount, payment_method}), options)
             .catch(err     => Observable.throw(new Error(err.json().help)))

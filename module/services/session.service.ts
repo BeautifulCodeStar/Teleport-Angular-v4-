@@ -5,8 +5,11 @@ import { Observable }      from "rxjs/Rx";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Observer }        from "rxjs/Observer";
 
-import {ISession, IDeveloper}  from "../models/interfaces";
-import { Developer } from "../models/Developer";
+import { ISession, IDeveloper } from "../models/interfaces";
+import { Developer }            from "../models/Developer";
+
+const API_BASE_URL = "http://localhost:8080";
+
 
 /**
  * SessionService Class.
@@ -14,8 +17,8 @@ import { Developer } from "../models/Developer";
 @Injectable()
 export class SessionService {
 
-    private _observable: Observable<ISession>;
-    private _observer: Observer<ISession>;
+    private _observable: Observable<ISession | null>;
+    private _observer: Observer<ISession | null>;
 
     private _session: ISession;
 
@@ -27,7 +30,7 @@ export class SessionService {
     }
 
     public cleanup () {
-        this._session = undefined;
+        delete this._session;
     }
 
     /**
@@ -101,9 +104,9 @@ export class SessionService {
 
         return () => {
             console.log("SessionService.createObservable complete", observer);
-            this._observer = null;
-            this._observable = null;
-            this._session = null;
+            delete this._observer;
+            delete this._observable;
+            delete this._session;
             clearInterval(id);
         };
     }
@@ -122,7 +125,7 @@ export class SessionService {
         return this.http.get(url, { withCredentials: true })
             .catch (err => Observable.throw(new Error(err.json().user_message)))
             .map   (res => res.json().developer as IDeveloper)
-            .catch (err => Observable.throw(new Error("No Developer object was found.")))
+            .catch (() => Observable.throw(new Error("No Developer object was found.")))
             .map   (dev => ({
                 loginAt  : this._session ? this._session.loginAt : new Date(),
                 refreshAt: new Date(),

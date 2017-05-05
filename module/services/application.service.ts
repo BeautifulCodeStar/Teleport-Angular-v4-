@@ -13,6 +13,8 @@ import { Developer }      from "../models/Developer";
 import { AccountService } from "./account.service";
 import { MessageService } from "./message.service";
 
+const API_BASE_URL = "http://localhost:8080";
+
 
 @Injectable()
 export class ApplicationService {
@@ -22,7 +24,7 @@ export class ApplicationService {
     private _subscription: Subscription;
 
     private _developer: IDeveloper;
-    private _applications: IApplication[] = null;
+    private _applications: IApplication[];
     private _lastRefresh = 0;
 
     constructor (
@@ -44,8 +46,8 @@ export class ApplicationService {
         console.log("ApplicationService cleanup");
         if (this._observer) { this._observer.complete(); }
         if (this._subscription) { this._subscription.unsubscribe(); }
-        this._developer = undefined;
-        this._applications = null;
+        delete this._developer;
+        delete this._applications;
         this._lastRefresh = 0;
     }
 
@@ -107,7 +109,7 @@ export class ApplicationService {
      */
     public getAppByName (appName: string): Promise<IApplication> {
 
-        let app: IApplication = this._applications && this._applications.find(a => a.name === appName);
+        let app: IApplication | undefined = this._applications && this._applications.find(a => a.name === appName);
         if (app) {
             return Promise.resolve(new Application(app));
         }
@@ -168,7 +170,7 @@ export class ApplicationService {
 
         if (app.name === appName && app.notes === notes) {
             this.message.warning("Application Update Failure", "No changes were found for the application.");
-            return;
+            return Promise.reject(new Error("Application Update Failure"));
         }
 
         let url = [
@@ -230,7 +232,7 @@ export class ApplicationService {
 
         let headers = new Headers({ "Content-Type": "application/json" });
 
-        return this.http.post(url, "", { headers: headers, withCredentials: true })
+        return this.http.post(url, "", { headers, withCredentials: true })
             .catch (err  => this.message.error("Credentials Create Failure", err.json().user_message, new Error(`Bad response status: ${err.status}`)))
             .map   (resp => new Application(resp.json().app))
             .do    (()   => this.message.info("Credentials Created", `New application credentials were created.`))

@@ -9,6 +9,8 @@ import { IDeveloper, ITopUp } from "../models/interfaces";
 
 import { AccountService } from "./account.service";
 
+const API_BASE_URL = "http://localhost:8080";
+
 
 @Injectable()
 export class TopUpService {
@@ -23,7 +25,7 @@ export class TopUpService {
         @Inject(Http)           private http: Http,
         @Inject(AccountService) private account: AccountService,
     ) {
-        account.Observable
+        this.account.Observable
             .first(d => !! d)
             .subscribe (d => this._developer = d);
     }
@@ -76,7 +78,7 @@ export class TopUpService {
 
         const headers = new Headers({ "Content-Type": "application/json" });
 
-        this.http.post(url, JSON.stringify(data), { headers: headers, withCredentials: true })
+        this.http.post(url, JSON.stringify(data), { headers, withCredentials: true })
             .catch     (err  => Observable.throw(new Error(err.json().user_message)))
             .map       (resp => resp.json().topUp as ITopUp)
             .subscribe (

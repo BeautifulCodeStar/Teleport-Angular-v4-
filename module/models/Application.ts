@@ -56,16 +56,16 @@ export class Application implements IApplication {
     public toJSON (): IApplication {
         
         return {
-            id: this.id,
-            createdAt: this.createdAt.toISOString(),
-            lastModifiedAt: this.lastModifiedAt.toISOString(),
-            name: this.name,
-            friendlyName: this.friendlyName,
-            status: this.status,
-            isActive: this.isActive,
-            notes: this.notes,
-            credentials: this._credentials.map(c => c.toJSON()),
-            sipDomains: this.sipDomains,
+            id             : this.id,
+            createdAt      : this.createdAt.toISOString(),
+            lastModifiedAt : this.lastModifiedAt.toISOString(),
+            name           : this.name,
+            friendlyName   : this.friendlyName,
+            status         : this.status,
+            isActive       : this.isActive,
+            notes          : this.notes,
+            credentials    : this._credentials.map(c => c.toJSON()),
+            sipDomains     : this.sipDomains,
         };
     }
 }

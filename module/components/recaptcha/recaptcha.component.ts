@@ -1,4 +1,6 @@
 
+import "../vendor-js/google-recaptcha-api";
+
 import {
     Component, Input, Output, EventEmitter,
     ViewChild, ElementRef, AfterViewInit, OnDestroy,
@@ -11,10 +13,10 @@ declare const window: any;
 
 
 @Component({
-    selector: "sp-recaptcha",
+    selector: "teleport-sp-recaptcha",
     template: `<div #renderDiv class="g-recaptcha"></div>`,
 })
-export class ReCaptchaWidget implements AfterViewInit, OnDestroy {
+export class TeleportReCaptchaComponent implements AfterViewInit, OnDestroy {
 
     @ViewChild("renderDiv") public renderDiv: ElementRef;
 
@@ -46,10 +48,10 @@ export class ReCaptchaWidget implements AfterViewInit, OnDestroy {
             this.renderDiv.nativeElement.id = id;
 
             let widgetId = window.grecaptcha.render(id, {
-                sitekey: this.sitekey,
-                theme: this.theme || "light",
-                callback: (evt: any) => this.callback.emit(evt),
-                "expired-callback": (evt: any) => this.expiredCallback.emit(evt),
+                sitekey            : this.sitekey,
+                theme              : this.theme || "light",
+                callback           : (evt: any) => this.callback.emit(evt),
+                "expired-callback" : (evt: any) => this.expiredCallback.emit(evt),
             });
 
             if (this.onReset) {

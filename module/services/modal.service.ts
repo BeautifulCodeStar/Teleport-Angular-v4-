@@ -54,7 +54,7 @@ export namespace Modal {
     export class Service {
 
         constructor(
-            @Inject(DOCUMENT) private doc: HTMLDocument
+            @Inject(DOCUMENT) private doc: HTMLDocument,
         ) {}
 
         public show (title: string, message: string, config?: IConfig): Promise<boolean> {
@@ -73,9 +73,9 @@ export namespace Modal {
 
                     let titleEl = modal.getElementsByClassName("modal-title").item(0) as HTMLHeadElement,
                         bodyEl = modal.getElementsByClassName("modal-body").item(0) as HTMLDivElement,
-                        cancelButtonEl: HTMLButtonElement,
-                        closeIconEl: HTMLButtonElement,
-                        okButtonEl: HTMLButtonElement;
+                        cancelButtonEl: HTMLButtonElement = new HTMLButtonElement(), // Just to shutup the undefined checker.
+                        closeIconEl: HTMLButtonElement = new HTMLButtonElement(),
+                        okButtonEl: HTMLButtonElement = new HTMLButtonElement();
 
                     titleEl.innerHTML = title;
                     bodyEl.innerHTML = message;

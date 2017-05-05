@@ -4,8 +4,10 @@ import { Http }               from "@angular/http";
 
 import { Observable }      from "rxjs/Observable";
 
-import { IUsageDataResponse, IUsageAggregateData, IDeveloper } from "../models/interfaces";
-import { AccountService }                              from "./account.service";
+import { IUsageAggregateData, IDeveloper } from "../models/interfaces";
+import { AccountService }                  from "./account.service";
+
+const API_BASE_URL = "http://localhost:8080";
 
 
 export interface IUsageRequest {
@@ -24,14 +26,14 @@ export interface IUsageResponse {
 @Injectable()
 export class UsageService {
 
-    private _developer: IDeveloper = null;
+    private _developer: IDeveloper;
 
 
     constructor(
         @Inject(Http)           private http: Http,
         @Inject(AccountService) private account: AccountService,
     ) {
-        account.Observable
+        this.account.Observable
             .first(d => !! d)
             .subscribe (d => this._developer = d);
     }

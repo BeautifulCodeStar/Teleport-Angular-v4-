@@ -13,10 +13,11 @@ import { IDeveloper }     from "../../models/interfaces";
 
 
 @Component({
-    selector   : "ui-login",
-    templateUrl: DOC_BASE_HREF + "/directives/login/login.html",
+    moduleId   : String(module.id),
+    selector   : "teleport-login-page-component",
+    templateUrl: "login.html",
 })
-export class UILogin {
+export class TeleportLoginPageComponent {
     
     public userName = "";
     public passWord = "";
@@ -25,7 +26,7 @@ export class UILogin {
     public isCaptchaOk = false;
 
     public showMultiLogin = false;
-    public devLogin: IDeveloper & { authCode: string };
+    public devLogin: IDeveloper & { authCode: string } | undefined;
     public userLogins: (IDeveloper & { authCode: string })[];
     
     private reCaptchaResponse = "";
@@ -71,7 +72,7 @@ export class UILogin {
                 if (res.developer) {
                     console.log("Login Success", res.developer);
                     this.messages.info(`Welcome, ${res.developer.firstName}.`, "You are now logged in to your account.");
-                } else {
+                } else if (res.possibleLogins) {
                     this._resetCaptchaObserver.next(true);
                     this.isCaptchaOk = false;
                     this.isBusy = false;
@@ -112,7 +113,7 @@ export class UILogin {
 
     public closeMultiLogin () {
         this.showMultiLogin = false;
-        this.devLogin = undefined;
-        this.userLogins = undefined;
+        delete this.devLogin;
+        delete this.userLogins;
     }
 }

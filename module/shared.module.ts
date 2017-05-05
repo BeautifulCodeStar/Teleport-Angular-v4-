@@ -9,8 +9,7 @@ import { LoginService }   from "./services/login.service";
 import { MessageService } from "./services/message.service";
 import { Modal }          from "./services/modal.service";
 
-import { ReCaptchaWidget } from "./recaptcha/recaptcha.component";
-// import { ReCaptchaButton } from "./recaptcha/recaptcha-button.component";
+import { TeleportReCaptchaComponent } from "./components/recaptcha/recaptcha.component";
 
 /**
  * Share this module with other core modules.
@@ -23,8 +22,7 @@ import { ReCaptchaWidget } from "./recaptcha/recaptcha.component";
         HttpModule,
     ],
     declarations: [
-        ReCaptchaWidget,
-        // ReCaptchaButton,
+        TeleportReCaptchaComponent,
     ],
     providers: [
         LoginService,
@@ -36,8 +34,7 @@ import { ReCaptchaWidget } from "./recaptcha/recaptcha.component";
         CommonModule,
         FormsModule,
         HttpModule,
-        ReCaptchaWidget,
-        // ReCaptchaButton,
+        TeleportReCaptchaComponent,
     ],
 })
 export class SharedModule {}

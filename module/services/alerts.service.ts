@@ -11,11 +11,13 @@ import { Alert }              from "../models/Alert";
 
 import { AccountService } from "./account.service";
 
+const API_BASE_URL = "http://localhost:8080";
+
 
 @Injectable()
 export class AlertsService {
 
-    private _developer: IDeveloper = null;
+    private _developer: IDeveloper;
 
     private _observable: Observable<IAlert[]>;
     private _observer: Observer<IAlert[]>;
@@ -30,7 +32,7 @@ export class AlertsService {
     ) {
         console.log("new AlertsService()", arguments);
 
-        account.Observable
+        this.account.Observable
             .first(d => !! d)
             .subscribe (d => this._developer = d);
 
@@ -48,14 +50,14 @@ export class AlertsService {
 
 
     public get Observable (): Observable<IAlert[]> {
-        this.refresh();
+        this.refresh().catch(err => this._observer.error(err));
         return this._observable;
     }
 
 
     public refresh (): Promise<IAlert[]> {
 
-        if (this._lastRefresh > Date.now() - 5000) { return; }
+        if (this._lastRefresh > Date.now() - 5000) { return Promise.resolve(this._alerts); }
         this._lastRefresh = Date.now();
 
         const url = [
@@ -83,7 +85,7 @@ export class AlertsService {
     public add (alert: IAlert): Promise<boolean> {
 
         let headers = new Headers({ "Content-Type": "application/json" });
-        let options = new RequestOptions({ headers: headers, withCredentials: true });
+        let options = new RequestOptions({ headers, withCredentials: true });
 
         const url = [
             API_BASE_URL,

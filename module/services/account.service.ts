@@ -9,6 +9,8 @@ import { SessionService }       from "./session.service";
 import { IDeveloper, ISession } from "../models/interfaces";
 import { Developer }            from "../models/Developer";
 
+const API_BASE_URL = "http://localhost:8080";
+
 
 @Injectable()
 export class AccountService {
@@ -16,13 +18,13 @@ export class AccountService {
     private _observable: Observable<IDeveloper>;
     private _observer: Observer<IDeveloper>;
 
-    private _developer: IDeveloper = null;
+    private _developer: IDeveloper;
 
     private _lastRefresh = 0;
 
     constructor (
         @Inject(Http)           private http: Http,
-        @Inject(SessionService) private session: SessionService
+        @Inject(SessionService) private session: SessionService,
     ) {
         console.log("new AccountService()", http, session);
 
@@ -39,7 +41,7 @@ export class AccountService {
     public cleanup () {
         console.log("AccountService cleanup");
         if (this._observer) { this._observer.complete(); }
-        this._developer = null;
+        delete this._developer;
     }
 
     /**
@@ -56,7 +58,7 @@ export class AccountService {
                 .refCount();
         }
         
-        this.refreshDeveloper();
+        this.refreshDeveloper().catch(err => this._observer.error(err));
         return this._observable;
     }
 
@@ -66,9 +68,9 @@ export class AccountService {
      */
     public refreshDeveloper (): Promise<IDeveloper> {
 
-        if (! this._developer) { return; }
+        if (! this._developer) { return Promise.reject(new Error("No Developer found.")); }
 
-        if (this._lastRefresh > Date.now() - 500) { return; }
+        if (this._lastRefresh > Date.now() - 500) { return Promise.resolve(this._developer); }
         this._lastRefresh = Date.now();
         
         let url = [
@@ -92,7 +94,7 @@ export class AccountService {
     public update (dev: IDeveloper): Promise<Developer> {
 
         let headers = new Headers({ "Content-Type": "application/json" });
-        let options = new RequestOptions({ headers: headers, withCredentials: true });
+        let options = new RequestOptions({ headers, withCredentials: true });
 
         let url = [
             API_BASE_URL,
@@ -120,7 +122,7 @@ export class AccountService {
     public updatePassword (password: string, newPassword: string): Promise<boolean> {
 
         let headers = new Headers({ "Content-Type": "application/json" });
-        let options = new RequestOptions({ headers: headers, withCredentials: true });
+        let options = new RequestOptions({ headers, withCredentials: true });
 
         let url = [
             API_BASE_URL,

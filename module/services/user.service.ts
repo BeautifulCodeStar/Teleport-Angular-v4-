@@ -6,17 +6,18 @@ import { Observable }      from "rxjs/Observable";
 import { IDeveloper, IUser } from "../models/interfaces";
 import { AccountService }    from "./account.service";
 
+const API_BASE_URL = "http://localhost:8080";
 
 
-interface IUserDetailResponse {
-    developer: IDeveloper;
-    portalUser: IUser;
-}
-
-interface IUserListResponse {
-    developer: IDeveloper;
-    portalUsers: IUser[];
-}
+// interface IUserDetailResponse {
+//     developer: IDeveloper;
+//     portalUser: IUser;
+// }
+//
+// interface IUserListResponse {
+//     developer: IDeveloper;
+//     portalUsers: IUser[];
+// }
 
 
 /**
@@ -29,9 +30,9 @@ export class UserService {
 
     constructor(
         @Inject(Http)           private http: Http,
-        @Inject(AccountService) private account: AccountService
+        @Inject(AccountService) private account: AccountService,
     ) {
-        account.Observable
+        this.account.Observable
             .first(d => !! d)
             .subscribe (d => this._developer = d);
     }
@@ -90,7 +91,7 @@ export class UserService {
     public create (user: IUser): Promise<IUser> {
 
         let headers = new Headers({ "Content-Type": "application/json" });
-        let options = { headers: headers, withCredentials: true };
+        let options = { headers, withCredentials: true };
 
         const url = [
             API_BASE_URL,
@@ -114,7 +115,7 @@ export class UserService {
     public update (user: IUser): Promise<IUser> {
 
         let headers = new Headers({ "Content-Type": "application/json" });
-        let options = { headers: headers, withCredentials: true };
+        let options = { headers, withCredentials: true };
 
         const url = [
             API_BASE_URL,
@@ -141,7 +142,7 @@ export class UserService {
     public updatePassword (user: IUser, oldPassword: string, password: string): Promise<IUser> {
 
         let headers = new Headers({ "Content-Type": "application/json" });
-        let options = { headers: headers, withCredentials: true };
+        let options = { headers, withCredentials: true };
 
         const url = [
             API_BASE_URL,
@@ -191,7 +192,7 @@ export class UserService {
     public sendInvite (user: IUser): Promise<boolean> {
 
         let headers = new Headers({ "Content-Type": "application/json" });
-        let options = { headers: headers, withCredentials: true };
+        let options = { headers, withCredentials: true };
 
         const url = [
             API_BASE_URL,

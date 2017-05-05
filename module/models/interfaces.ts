@@ -1,5 +1,4 @@
 
-
 export interface IDeveloper {
     readonly id: string;
     readonly status: string;
@@ -131,7 +130,7 @@ export interface IUser {
 
 export interface IUserPermissions {
 
-    [key: string]: boolean;
+    [key: string]: boolean | undefined;
 
     "account.create"?: boolean;
     "account.read"?: boolean;

@@ -12,13 +12,13 @@ export class Developer implements IDeveloper {
     private _firstName: string;
     private _lastName: string;
     private _email: string;
-    private _company: string;
-    private _phone: string;
+    private _company: string | undefined;
+    private _phone: string | undefined;
     private _numApps: number;
     private _maxApps: number;
     private _maxSubAccountsPerApp: number;
     private _permissions: IUserPermissions;
-    private _portalUser: IUser;
+    private _portalUser: IUser | undefined;
 
     constructor (dev: IDeveloper) {
 

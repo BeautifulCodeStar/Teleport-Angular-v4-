@@ -6,23 +6,25 @@ import { Observable } from "rxjs/Observable";
 import { AccountService }             from "./account.service";
 import { IDeveloper, IUserBasicAuth } from "../models/interfaces";
 
+const API_BASE_URL = "http://localhost:8080";
+
 
 @Injectable()
 export class AccountCredentialsService {
 
-    private _developer: IDeveloper = null;
+    private _developer: IDeveloper;
 
     constructor (
         @Inject(Http)           private http: Http,
-        @Inject(AccountService) private account: AccountService
+        @Inject(AccountService) private account: AccountService,
     ) {
-        account.Observable
+        this.account.Observable
             .first(d => !! d)
             .subscribe (d => this._developer = d);
     }
 
     public cleanup () {
-        this._developer = null;
+        delete this._developer;
     }
 
     /**
@@ -72,7 +74,7 @@ export class AccountCredentialsService {
             encodeURIComponent(userId),
         ].join("/");
 
-        return this.http.post(url, "", { headers: headers, withCredentials: true })
+        return this.http.post(url, "", { headers, withCredentials: true })
             .catch (err => Observable.throw(new Error(err.json().user_message)))
             .map   (res => res.json().basicAuthPasswords as string[])
             .map   (p => p.map(p2 => ({userName: userId, password: p2})))

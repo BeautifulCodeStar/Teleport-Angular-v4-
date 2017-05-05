@@ -1,5 +1,5 @@
 
-import {IAlert, IAlertAccountBalance} from "./interfaces";
+import { IAlert, IAlertAccountBalance } from "./interfaces";
 
 
 export class Alert implements IAlert {
@@ -8,7 +8,7 @@ export class Alert implements IAlert {
     private _firstname: string;
     private _lastname: string;
     private _email: string;
-    private _phone_no: string;
+    private _phone_no: string | undefined;
     private _send_receipt_on_payment: boolean;
     private _notify_on_app_payment: boolean;
     private _account_balance: AlertAccountBalance;
@@ -59,14 +59,14 @@ export class Alert implements IAlert {
     public toJSON (): IAlert {
 
         return {
-            id                     : this.id,
-            firstname              : this.firstname,
-            lastname               : this.lastname,
-            email                  : this.email,
-            phone_no               : this.phone_no,
-            send_receipt_on_payment: this.send_receipt_on_payment,
-            notify_on_app_payment  : this.notify_on_app_payment,
-            account_balance        : this.account_balance.toJSON(),
+            id                      : this.id,
+            firstname               : this.firstname,
+            lastname                : this.lastname,
+            email                   : this.email,
+            phone_no                : this.phone_no,
+            send_receipt_on_payment : this.send_receipt_on_payment,
+            notify_on_app_payment   : this.notify_on_app_payment,
+            account_balance         : this.account_balance.toJSON(),
         };
     }
 }
@@ -74,12 +74,14 @@ export class Alert implements IAlert {
 
 export class AlertAccountBalance implements IAlertAccountBalance {
 
-    private _minutes_before_zero: number;
-    private _thresholds: number[];
+    private _minutes_before_zero: number | undefined;
+    private _thresholds: number[] | undefined;
 
-    constructor(balance: IAlertAccountBalance) {
-        this._minutes_before_zero = balance.minutes_before_zero;
-        this._thresholds          = balance.thresholds;
+    constructor(balance?: IAlertAccountBalance) {
+        if (balance !== undefined) {
+            this._minutes_before_zero = balance.minutes_before_zero;
+            this._thresholds = balance.thresholds;
+        }
     }
 
     public get minutes_before_zero () {
@@ -92,8 +94,8 @@ export class AlertAccountBalance implements IAlertAccountBalance {
 
     public toJSON (): IAlertAccountBalance {
         return {
-            minutes_before_zero: this.minutes_before_zero,
-            thresholds         : this.thresholds,
+            minutes_before_zero : this.minutes_before_zero,
+            thresholds          : this.thresholds,
         };
     }
 }

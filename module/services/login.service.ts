@@ -7,6 +7,8 @@ import { Developer }         from "../models/Developer";
 import { IDeveloper, IUser } from "../models/interfaces";
 import { SessionService }    from "./session.service";
 
+const API_BASE_URL = "http://localhost:8080";
+
 
 export interface ILoginResponse {
     developer?: IDeveloper;
@@ -34,7 +36,7 @@ export class LoginService {
 
         return this.http.post(`${API_BASE_URL}/register`, JSON.stringify(dev), options)
             .catch (err => Observable.throw(new Error(err.json().user_message)))
-            .map   (res => true)
+            .map   (() => true)
             .catch (err => Observable.throw(err))
             .toPromise();
     }
@@ -65,7 +67,7 @@ export class LoginService {
                 developer: res.developer ? new Developer(res.developer) : null,
                 possibleLogins: res.possibleLogins ? res.possibleLogins : null,
             }))
-            .do    ((res: ILoginResponse) => res.developer && this.session.refresh())
+            .do    (res => { if (res.developer) { this.session.refresh(); } })
             .catch (err => Observable.throw(err))
             .toPromise();
     }

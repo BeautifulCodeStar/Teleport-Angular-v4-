@@ -5,7 +5,7 @@ const del = require("del");
 
 gulp.task("fresh-project", function(cb) {
     del([
-        './module/**/*.css',
+        // './module/**/*.css',
         './_test-output/*',
         './bundle/*',
         './coverage/*',
@@ -40,4 +40,24 @@ gulp.task('bump:patch', function(){
     gulp.src('./package.json')
         .pipe(bump({type:'patch'}))
         .pipe(gulp.dest('./'));
+});
+
+
+gulp.task('dev:sass', [], function () {
+
+    var sass = require('gulp-sass'),
+        rename = require('gulp-rename'),
+        autoprefixer = require('gulp-autoprefixer'),
+        cssnano = require('gulp-cssnano');
+
+    return gulp.src('./module/__sass/main.scss')
+        .pipe(sass())
+        .pipe(autoprefixer({
+            browsers: ['> 5%']
+        }))
+        .pipe(cssnano({
+            safe: true
+        }))
+        .pipe(rename('main.min.css'))
+        .pipe(gulp.dest('./module/pages/css'));
 });

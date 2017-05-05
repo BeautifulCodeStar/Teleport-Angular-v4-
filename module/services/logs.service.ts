@@ -9,6 +9,8 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { ILog, IDeveloper } from "../models/interfaces";
 import { AccountService }   from "./account.service";
 
+const API_BASE_URL = "http://localhost:8080";
+
 
 export interface ILogsRequest {
     beginDate?: Date | string;
@@ -29,7 +31,7 @@ export interface ILogsResponse {
 @Injectable()
 export class LogsService {
 
-    private _developer: IDeveloper = null;
+    private _developer: IDeveloper;
 
     private _observable: Observable<ILogsResponse>;
     private _observer: Observer<ILogsResponse>;
@@ -43,14 +45,14 @@ export class LogsService {
         @Inject(Http)           private http: Http,
         @Inject(AccountService) private account: AccountService,
     ) {
-        account.Observable
+        this.account.Observable
             .first(d => !! d)
             .subscribe (d => this._developer = d);
     }
 
     public destroy () {
         if (this._observer) { this._observer.complete(); }
-        this._logs = undefined;
+        delete this._logs;
     }
 
     public get Observable (): Observable<ILogsResponse> {
@@ -120,7 +122,7 @@ export class LogsService {
             this._searchParams.set("app_id", logs.appId);
         }
         if (logs.direction !== "both") {
-            this._searchParams.set("direction", logs.direction);
+            this._searchParams.set("direction", logs.direction || "inbound");
         }
         if (logs.connectTime) {
             this._searchParams.set("connect_time", String(logs.connectTime));

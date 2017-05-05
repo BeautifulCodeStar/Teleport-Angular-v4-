@@ -13,8 +13,10 @@ export class MessageService {
     constructor (
         @Inject(DOCUMENT) private doc: HTMLDocument,
     ) {
-        this.containerDiv = doc.getElementById("message-container-ber2z79jspqlg14i");
-        if (! this.containerDiv) {
+        const div = doc.getElementById("message-container-ber2z79jspqlg14i");
+        if (div !== null) {
+            this.containerDiv = div;
+        } else {
             this.containerDiv = doc.createElement("div");
             this.containerDiv.id = "message-container-ber2z79jspqlg14i";
             this.containerDiv.className = "messages-container";
@@ -61,13 +63,13 @@ export class MessageService {
         alert.appendChild(p);
 
         let autoRemoveId = setTimeout(() => {
-            if (alert.parentElement) {
-                alert.style.webkitAnimation = "fadeOutRight 2s";
-                alert.style.animation = "fadeOutRight 2s";
-                alert.style.opacity = "0";
-                setTimeout(() => { if (alert.parentElement) { this.containerDiv.removeChild(alert); } }, 2100);
-            }
-        }, 5000);
+                if (alert.parentElement) {
+                    alert.style.webkitAnimation = "fadeOutRight 2s";
+                    alert.style.animation = "fadeOutRight 2s";
+                    alert.style.opacity = "0";
+                    setTimeout(() => { if (alert.parentElement) { this.containerDiv.removeChild(alert); } }, 2100);
+                }
+            }, 5000);
 
         alert.addEventListener("click", () => {
             if (alert.parentElement) {
