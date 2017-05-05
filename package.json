@@ -6,7 +6,8 @@
   "types": "bundle/module/index.d.ts",
   "scripts": {
     "fresh-start": "gulp 'fresh-project'",
-    "bundle": "gulp 'bundle:prepare' && ./node_modules/node-sass/bin/node-sass ./module -o ./module && ./node_modules/typescript/bin/tsc && ./node_modules/webpack/bin/webpack.js -p --config webpack.config.js && gulp 'bundle:finalize'",
+    "bundle": "gulp 'bundle:prepare' && ./node_modules/typescript/bin/tsc && ./node_modules/webpack/bin/webpack.js -p --config webpack.config.js && gulp 'bundle:finalize'",
+    "bundle-with-sass": "gulp 'bundle:prepare' && ./node_modules/node-sass/bin/node-sass ./module -o ./module && ./node_modules/typescript/bin/tsc && ./node_modules/webpack/bin/webpack.js -p --config webpack.config.js && gulp 'bundle:finalize'",
     "test": "npm run bundle && ./node_modules/karma/bin/karma start ./karma.conf.js --single-run",
     "demo-compile": "./node_modules/typescript/bin/tsc -p ./demo/tsconfig.json",
     "demo-run": "npm run demo-compile && ./node_modules/http-server/bin/http-server -o",
@@ -42,7 +43,6 @@
     "shoutpoint-teleport-core": "git+http://gitlab.teramesh.net/patrick.martin/shoutpoint-teleport-core.git#1.5.3"
   },
   "dependencies": {
-    "braintree-web": "3.13.0",
     "md2": "0.0.19"
   },
   "devDependencies": {

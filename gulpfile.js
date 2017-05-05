@@ -50,7 +50,7 @@ gulp.task('dev:sass', [], function () {
         autoprefixer = require('gulp-autoprefixer'),
         cssnano = require('gulp-cssnano');
 
-    return gulp.src('./module/__sass/main.scss')
+    return gulp.src('./__sass/main.scss')
         .pipe(sass())
         .pipe(autoprefixer({
             browsers: ['> 5%']

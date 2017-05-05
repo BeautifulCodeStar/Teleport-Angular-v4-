@@ -1,0 +1,30 @@
+import { OnInit, OnDestroy } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { IUser } from "../../../../models/interfaces";
+import { AccountService } from "../../../../services/account.service";
+import { UserService } from "../../../../services/user.service";
+import { MessageService } from "../../../../services/message.service";
+import { Modal } from "../../../../services/modal.service";
+export declare class TeleportDevPortalUserUpdateComponent implements OnInit, OnDestroy {
+    private router;
+    private route;
+    private account;
+    private users;
+    private messages;
+    private modal;
+    isBusy: boolean;
+    isEditing: boolean;
+    private _developer;
+    private _origUser;
+    private _user;
+    constructor(router: Router, route: ActivatedRoute, account: AccountService, users: UserService, messages: MessageService, modal: Modal.Service);
+    ngOnInit(): void;
+    ngOnDestroy(): void;
+    readonly User: IUser;
+    editUser(): void;
+    deleteUser(): void;
+    isEmailValid(): boolean;
+    isUserValid(): boolean;
+    saveChanges(): void;
+    cancelChanges(): void;
+}

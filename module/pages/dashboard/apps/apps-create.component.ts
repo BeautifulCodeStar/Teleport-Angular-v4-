@@ -8,7 +8,7 @@ import { ApplicationService } from "../../../services/application.service";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-apps-create",
     templateUrl: "apps-create.html",
-    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
+    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalAppsCreateComponent {
 

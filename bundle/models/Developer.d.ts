@@ -1,0 +1,31 @@
+import { IDeveloper, IUserPermissions, IUser } from "./interfaces";
+export declare class Developer implements IDeveloper {
+    private _id;
+    private _status;
+    private _createdAt;
+    private _firstName;
+    private _lastName;
+    private _email;
+    private _company;
+    private _phone;
+    private _numApps;
+    private _maxApps;
+    private _maxSubAccountsPerApp;
+    private _permissions;
+    private _portalUser;
+    constructor(dev: IDeveloper);
+    readonly id: string;
+    readonly status: string;
+    readonly createdAt: Date;
+    readonly firstName: string;
+    readonly lastName: string;
+    readonly email: string;
+    readonly company: string | undefined;
+    readonly phone: string | undefined;
+    readonly numApps: number;
+    readonly maxApps: number;
+    readonly maxSubAccountsPerApp: number;
+    readonly permissions: IUserPermissions;
+    readonly portalUser: IUser | undefined;
+    toJSON(): IDeveloper;
+}

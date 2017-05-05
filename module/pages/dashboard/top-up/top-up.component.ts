@@ -12,7 +12,7 @@ import { ITopUp } from "../../../models/interfaces";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-top-up",
     templateUrl: "top-up.html",
-    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
+    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalTopUpComponent implements OnInit, OnDestroy {
 

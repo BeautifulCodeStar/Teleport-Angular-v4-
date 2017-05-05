@@ -13,7 +13,7 @@ declare const braintree: any;
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-billing-payment",
     templateUrl: "/billing.payment.html",
-    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
+    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalBillingPaymentComponent implements AfterViewInit, OnDestroy {
 

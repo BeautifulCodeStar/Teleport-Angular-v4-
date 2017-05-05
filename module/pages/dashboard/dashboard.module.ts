@@ -1,7 +1,8 @@
 import { NgModule } from "@angular/core";
 
+import { Md2DatepickerModule } from "md2/datepicker";
+
 import { RolePickerModule }    from "./profile/users/role-picker.module";
-import { Md2DatepickerModule } from "../../md2/datepicker/datepicker";
 
 import { SharedModule }        from "../../shared.module";
 
@@ -43,7 +44,7 @@ import { AllowAccessDirective } from "./access-denied/access.directive";
     imports: [
         SharedModule,
         RolePickerModule,
-        Md2DatepickerModule.forRoot(),
+        Md2DatepickerModule,
         DevPortalServicesModule,
     ],
     declarations: [

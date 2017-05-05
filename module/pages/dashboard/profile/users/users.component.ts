@@ -13,7 +13,7 @@ import * as Permissions   from "../../../../utils/Permissions";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-users",
     templateUrl: "users.html",
-    styleUrls  : [ "../../../../css/bootswatch.css", "../../../../css/main.min.css" ],
+    styleUrls  : [ "../../../css/bootswatch.min.css", "../../../css/main.min.css" ],
 })
 export class TeleportDevPortalUsersComponent implements OnInit, OnDestroy {
 

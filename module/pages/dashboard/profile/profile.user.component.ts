@@ -18,7 +18,7 @@ import { EmailValidator } from "../../../utils/EmailValidator";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-user-profile",
     templateUrl: "profile.user.html",
-    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
+    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalUserProfileComponent implements OnInit, OnDestroy {
 

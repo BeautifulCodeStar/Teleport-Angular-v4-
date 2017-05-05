@@ -10,7 +10,7 @@ import { BillingService, IBillingPayload } from "../../../services/billing.servi
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-billing",
     templateUrl: "billing.html",
-    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
+    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalBillingComponent implements OnInit, OnDestroy {
 

@@ -12,7 +12,7 @@ import { MessageService }                         from "../../../../services/mes
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-app-integrations-aws",
     templateUrl: "apps.integrations.aws.html",
-    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
+    styleUrls  : [ "../../../css/bootswatch.min.css", "../../../css/main.min.css" ],
 })
 export class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
 

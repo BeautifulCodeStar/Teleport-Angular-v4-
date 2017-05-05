@@ -18,7 +18,7 @@ const API_BASE_URL = "http://localhost:8080";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-support-form",
     templateUrl: "support.html",
-    styleUrls  : [ "../../css/bootswatch.css", "../../css/main.min.css" ],
+    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalSupportFormComponent implements OnInit, OnDestroy {
 

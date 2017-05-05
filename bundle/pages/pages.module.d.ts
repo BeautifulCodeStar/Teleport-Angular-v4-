@@ -1,2 +1,2 @@
-export declare class PagesModule {
+export declare class DevPortalPagesModule {
 }

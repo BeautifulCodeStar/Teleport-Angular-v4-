@@ -11,7 +11,7 @@ import PasswordUtil       from "../../../utils/PasswordUtil";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-profile-password",
     templateUrl: "profile.password.html",
-    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
+    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalProfilePasswordComponent {
 
@@ -19,7 +19,6 @@ export class TeleportDevPortalProfilePasswordComponent {
     public password = "";
     public newPassword = "";
     public newPasswordVerify = "";
-
     @Output() private onComplete = new EventEmitter<void>();
 
     constructor(
@@ -82,7 +81,7 @@ export class TeleportDevPortalProfilePasswordComponent {
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-user-profile-password",
     templateUrl: "profile.password.html",
-    styleUrls  : [ "../../../css/bootswatch.css", "../../../css/main.min.css" ],
+    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalUserProfilePasswordComponent {
 
