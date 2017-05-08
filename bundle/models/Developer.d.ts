@@ -20,12 +20,12 @@ export declare class Developer implements IDeveloper {
     readonly firstName: string;
     readonly lastName: string;
     readonly email: string;
-    readonly company: string | undefined;
-    readonly phone: string | undefined;
+    readonly company: string;
+    readonly phone: string;
     readonly numApps: number;
     readonly maxApps: number;
     readonly maxSubAccountsPerApp: number;
     readonly permissions: IUserPermissions;
-    readonly portalUser: IUser | undefined;
+    readonly portalUser: IUser;
     toJSON(): IDeveloper;
 }

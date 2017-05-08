@@ -10,7 +10,7 @@ export declare class SessionService {
     private _lastRefresh;
     constructor(http: Http);
     cleanup(): void;
-    readonly Observable: Observable<ISession | null>;
+    readonly Observable: Observable<ISession>;
     refresh(): void;
     private createObservable(observer);
     private pingSession();

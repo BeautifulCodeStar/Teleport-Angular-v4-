@@ -17,9 +17,9 @@ import { DevPortalServicesModule }   from "./services/services.module";
 import { services } from "shoutpoint-teleport-core";
 
 // Models, functions and classes
-import * as devPortalUtilsImport from "./utils/index";
-import * as devPortalModelsImport from "./models/index";
-
+import * as devPortalUtilsImport    from "./utils/index";
+import * as devPortalModelsImport   from "./models/index";
+import * as devPortalServicesImport from "./services/index";
 
 @NgModule({
     imports: [
@@ -36,9 +36,26 @@ import * as devPortalModelsImport from "./models/index";
         services.ServicesModule,
     ],
     exports: [
+
         DevPortalComponentsModule,
         DevPortalPagesModule,
         DevPortalServicesModule,
+        // devPortalServicesImport.AccountCredentialsService,
+        // devPortalServicesImport.AccountService,
+        // devPortalServicesImport.AlertsService,
+        // devPortalServicesImport.ApplicationService,
+        // devPortalServicesImport.BillingService,
+        // devPortalServicesImport.IntegrationsAWSService,
+        // devPortalServicesImport.IntegrationsWatsonService,
+        // devPortalServicesImport.LoginService,
+        // devPortalServicesImport.LogsService,
+        // devPortalServicesImport.MessageService,
+        // devPortalServicesImport.Modal.Service,
+        // devPortalServicesImport.PermsGuardCanActivate,
+        // devPortalServicesImport.SessionService,
+        // devPortalServicesImport.TopUpService,
+        // devPortalServicesImport.UsageService,
+        // devPortalServicesImport.UserService,
     ],
 })
 export class DevPortalModule { }
@@ -49,3 +66,4 @@ export class DevPortalModule { }
  */
 export const devPortalUtils = devPortalUtilsImport;
 export const devPortalModels = devPortalModelsImport;
+export const devPortalServices = devPortalServicesImport;

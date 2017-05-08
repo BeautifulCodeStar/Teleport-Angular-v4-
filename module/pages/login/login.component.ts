@@ -13,7 +13,7 @@ import { IDeveloper }     from "../../models/interfaces";
 
 @Component({
     moduleId   : String(module.id),
-    selector   : "teleport-login",
+    selector   : "teleport-dev-portal-login",
     templateUrl: "login.html",
     styleUrls  : [ "../css/bootswatch.min.css", "../css/main.min.css" ],
 })

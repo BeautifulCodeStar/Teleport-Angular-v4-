@@ -91,6 +91,7 @@ export class TeleportDevPortalRolePickerComponent implements OnInit, OnDestroy {
 
 
 @Component({
+    moduleId : String(module.id),
     selector : "teleport-dev-portal-role-picker-row",
     template : `
         <ul>
@@ -104,7 +105,7 @@ export class TeleportDevPortalRolePickerComponent implements OnInit, OnDestroy {
                         [ngClass]="{ 'glyphicon-unchecked': ! hasPerm(node, a) && isPermAvailable(node, a), 'glyphicon-ok-sign': hasPerm(node, a), 'glyphicon-minus disabled': ! isPermAvailable(node, a), exact: hasExactPerm(node, a) }"
                     ></span>
                 </span>
-                <role-picker-row [dev]="dev" [user]="user" [tree]="tree[node].subTree" [readOnly]="readOnly"></role-picker-row>
+                <teleport-dev-portal-role-picker-row [dev]="dev" [user]="user" [tree]="tree[node].subTree" [readOnly]="readOnly"></teleport-dev-portal-role-picker-row>
             </li>
         </ul>
     `,

@@ -36,25 +36,24 @@ System.config({
         'shoutpoint-teleport-core': 'npm:shoutpoint-teleport-core/index.umd.js',
 
         // This setting is dependent on the "path" in tsconfig.json.
-        'teleport-module-my-module-name': '../bundle/module.umd.js'
+        'teleport-module-dev-portal': '../bundle/module.umd.js'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
-      app: {
-        main: './main.js',
-        defaultExtension: 'js'
-      },
-      'concrete-types': {
-        exports: 'Concrete',
-        format: 'global'
-      },
-      'date-fns': {
-          main: 'index.js',
-          defaultExtension: 'js'
-      },
-      rxjs: {
-          defaultExtension: 'js'
-      }
+        app: {
+            main: './main.js',
+            defaultExtension: 'js'
+        },
+        'concrete-types': {
+            exports: 'Concrete',
+            format: 'global'
+        },
+        'date-fns': {
+            main: 'index.js',
+            defaultExtension: 'js'
+        },
+        rxjs: {
+            defaultExtension: 'js'
+        }
     }
 });
-

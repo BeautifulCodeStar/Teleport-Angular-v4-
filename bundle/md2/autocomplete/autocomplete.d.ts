@@ -1,0 +1,51 @@
+import { AfterContentInit, ElementRef, EventEmitter, ModuleWithProviders } from '@angular/core';
+import { ControlValueAccessor } from '@angular/forms';
+import { HightlightPipe } from './autocomplete.pipe';
+export declare const MD2_AUTOCOMPLETE_CONTROL_VALUE_ACCESSOR: any;
+export declare class Md2Autocomplete implements AfterContentInit, ControlValueAccessor {
+    private element;
+    constructor(element: ElementRef);
+    ngAfterContentInit(): void;
+    change: EventEmitter<any>;
+    private _value;
+    private _disabled;
+    private _isInitialized;
+    private _onTouchedCallback;
+    private _onChangeCallback;
+    private _items;
+    private list;
+    private focusedOption;
+    private inputBuffer;
+    private selectedItem;
+    private inputFocused;
+    private noBlur;
+    id: string;
+    disabled: boolean;
+    tabindex: number;
+    placeholder: string;
+    textKey: string;
+    valueKey: string;
+    items: Array<any>;
+    value: any;
+    private setValue(value);
+    private equals(o1, o2);
+    readonly isMenuVisible: boolean;
+    private updateScroll();
+    private inputKeydown(event);
+    private select(event, index);
+    private onClear();
+    private updateValue();
+    private onFocus();
+    private onInputFocus();
+    private onInputBlur();
+    private listEnter();
+    private listLeave();
+    private updateItems(query);
+    writeValue(value: any): void;
+    registerOnChange(fn: any): void;
+    registerOnTouched(fn: any): void;
+}
+export declare const MD2_AUTOCOMPLETE_DIRECTIVES: (typeof HightlightPipe | typeof Md2Autocomplete)[];
+export declare class Md2AutocompleteModule {
+    static forRoot(): ModuleWithProviders;
+}

@@ -13,7 +13,7 @@ export declare class Alert implements IAlert {
     readonly firstname: string;
     readonly lastname: string;
     readonly email: string;
-    readonly phone_no: string | undefined;
+    readonly phone_no: string;
     readonly send_receipt_on_payment: boolean;
     readonly notify_on_app_payment: boolean;
     readonly account_balance: AlertAccountBalance;
@@ -23,7 +23,7 @@ export declare class AlertAccountBalance implements IAlertAccountBalance {
     private _minutes_before_zero;
     private _thresholds;
     constructor(balance?: IAlertAccountBalance);
-    readonly minutes_before_zero: number | undefined;
-    readonly thresholds: number[] | undefined;
+    readonly minutes_before_zero: number;
+    readonly thresholds: number[];
     toJSON(): IAlertAccountBalance;
 }

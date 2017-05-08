@@ -22,7 +22,7 @@
     "noUnusedParameters": true,
     "baseUrl": ".",
     "paths": {
-      "teleport-module-my-module-name": ["../bundle/"]
+      "teleport-module-dev-portal": ["../bundle/"]
     }
   },
   "include": [

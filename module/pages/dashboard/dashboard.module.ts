@@ -1,12 +1,17 @@
-import { NgModule } from "@angular/core";
+import { NgModule }                from "@angular/core";
+import { BrowserModule }           from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CommonModule }            from "@angular/common";
+import { FormsModule }             from "@angular/forms";
+import { HttpModule }              from "@angular/http";
+import { RouterModule }            from "@angular/router";
 
-import { Md2DatepickerModule } from "md2/datepicker";
+import { Md2DatepickerModule } from "../../md2/datepicker";
 
 import { RolePickerModule }    from "./profile/users/role-picker.module";
 
-import { SharedModule }        from "../../shared.module";
-
-import {DevPortalServicesModule} from "../../services/services.module";
+import { DevPortalComponentsModule } from "../../components/components.module";
+import { DevPortalServicesModule }   from "../../services/services.module";
 
 import { TeleportDevPortalAppCredentialsComponent }                         from "./apps/apps.credentials.component";
 import { TeleportDevPortalProfilePasswordComponent, TeleportDevPortalUserProfilePasswordComponent } from "./profile/profile.password.component";
@@ -42,9 +47,16 @@ import { AllowAccessDirective } from "./access-denied/access.directive";
  */
 @NgModule({
     imports: [
-        SharedModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        CommonModule,
+        FormsModule,
+        HttpModule,
+        RouterModule,
+
         RolePickerModule,
         Md2DatepickerModule,
+        DevPortalComponentsModule,
         DevPortalServicesModule,
     ],
     declarations: [
@@ -76,6 +88,9 @@ import { AllowAccessDirective } from "./access-denied/access.directive";
         TeleportDevPortalAccessDeniedComponent,
     ],
     exports: [
+        RolePickerModule,
+        Md2DatepickerModule,
+        DevPortalComponentsModule,
         AllowAccessDirective,
         TeleportDevPortalAppCredentialsComponent,
         TeleportDevPortalProfilePasswordComponent,

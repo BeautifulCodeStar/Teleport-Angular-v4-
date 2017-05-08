@@ -8,8 +8,12 @@ import { Routes, RouterModule, Router }           from "@angular/router";
  * The selector is set under /module/module.component.ts.
  */
 @Component({
-  selector: 'demo-app',
-  template: `<h1>Module Demo Page</h1><teleport-module-my-module-name></teleport-module-my-module-name>`,
+  selector: "teleport-demo-app",
+  template: `
+      <h1>Module Demo Page</h1>
+      <!--p><a [routerLink]="/login">Login Page</a></p-->
+      <teleport-login></teleport-login>
+  `,
 })
 export class AppComponent  {
 
@@ -23,8 +27,13 @@ export class AppComponent  {
 const routes: Routes = [{
         path       : "demo",
         redirectTo : "/module-page",
-        pathMatch  : "full"
-    }];
+        pathMatch  : "full",
+    },
+    // {
+    //     path       : "login",
+    //     component  : TeleportDevPortalLoginComponent,
+    // },
+];
 
 // export const appRoutingProviders: any[] = [];
 

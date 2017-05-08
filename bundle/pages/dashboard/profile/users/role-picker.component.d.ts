@@ -39,6 +39,6 @@ export declare class TeleportDevPortalRolePickerRowComponent implements OnInit {
     toggleOpen(node: string): void;
     isPermAvailable(node: string, action: string): boolean;
     hasPerm(node: string, action: string): boolean;
-    hasExactPerm(node: string, action: string): boolean | undefined;
-    onPermClick(node: string, action: string): false | undefined;
+    hasExactPerm(node: string, action: string): boolean;
+    onPermClick(node: string, action: string): boolean;
 }

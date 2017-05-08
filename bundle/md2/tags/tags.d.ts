@@ -1,0 +1,58 @@
+import { AfterContentInit, ElementRef, EventEmitter, ModuleWithProviders } from '@angular/core';
+import { ControlValueAccessor } from '@angular/forms';
+export declare const MD2_TAGS_CONTROL_VALUE_ACCESSOR: any;
+export declare class Md2Tags implements AfterContentInit, ControlValueAccessor {
+    private element;
+    constructor(element: ElementRef);
+    ngAfterContentInit(): void;
+    change: EventEmitter<any>;
+    private _value;
+    private _disabled;
+    private _isInitialized;
+    private _onTouchedCallback;
+    private _onChangeCallback;
+    private _tags;
+    private list;
+    private items;
+    private focusedTag;
+    private selectedTag;
+    private tagBuffer;
+    private inputFocused;
+    private noBlur;
+    id: string;
+    disabled: boolean;
+    tabindex: number;
+    placeholder: string;
+    textKey: string;
+    valueKey: string;
+    tags: Array<any>;
+    value: any;
+    private setValue(value);
+    private equals(o1, o2);
+    readonly isMenuVisible: boolean;
+    private updateScroll();
+    private inputKeydown(event);
+    private onKeydown(event);
+    private removeAndSelectAdjacentTag(index);
+    private resetselectedTag();
+    private getAdjacentTagIndex(index);
+    private addTag(event, index);
+    private removeTagAndFocusInput(index);
+    private removeTag(index);
+    private updateValue();
+    private selectAndFocusTagSafe;
+    private selectTag(index);
+    private onFocus();
+    private onInputFocus();
+    private onInputBlur();
+    private listEnter();
+    private listLeave();
+    private filterMatches(query);
+    writeValue(value: any): void;
+    registerOnChange(fn: any): void;
+    registerOnTouched(fn: any): void;
+}
+export declare const MD2_TAGS_DIRECTIVES: typeof Md2Tags[];
+export declare class Md2TagsModule {
+    static forRoot(): ModuleWithProviders;
+}

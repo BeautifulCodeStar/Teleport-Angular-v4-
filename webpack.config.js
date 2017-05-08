@@ -19,7 +19,7 @@ module.exports = {
     externals: /^[^.]/,
 
     resolve: {
-        modules: ['node_modules'],
+        modules: [ 'node_modules' ],
         extensions: ['.ts', '.js', '.jpg', '.jpeg', '.gif', '.png', '.css', '.html']
     },
     module: {
