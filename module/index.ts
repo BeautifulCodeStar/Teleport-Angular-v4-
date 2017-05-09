@@ -14,7 +14,7 @@ import { DevPortalPagesModule }      from "./pages/pages.module";
 import { DevPortalServicesModule }   from "./services/services.module";
 
 // Services
-import { services } from "shoutpoint-teleport-core";
+// import { services } from "shoutpoint-teleport-core";
 
 // Models, functions and classes
 import * as devPortalUtilsImport    from "./utils/index";
@@ -33,7 +33,7 @@ import * as devPortalServicesImport from "./services/index";
         DevPortalPagesModule,
         DevPortalServicesModule,
 
-        services.ServicesModule,
+        // services.ServicesModule,
     ],
     exports: [
 

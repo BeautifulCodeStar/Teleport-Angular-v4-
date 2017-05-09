@@ -12,13 +12,13 @@ import { RouterModule }            from "@angular/router";
 import { DevPortalDashboardModule } from "./dashboard/dashboard.module";
 
 // Components
-import { TeleportDevPortalForgotPasswordComponent } from "./forgot-password/forgot.component";
-import { TeleportDevPortalLoginComponent } from "./login/login.component";
+import { TeleportDevPortalForgotPasswordComponent }  from "./forgot-password/forgot.component";
+import { TeleportDevPortalLoginComponent }           from "./login/login.component";
 import { TeleportDevPortalRecoverPasswordComponent } from "./recover-password/recover.component";
-import { TeleportDevPortalRegisterComponent } from "./register/register.component";
+import { TeleportDevPortalRegisterComponent }        from "./register/register.component";
 
 // Directives
-import { directives } from "shoutpoint-teleport-core";
+// import { directives } from "shoutpoint-teleport-core";
 
 
 @NgModule({
@@ -29,7 +29,7 @@ import { directives } from "shoutpoint-teleport-core";
         FormsModule,
         HttpModule,
         RouterModule,
-        directives.PublicDirectivesModule,
+        // directives.PublicDirectivesModule,
 
         DevPortalDashboardModule,
     ],

@@ -18,14 +18,14 @@ The goal will be to incrementally replace this module with "native" Teleport com
 
 To install the module as a dependency:
 ```
-npm i -S git+http://gitlab.teramesh.net/patrick.martin/teleport-module-dev-portal.git#v1.0.0
+npm i -S git+http://gitlab.teramesh.net/patrick.martin/teleport-module-dev-portal.git#1.0.0
 ```
 
 
 ## Usage Examples
 
 ```typescript
-import { DevPortalModule, devPortalUtils, devPortalModels } from "teleport-module-dev-portal";
+import { DevPortalModule, devPortalUtils, devPortalModels, devPortalServices } from "teleport-module-dev-portal";
 ```
 
 ## Documentation
