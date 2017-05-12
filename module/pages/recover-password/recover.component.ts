@@ -15,7 +15,7 @@ import { EmailValidator } from "../../utils/EmailValidator";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-recover-password",
     templateUrl: "recover.html",
-    styleUrls  : [ "../css/bootswatch.min.css", "../css/main.min.css" ],
+    // styleUrls  : [ "../css/bootswatch.min.css", "../css/main.min.css" ],
 })
 export class TeleportDevPortalRecoverPasswordComponent implements OnInit, OnDestroy {
 

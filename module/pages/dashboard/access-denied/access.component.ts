@@ -13,7 +13,7 @@ import { validate } from "../../../utils/Permissions";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-access-denied",
     templateUrl: "access.html",
-    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
+    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalAccessDeniedComponent implements OnInit, OnDestroy {
 

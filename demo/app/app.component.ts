@@ -2,6 +2,8 @@
 import { Component, ModuleWithProviders, Inject } from "@angular/core";
 import { Routes, RouterModule, Router }           from "@angular/router";
 
+import { devPortalServices } from "teleport-module-dev-portal";
+import DevPortalSessionService = devPortalServices.SessionService;
 
 /**
  * This component embeds your component on the page with its selector.
@@ -18,9 +20,11 @@ import { Routes, RouterModule, Router }           from "@angular/router";
 export class AppComponent  {
 
     constructor(
+        @Inject(DevPortalSessionService) private session: DevPortalSessionService,
         @Inject(Router) router: Router,
     ) {
         router.events.subscribe(e => console.log("AppComponentWithRouting =>", e));
+        console.log(this.session);
     }
 }
 

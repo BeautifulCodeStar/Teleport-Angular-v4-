@@ -11,7 +11,7 @@ import PasswordUtil       from "../../../utils/PasswordUtil";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-profile-password",
     templateUrl: "profile.password.html",
-    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
+    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalProfilePasswordComponent {
 

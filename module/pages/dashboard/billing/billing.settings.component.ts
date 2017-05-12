@@ -9,7 +9,7 @@ declare const braintree: any;
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-billing-settings",
     templateUrl: "billing.settings.html",
-    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
+    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalBillingSettingsComponent implements AfterViewInit {
 

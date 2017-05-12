@@ -30,7 +30,7 @@ export interface IUsageView {
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-data-usage",
     templateUrl: "data.usage.html",
-    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
+    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalDataUsageComponent implements OnInit, OnDestroy {
 

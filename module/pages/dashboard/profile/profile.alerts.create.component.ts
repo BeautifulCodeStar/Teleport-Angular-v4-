@@ -9,7 +9,7 @@ import { AlertsService } from "../../../services/alerts.service";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-alerts-create",
     templateUrl: "profile.alerts.create.html",
-    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
+    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalProfileAlertsCreateComponent implements OnInit {
 

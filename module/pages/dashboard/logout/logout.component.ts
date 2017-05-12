@@ -10,7 +10,7 @@ import { MessageService } from "../../../services/message.service";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-logout",
     templateUrl: "logout.html",
-    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
+    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalLogoutComponent implements OnInit {
 

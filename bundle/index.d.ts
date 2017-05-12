@@ -1,8 +1,8 @@
-import * as devPortalUtilsImport from "./utils/index";
-import * as devPortalModelsImport from "./models/index";
-import * as devPortalServicesImport from "./services/index";
+import * as devPortalUtils from "./utils/index";
+import * as devPortalModels from "./models/index";
+import * as devPortalServices from "./services/index";
 export declare class DevPortalModule {
 }
-export declare const devPortalUtils: typeof devPortalUtilsImport;
-export declare const devPortalModels: typeof devPortalModelsImport;
-export declare const devPortalServices: typeof devPortalServicesImport;
+export { devPortalUtils };
+export { devPortalModels };
+export { devPortalServices };

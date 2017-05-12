@@ -15,7 +15,7 @@ import { EmailValidator } from "../../utils/EmailValidator";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-forgot-password",
     templateUrl: "forgot.html",
-    styleUrls  : [ "../css/bootswatch.min.css", "../css/main.min.css" ],
+    // styleUrls  : [ "../css/bootswatch.min.css", "../css/main.min.css" ],
 })
 export class TeleportDevPortalForgotPasswordComponent {
     

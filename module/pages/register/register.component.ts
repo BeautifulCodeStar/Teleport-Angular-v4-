@@ -14,7 +14,7 @@ import { Observer }   from "rxjs/Observer";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-register",
     templateUrl: "register.html",
-    styleUrls  : [ "../css/bootswatch.min.css", "../css/main.min.css" ],
+    // styleUrls  : [ "../css/bootswatch.min.css", "../css/main.min.css" ],
 })
 export class TeleportDevPortalRegisterComponent implements OnInit, OnDestroy {
 

@@ -9,7 +9,7 @@ import { Modal }                         from "../../../services/modal.service";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-app-credentials",
     templateUrl: "apps.credentials.html",
-    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
+    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalAppCredentialsComponent implements OnDestroy {
 
