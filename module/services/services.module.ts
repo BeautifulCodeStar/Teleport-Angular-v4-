@@ -41,23 +41,5 @@ import { UserService }               from "./user.service";
         UsageService,
         UserService,
     ],
-    exports: [
-        // AccountCredentialsService,
-        // AccountService,
-        // AlertsService,
-        // ApplicationService,
-        // BillingService,
-        // IntegrationsAWSService,
-        // IntegrationsWatsonService,
-        // LoginService,
-        // LogsService,
-        // MessageService,
-        // Modal.Service,
-        // PermsGuardCanActivate,
-        // SessionService,
-        // TopUpService,
-        // UsageService,
-        // UserService,
-    ],
 })
 export class DevPortalServicesModule {}

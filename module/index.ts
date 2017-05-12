@@ -33,7 +33,6 @@ import * as devPortalServices from "./services/index";
         DevPortalServicesModule,
     ],
     exports: [
-
         DevPortalComponentsModule,
         DevPortalPagesModule,
         DevPortalServicesModule,
@@ -45,17 +44,7 @@ export class DevPortalModule { }
 /**
  * Export models, classes and functions from DevPortal lib.
  */
-// export const devPortalUtils = devPortalUtilsImport;
-// export const devPortalModels = devPortalModelsImport;
-// export const devPortalServices = devPortalServicesImport;
+
 export { devPortalUtils };
 export { devPortalModels };
 export { devPortalServices };
-
-// export namespace devPortalServices {
-//
-//     export { devPortalServicesImport.SessionService };
-//
-// }
-//
-// const s = devPortalServices.SessionService;

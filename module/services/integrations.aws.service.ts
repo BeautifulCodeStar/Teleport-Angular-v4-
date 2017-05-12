@@ -7,7 +7,7 @@ import { Observable }      from "rxjs/Observable";
 import { IAWS, IDeveloper } from "../models/interfaces";
 import { AccountService }   from "./account.service";
 
-const API_BASE_URL = "http://localhost:8080";
+declare const API_BASE_URL: string;
 
 
 export interface IAWSPutRequest {

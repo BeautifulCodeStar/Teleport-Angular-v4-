@@ -11,7 +11,7 @@ import { Alert }              from "../models/Alert";
 
 import { AccountService } from "./account.service";
 
-const API_BASE_URL = "http://localhost:8080";
+declare const API_BASE_URL: string;
 
 
 @Injectable()

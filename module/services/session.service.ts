@@ -8,7 +8,8 @@ import { Observer }        from "rxjs/Observer";
 import { ISession, IDeveloper } from "../models/interfaces";
 import { Developer }            from "../models/Developer";
 
-const API_BASE_URL = "http://localhost:8080";
+
+declare const API_BASE_URL: string;
 
 
 /**

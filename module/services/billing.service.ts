@@ -11,7 +11,7 @@ import { IPayment, IDeveloper } from "../models/interfaces";
 import { MessageService } from "./message.service";
 import { AccountService } from "./account.service";
 
-const API_BASE_URL = "http://localhost:8080";
+declare const API_BASE_URL: string;
 
 
 export interface IBillingPayload {

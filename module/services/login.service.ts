@@ -7,7 +7,7 @@ import { Developer }         from "../models/Developer";
 import { IDeveloper, IUser } from "../models/interfaces";
 import { SessionService }    from "./session.service";
 
-const API_BASE_URL = "http://localhost:8080";
+declare const API_BASE_URL: string;
 
 
 export interface ILoginResponse {

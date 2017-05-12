@@ -9,7 +9,7 @@ import { SessionService }       from "./session.service";
 import { IDeveloper, ISession } from "../models/interfaces";
 import { Developer }            from "../models/Developer";
 
-const API_BASE_URL = "http://localhost:8080";
+declare const API_BASE_URL: string;
 
 
 @Injectable()

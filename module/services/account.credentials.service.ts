@@ -6,7 +6,7 @@ import { Observable } from "rxjs/Observable";
 import { AccountService }             from "./account.service";
 import { IDeveloper, IUserBasicAuth } from "../models/interfaces";
 
-const API_BASE_URL = "http://localhost:8080";
+declare const API_BASE_URL: string;
 
 
 @Injectable()
