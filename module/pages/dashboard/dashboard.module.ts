@@ -7,6 +7,7 @@ import { HttpModule }              from "@angular/http";
 import { RouterModule }            from "@angular/router";
 
 import { Md2DatepickerModule } from "../../md2/datepicker";
+import { Md2DateUtil }         from "../../md2/datepicker/dateUtil";
 
 import { RolePickerModule }    from "./profile/users/role-picker.module";
 
@@ -86,6 +87,9 @@ import { AllowAccessDirective } from "./access-denied/access.directive";
         TeleportDevPortalUserCreateComponent,
         TeleportDevPortalUserUpdateComponent,
         TeleportDevPortalAccessDeniedComponent,
+    ],
+    providers: [
+        Md2DateUtil,
     ],
     exports: [
         RolePickerModule,

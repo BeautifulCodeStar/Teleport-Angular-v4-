@@ -11,12 +11,12 @@
 
             <div class="form-group col-md-2">
                 <label for="beginDateInput">Begin Date/Time</label>
-                <md2-datepicker id="beginDateInput" name="beginDate" type="datetime" format="MM/DD/YYYY HH:mm" [(ngModel)]="filters.beginDate" [max]="filters.endDate"></md2-datepicker>
+                <md2-datepicker id="beginDateInput" name="beginDate" type="date" format="MM/DD/YYYY HH:mm" [(ngModel)]="filters.beginDate" [max]="filters.endDate"></md2-datepicker>
             </div>
 
             <div class="form-group col-md-2">
                 <label for="endDateInput">End Date/Time</label>
-                <md2-datepicker id="endDateInput" name="endDate" type="datetime" format="MM/DD/YYYY HH:mm" [(ngModel)]="filters.endDate" [min]="filters.beginDate"></md2-datepicker>
+                <md2-datepicker id="endDateInput" name="endDate" type="date" format="MM/DD/YYYY HH:mm" [(ngModel)]="filters.endDate" [min]="filters.beginDate"></md2-datepicker>
             </div>
 
             <div class="form-group col-md-3">
