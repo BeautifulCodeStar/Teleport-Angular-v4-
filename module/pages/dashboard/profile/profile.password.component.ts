@@ -81,7 +81,7 @@ export class TeleportDevPortalProfilePasswordComponent {
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-user-profile-password",
     templateUrl: "profile.password.html",
-    styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
+    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalUserProfilePasswordComponent {
 

@@ -75,7 +75,7 @@ export class TeleportDevPortalBillingPaymentComponent implements AfterViewInit, 
     }
 
     public onCancel () {
-        this.router.navigate(["/dashboard/account/payments"]).catch(err => console.error(err));
+        this.router.navigate(["/apiv1/account/payments"]).catch(err => console.error(err));
     }
 
     public onSubmit (nonce: string, method: string, type: string, lastFour: string) {
@@ -91,7 +91,7 @@ export class TeleportDevPortalBillingPaymentComponent implements AfterViewInit, 
             .then(() => {
                 this.messages.info("Payment Accepted!", `A payment of $${this.amount} was credited to your account.`);
                 this.isBusy = false;
-                return this.router.navigate(["/dashboard/account/payments"]);
+                return this.router.navigate(["/apiv1/account/payments"]);
             })
             .catch(err => {
                 this.messages.warning("Payment Failure", err.message, err);

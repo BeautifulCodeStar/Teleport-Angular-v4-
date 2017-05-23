@@ -58,7 +58,7 @@
         <div class="col-md-12 app-panel text-center" *ngIf="!isBusy && Applications && Applications.length === 0">
             <h4 style="margin-top:60px">Getting started?</h4>
             <h4 style="font-size:16px">Create an Application to get&nbsp;your&nbsp;API&nbsp;Key.</h4>
-            <a class="btn btn-link btn-lg" [routerLink]="['/dashboard/applications/create']" [allowAccess]="'account.applications.app.create'">
+            <a class="btn btn-link btn-lg" [routerLink]="['/apiv1/applications/create']" [allowAccess]="'account.applications.app.create'">
                 <span class="glyphicon glyphicon-plus"></span>
                 Create New App
             </a>
@@ -66,7 +66,7 @@
 
         <div class="col-md-4 new-app-panel" *ngIf="Applications && Applications.length > 0">
             <div>
-                <a class="btn btn-link btn-lg" [routerLink]="['/dashboard/applications/create']" [allowAccess]="'account.applications.app.create'">
+                <a class="btn btn-link btn-lg" [routerLink]="['/apiv1/applications/create']" [allowAccess]="'account.applications.app.create'">
                     <span class="glyphicon glyphicon-plus"></span>
                     Create New App
                 </a>
@@ -85,9 +85,9 @@
 
                 <p>
                     <small class="pull-left">ID {{ app.name | slice:0:5 }}...{{ app.name | slice:-5 }}</small>
-                    <a class="btn btn-link pull-right" [routerLink]="['/dashboard/applications/', app.name]"
+                    <a class="btn btn-link pull-right" [routerLink]="['/apiv1/applications/', app.name]"
                        [allowAccess]="'account.applications.app.read account.applications.app.update account.applications.app.delete'"
-                    >Detail</a>
+                    >Switch</a>
                 </p>
 
             </div>

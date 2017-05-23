@@ -42,7 +42,7 @@ export class TeleportDevPortalProfileComponent implements OnInit, OnDestroy {
             .subscribe(dev => {
 
                 if (dev.portalUser) {
-                    this.router.navigateByUrl("/dashboard/account/user");
+                    this.router.navigateByUrl("/apiv1/account/user");
                     return;
                 }
 

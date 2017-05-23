@@ -73,7 +73,7 @@ export class TeleportDevPortalAppByIdComponent implements OnDestroy {
                 if (result) {
                     this.isBusy = true;
                     this.apps.deleteApp(this.App)
-                        .then(() => this.router.navigate(["/dashboard/applications"]))
+                        .then(() => this.router.navigate(["/apiv1/applications"]))
                         .catch(() => this.isBusy = false);
                 }
             });

@@ -61,7 +61,7 @@ export class TeleportDevPortalUserCreateComponent implements OnInit, OnDestroy {
                     this.isBusy = false;
 
                 } else {
-                    return this.router.navigate(["/dashboard/access-denied"], { queryParams: { perms: "account.users.create" }});
+                    return this.router.navigate(["/apiv1/access-denied"], { queryParams: { perms: "account.users.create" }});
                 }
             });
     }
@@ -100,7 +100,7 @@ export class TeleportDevPortalUserCreateComponent implements OnInit, OnDestroy {
                     this.users.sendInvite(user);
                     this.messages.info("Email Invite Sent", "An email invitation has been sent to the user.");
                 }
-                this.router.navigateByUrl("/dashboard/account/users").catch(err => console.error(err));
+                this.router.navigateByUrl("/apiv1/account/users").catch(err => console.error(err));
             })
             .catch(err => {
                 this.isBusy = false;

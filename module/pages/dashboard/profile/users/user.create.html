@@ -76,7 +76,7 @@
 
                 <div class="form-group clearfix">
                     <div class="col-md-11 text-right">
-                        <button class="btn btn-link" [routerLink]="['/dashboard/users']">Cancel</button>
+                        <button class="btn btn-link" [routerLink]="['/apiv1/account/users']">Cancel</button>
                         <button class="btn btn-success" type="submit" [disabled]="! newUserForm.form.valid || ! isUserValid()" [allowAccess]="'account.users.create'">Create</button>
                     </div>
                 </div>

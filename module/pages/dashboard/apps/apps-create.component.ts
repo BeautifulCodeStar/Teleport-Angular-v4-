@@ -37,7 +37,7 @@ export class TeleportDevPortalAppsCreateComponent {
         this.applications.createApp(this.appName, this.appNotes, this.reCaptchaResponse)
             .then(app => {
                 this.isBusy = false;
-                return this.router.navigate(["/dashboard/applications", app.name]);
+                return this.router.navigate(["/apiv1/applications", app.name]);
             })
             .catch(() => {
                 this.isBusy = false;
