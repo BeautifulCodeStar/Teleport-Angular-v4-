@@ -27,15 +27,9 @@
             </div>
 
             <div class="form-group clearfix">
-                <div class="col-md-8 col-md-offset-2">
-                    <teleport-sp-recaptcha theme="light" sitekey="6Lf3RBETAAAAAKtkTgxjrn9AnYlhcfvh0tS7hFZo" (callback)="onCaptcha($event, true)" (expiredCallback)="onCaptcha($event, false)"></teleport-sp-recaptcha>
-                </div>
-            </div>
-
-            <div class="form-group clearfix">
                 <div class="col-md-10 text-right">
-                    <button class="btn btn-link" [routerLink]="['/dashboard/applications']">Cancel</button>
-                    <button class="btn btn-success" type="submit" [disabled]="! newAppForm.form.valid || ! isCaptchaOk" [allowAccess]="'account.applications.app.create'">Create</button>
+                    <button class="btn btn-link" [routerLink]="['/apiv1/applications']">Cancel</button>
+                    <button class="btn btn-success" type="submit" [disabled]="! newAppForm.form.valid" [allowAccess]="'account.applications.app.create'">Create</button>
                 </div>
             </div>
 

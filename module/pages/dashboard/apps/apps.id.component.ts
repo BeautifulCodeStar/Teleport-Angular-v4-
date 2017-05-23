@@ -28,11 +28,11 @@ export class TeleportDevPortalAppByIdComponent implements OnDestroy {
         @Inject(ActivatedRoute)     private route: ActivatedRoute,
     ) {
         this.route.params
-            .filter((param: any) => !!param.id)
+            .filter((param: any) => !!param.appId)
             .forEach((param: any) => {
 
                 this.isBusy = true;
-                apps.getAppByName(param.id)
+                apps.getAppByName(param.appId)
                     .then(app => {
                         this.appName = app.friendlyName;
                         this.appNotes = app.notes;

@@ -38,12 +38,12 @@ export class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
         this.isBusy = true;
 
         this.route.params
-            .filter((param: any) => !!param.id)
+            .filter((param: any) => !!param.appId)
             .forEach((param: any) => {
 
                 Promise.all([
-                    this.apps.getAppByName(param.id),
-                    this.aws.getAWS(param.id),
+                    this.apps.getAppByName(param.appId),
+                    this.aws.getAWS(param.appId),
                 ])
                 .then((r: [IApplication, IAWS]) => {
                     this._application = r[0];

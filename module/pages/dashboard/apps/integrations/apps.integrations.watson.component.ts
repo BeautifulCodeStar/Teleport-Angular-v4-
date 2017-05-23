@@ -36,12 +36,12 @@ export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy
         this.isBusy = true;
 
         this.route.params
-            .filter((param: any) => !!param.id)
+            .filter((param: any) => !!param.appId)
             .forEach((param: any) => {
 
                 Promise.all([
-                    this.apps.getAppByName(param.id),
-                    this.watson.getTextToSpeech(param.id),
+                    this.apps.getAppByName(param.appId),
+                    this.watson.getTextToSpeech(param.appId),
                 ])
                     .then((r: [IApplication, IWatson]) => {
                         this._application = r[0];
