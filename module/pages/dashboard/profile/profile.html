@@ -1,7 +1,9 @@
 
 <div class="col-md-11" *ngIf="Developer">
 
-    <h4 class="text-uppercase">My Profile</h4>
+    <h4 class="text-uppercase">Edit Account</h4>
+
+    <p>Account ID: {{ Developer.id }}</p>
 
     <form class="form-horizontal col-md-8" (ngSubmit)="onSubmit()" #profileForm="ngForm">
 

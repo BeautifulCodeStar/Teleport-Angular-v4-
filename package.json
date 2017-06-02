@@ -1,19 +1,19 @@
 {
   "name": "teleport-module-dev-portal",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Dev Portal module for Shoutpoint's TelePort web app.",
   "main": "bundle/module.umd.js",
   "types": "bundle/index.d.ts",
   "scripts": {
-    "fresh-start": "gulp 'fresh-project'",
-    "bundle": "gulp 'bundle:prepare' && ./node_modules/typescript/bin/tsc && ./node_modules/webpack/bin/webpack.js -p --config webpack.config.js && gulp 'bundle:finalize'",
-    "bundle-with-sass": "gulp 'bundle:prepare' && ./node_modules/node-sass/bin/node-sass ./module -o ./module && ./node_modules/typescript/bin/tsc && ./node_modules/webpack/bin/webpack.js -p --config webpack.config.js && gulp 'bundle:finalize'",
+    "fresh-start": "./node_modules/.bin/gulp 'fresh-project'",
+    "bundle": "./node_modules/.bin/gulp 'bundle:prepare' && ./node_modules/typescript/bin/tsc && ./node_modules/webpack/bin/webpack.js -p --config webpack.config.js && ./node_modules/.bin/gulp 'bundle:finalize'",
+    "bundle-with-sass": "./node_modules/.bin/gulp 'bundle:prepare' && ./node_modules/node-sass/bin/node-sass ./module -o ./module && ./node_modules/typescript/bin/tsc && ./node_modules/webpack/bin/webpack.js -p --config webpack.config.js && ./node_modules/.bin/gulp 'bundle:finalize'",
     "test": "npm run bundle && ./node_modules/karma/bin/karma start ./karma.conf.js --single-run",
     "demo-compile": "./node_modules/typescript/bin/tsc -p ./demo/tsconfig.json",
     "demo-run": "npm run demo-compile && ./node_modules/http-server/bin/http-server -o",
     "coverage-build": "./node_modules/.bin/remap-istanbul -i coverage/coverage-final.json -o coverage -t html",
     "coverage-open": "./node_modules/http-server/bin/http-server -c-1 -o -p 9875 ./coverage",
-    "release-build": "npm run test && gulp 'bump:patch'"
+    "release-build": "npm run test && ./node_modules/.bin/gulp 'bump:patch'"
   },
   "imports": [],
   "keywords": [

@@ -10,6 +10,9 @@ import { ApplicationService }                       from "../../../services/appl
 import { MessageService }                           from "../../../services/message.service";
 
 
+const FIND_APPID_IN_URL = /^\/apiv1\/applications\/([a-z0-9\-]+)\/history\/logs/;
+
+
 @Component({
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-data-logs",
@@ -61,33 +64,6 @@ export class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
         @Inject(Router)             private router: Router,
         @Inject(Location)           private location: Location,
     ) {}
-
-
-    public getQueryFromUrl (): [ILogsRequest, string] {
-
-        const params = this.router.parseUrl(this.router.url).queryParams as any;
-        const now = new Date();
-        const filters: ILogsRequest = {
-            beginDate   : params.beginDate || new Date(now.getTime() - 1000 * 60 * 60 * 24 * 7).toLocaleString(),
-            endDate     : params.endDate || now.toLocaleString(),
-            appId       : params.appId || "",
-            direction   : (params.direction || "both") as ("inbound" | "outbound" | "both"),
-            connectTime : +params.connectTime || 0,
-        };
-
-        const sortOn = params.sortOn || "startTimeDesc";
-
-        return [ filters, sortOn ];
-    }
-
-
-    public setQueryOnUrl () {
-
-        this.location.replaceState(
-            (window.location as any).pathname,
-            Object.keys(this.filters).reduce((p: string, c: string) => `${p}&${c}=${encodeURIComponent(String((this.filters as any)[c]))}`, `sortOn=${this._sortOn}`),
-        );
-    }
 
 
     public ngOnInit () {
@@ -156,6 +132,38 @@ export class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
     public isSortOn (name: string) {
         return this._sortOn === name;
     }
+
+
+    public getQueryFromUrl (): [ILogsRequest, string] {
+
+        const params = this.router.parseUrl(this.router.url).queryParams as any;
+        const appId = this.router.url.match(FIND_APPID_IN_URL)[1];
+        const now = new Date();
+        const filters: ILogsRequest = {
+            beginDate   : params.beginDate || new Date(now.getTime() - 1000 * 60 * 60 * 24 * 7).toLocaleString(),
+            endDate     : params.endDate || now.toLocaleString(),
+            appId       : params.appId || appId || "",
+            direction   : (params.direction || "both") as ("inbound" | "outbound" | "both"),
+            connectTime : +params.connectTime || 0,
+        };
+
+        const sortOn = params.sortOn || "startTimeDesc";
+
+        return [ filters, sortOn ];
+    }
+
+
+    public setQueryOnUrl () {
+
+        this.location.replaceState(
+            (window.location as any).pathname,
+            Object.keys(this.filters).reduce(
+                (p: string, c: string) => `${p}&${c}=${encodeURIComponent(String((this.filters as any)[c]))}`,
+                `sortOn=${this._sortOn}`,
+            ),
+        );
+    }
+
 
     public loadLogs () {
 

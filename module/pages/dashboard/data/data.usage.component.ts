@@ -26,6 +26,10 @@ export interface IUsageView {
     total: number;
 }
 
+
+const FIND_APPID_IN_URL = /^\/apiv1\/applications\/([a-z0-9\-]+)\/history\/usage/;
+
+
 @Component({
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-data-usage",
@@ -55,10 +59,11 @@ export class TeleportDevPortalDataUsageComponent implements OnInit, OnDestroy {
     public getQueryFromUrl (): [IFilters] {
 
         const params = this.router.parseUrl(this.router.url).queryParams as any;
+        const appId = this.router.url.match(FIND_APPID_IN_URL)[1];
         const filters: IFilters = {
             beginDate   : params.beginDate,
             endDate     : params.endDate,
-            appId       : params.appId || "",
+            appId       : params.appId || appId || "",
         };
 
         return [ filters ];

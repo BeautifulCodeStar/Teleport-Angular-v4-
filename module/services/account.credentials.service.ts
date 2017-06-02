@@ -71,7 +71,7 @@ export class AccountCredentialsService {
             "developers",
             encodeURIComponent(this._developer.id),
             "credentials",
-            encodeURIComponent(userId),
+            // encodeURIComponent(userId),
         ].join("/");
 
         return this.http.post(url, "", { headers, withCredentials: true })
@@ -99,7 +99,7 @@ export class AccountCredentialsService {
             "developers",
             encodeURIComponent(this._developer.id),
             "credentials",
-            encodeURIComponent(userId),
+            // encodeURIComponent(userId),
             encodeURIComponent(password),
         ].join("/");
 

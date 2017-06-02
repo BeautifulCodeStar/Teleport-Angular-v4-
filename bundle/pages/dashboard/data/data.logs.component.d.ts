@@ -19,8 +19,6 @@ export declare class TeleportDevPortalDataLogsComponent implements OnInit, OnDes
     private _sortFuncs;
     private _sortOn;
     constructor(logs: LogsService, apps: ApplicationService, messages: MessageService, router: Router, location: Location);
-    getQueryFromUrl(): [ILogsRequest, string];
-    setQueryOnUrl(): void;
     ngOnInit(): void;
     ngOnDestroy(): void;
     readonly isBusy: boolean;
@@ -29,5 +27,7 @@ export declare class TeleportDevPortalDataLogsComponent implements OnInit, OnDes
     readonly Apps: IApplication[];
     sortLogs(sortOn?: string): void;
     isSortOn(name: string): boolean;
+    getQueryFromUrl(): [ILogsRequest, string];
+    setQueryOnUrl(): void;
     loadLogs(): void;
 }
