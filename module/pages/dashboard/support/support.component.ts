@@ -1,8 +1,7 @@
-import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
-import { Http, RequestOptions, Headers }        from "@angular/http";
+import { Component, Inject, OnInit }     from "@angular/core";
+import { Http, RequestOptions, Headers } from "@angular/http";
 
 import { Observable } from "rxjs/Observable";
-import { Observer }   from "rxjs/Observer";
 
 import { AccountService }     from "../../../services/account.service";
 import { MessageService }     from "../../../services/message.service";
@@ -11,7 +10,7 @@ import { IApplication }       from "../../../models/interfaces";
 
 import { EmailValidator } from "../../../utils/EmailValidator";
 
-const API_BASE_URL = "http://localhost:8080";
+declare const API_BASE_URL: string;
 
 
 @Component({
@@ -20,7 +19,7 @@ const API_BASE_URL = "http://localhost:8080";
     templateUrl: "support.html",
     // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
-export class TeleportDevPortalSupportFormComponent implements OnInit, OnDestroy {
+export class TeleportDevPortalSupportFormComponent implements OnInit {
 
     public form = {
         account: "",
@@ -31,17 +30,12 @@ export class TeleportDevPortalSupportFormComponent implements OnInit, OnDestroy 
         topic: "bug_report",
         priority: "normal",
         description: "",
-        "g-recaptcha-response": "",
     };
 
     public Applications: IApplication[] = [];
     
     public isSubmitted = false;
     public isSuccess = false;
-    public isCaptchaOk = false;
-
-    private _resetCaptchaObservable: Observable<boolean>;
-    private _resetCaptchaObserver: Observer<boolean>;
 
     
     constructor (
@@ -49,15 +43,12 @@ export class TeleportDevPortalSupportFormComponent implements OnInit, OnDestroy 
         @Inject(AccountService)     public account: AccountService,
         @Inject(ApplicationService) private apps: ApplicationService,
         @Inject(MessageService)     private messages: MessageService,
-    ) {
-        this._resetCaptchaObservable = Observable.create((observer: Observer<boolean>) => this._resetCaptchaObserver = observer);
-    }
+    ) {}
 
     public ngOnInit () {
 
         this.isSubmitted = false;
         this.isSuccess = false;
-        this.isCaptchaOk = false;
 
         this.account.Observable
             .first(a => !!a)
@@ -75,25 +66,10 @@ export class TeleportDevPortalSupportFormComponent implements OnInit, OnDestroy 
             });
     }
 
-    public ngOnDestroy () {
-        if (this._resetCaptchaObserver) {
-            this._resetCaptchaObserver.complete();
-        }
-    }
-
     public isEmailValid (email: string): boolean {
         return EmailValidator.isValid(email);
     }
-    
-    public onCaptcha (token: string, val: boolean) {
-        this.form["g-recaptcha-response"] = token;
-        this.isCaptchaOk = val;
-    }
 
-    public resetCaptchaObservable (): Observable<boolean> {
-        return this._resetCaptchaObservable;
-    }
-    
     public onSubmit () {
 
         this.isSubmitted = true;
@@ -108,7 +84,6 @@ export class TeleportDevPortalSupportFormComponent implements OnInit, OnDestroy 
             .then(() => {
                 this.isSuccess = true;
                 this.isSubmitted = false;
-                this._resetCaptchaObserver.next(true);
                 this.form = {
                     account: "",
                     app: "N/A",
@@ -118,14 +93,12 @@ export class TeleportDevPortalSupportFormComponent implements OnInit, OnDestroy 
                     topic: "bug_report",
                     priority: "normal",
                     description: "",
-                    "g-recaptcha-response": "",
                 };
                 this.messages.info("Support Request Delivered", "We will respond as soon as possible.");
             })
             .catch(err => {
                 this.isSuccess = false;
                 this.isSubmitted = false;
-                this._resetCaptchaObserver.next(true);
                 this.messages.error("Registration Failed", err.message, err);
             });
     }

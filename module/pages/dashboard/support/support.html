@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="form-group" [class.has-error]="!(priority.pristine || priority.valid)">
-                    <label for="support-priority" class="col-lg-2 control-label">Prioirty</label>
+                    <label for="support-priority" class="col-lg-2 control-label">Priority</label>
                     <div class="col-lg-10">
                         <select id="support-priority" class="form-control" [(ngModel)]="form.priority" name="priority" #priority="ngModel" required>
                             <option value="low">Low</option>
@@ -91,12 +91,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-lg-10 col-lg-offset-2">
-                        <teleport-sp-recaptcha theme="light" sitekey="6Lf3RBETAAAAAKtkTgxjrn9AnYlhcfvh0tS7hFZo" [onReset]="resetCaptchaObservable()" (callback)="onCaptcha($event, true)" (expiredCallback)="onCaptcha(null, false)"></teleport-sp-recaptcha>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-2">
-                        <button type="submit" class="btn btn-success" [disabled]="! surveyForm.form.valid && ! isCaptchaOk">Send Support Request</button>
+                        <button type="submit" class="btn btn-success" [disabled]="! surveyForm.form.valid">Send Support Request</button>
                     </div>
                 </div>
 
