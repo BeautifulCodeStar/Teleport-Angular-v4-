@@ -58,7 +58,7 @@ export class AccountService {
                 .refCount();
         }
         
-        this.refreshDeveloper().catch(err => this._observer.error(err));
+        this.refreshDeveloper().catch(err => console.error("Developer not ready yet.", err));
         return this._observable;
     }
 

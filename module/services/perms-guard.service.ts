@@ -36,7 +36,7 @@ export class PermsGuardCanActivate implements CanActivateChild {
 
                     if (routeData.perms && ! validate(dev.permissions, routeData.perms.reduce((p: IUserPermissions, c: string) => (p[c] = true) && p, {}))) {
 
-                        this.router.navigate(["/dashboard/access-denied"], { queryParams: { perms: routeData.perms.join("|") } })
+                        this.router.navigate(["/apiv1/access-denied"], { queryParams: { perms: routeData.perms.join("|") } })
                             .then(() => resolve(false))
                             .catch(err => reject(err));
                     }
