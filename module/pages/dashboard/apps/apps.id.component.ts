@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy } from "@angular/core";
+import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute }       from "@angular/router";
 
 import { ApplicationService } from "../../../services/application.service";
@@ -12,7 +12,7 @@ import { Modal }              from "../../../services/modal.service";
     templateUrl: "apps.id.html",
     // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
-export class TeleportDevPortalAppByIdComponent implements OnDestroy {
+export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
 
     public isBusy = false;
     public isEditing = false;
@@ -26,13 +26,16 @@ export class TeleportDevPortalAppByIdComponent implements OnDestroy {
         @Inject(ApplicationService) private apps: ApplicationService,
         @Inject(Modal.Service)      private modal: Modal.Service,
         @Inject(ActivatedRoute)     private route: ActivatedRoute,
-    ) {
+    ) {}
+
+    public ngOnInit () {
+
         this.route.params
             .filter((param: any) => !!param.appId)
             .forEach((param: any) => {
 
                 this.isBusy = true;
-                apps.getAppByName(param.appId)
+                this.apps.getAppByName(param.appId)
                     .then(app => {
                         this.appName = app.friendlyName;
                         this.appNotes = app.notes;

@@ -1,9 +1,9 @@
-import { OnDestroy } from "@angular/core";
+import { OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ApplicationService } from "../../../services/application.service";
 import { IApplication } from "../../../models/interfaces";
 import { Modal } from "../../../services/modal.service";
-export declare class TeleportDevPortalAppByIdComponent implements OnDestroy {
+export declare class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
     private router;
     private apps;
     private modal;
@@ -14,6 +14,7 @@ export declare class TeleportDevPortalAppByIdComponent implements OnDestroy {
     appNotes: string;
     private _application;
     constructor(router: Router, apps: ApplicationService, modal: Modal.Service, route: ActivatedRoute);
+    ngOnInit(): void;
     ngOnDestroy(): void;
     readonly App: IApplication;
     editApp(): void;
