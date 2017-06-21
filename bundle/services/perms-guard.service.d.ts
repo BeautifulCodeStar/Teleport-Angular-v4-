@@ -4,5 +4,5 @@ export declare class PermsGuardCanActivate implements CanActivateChild {
     private account;
     private router;
     constructor(account: AccountService, router: Router);
-    canActivateChild(route: ActivatedRouteSnapshot): Promise<{}>;
+    canActivateChild(route: ActivatedRouteSnapshot): Promise<boolean>;
 }

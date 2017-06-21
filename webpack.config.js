@@ -3,8 +3,6 @@
 const webpack = require('webpack');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 
-// const CompressionPlugin = require("compression-webpack-plugin");
-// const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 
 module.exports = {
 
@@ -35,26 +33,6 @@ module.exports = {
 
     plugins: [
         new CheckerPlugin()
-    //     new webpack.LoaderOptionsPlugin({
-    //         minimize: true,
-    //         debug: false
-    //     }),
-    //     new webpack.optimize.UglifyJsPlugin({
-    //         compress: {
-    //             warnings: false
-    //         },
-    //         output: {
-    //             comments: false
-    //         },
-    //         sourceMap: false
-    //     }),
-    //     // new CompressionPlugin({
-    //     //     asset: "[path].gz[query]",
-    //     //     algorithm: "gzip",
-    //     //     test: /\.js$|\.html$/,
-    //     //     threshold: 10240,
-    //     //     minRatio: 0.8
-    //     // })
     ],
     node: {
         __filename: true,
@@ -69,5 +47,4 @@ module.exports = {
             poll: 1000
         }
     }
-
 };

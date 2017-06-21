@@ -24,9 +24,9 @@ export class PermsGuardCanActivate implements CanActivateChild {
         @Inject(Router)         private router: Router,
     ) {}
 
-    public canActivateChild (route: ActivatedRouteSnapshot) {
+    public canActivateChild (route: ActivatedRouteSnapshot): Promise<boolean> {
 
-        return new Promise((resolve, reject) => {
+        return new Promise<boolean>((resolve, reject) => {
 
             this.account.Observable
                 .first(d => !!d)
