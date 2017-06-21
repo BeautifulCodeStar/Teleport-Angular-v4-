@@ -9,15 +9,5 @@ node_modules/
 yarn.lock
 yarn-error.log
 
-bundle/*
-!bundle/*.d.ts
-!bundle/**/
-bundle/**/*.js
-bundle/**/*.js.map
-bundle/**/*.html
-bundle/**/*.css
-bundle/**/*.scss
-!bundle/module.umd.js
-
 demo/app/**/*.js
 demo/app/**/*.js.map

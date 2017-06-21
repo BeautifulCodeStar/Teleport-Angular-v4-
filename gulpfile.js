@@ -26,6 +26,7 @@ gulp.task("bundle:prepare", function(cb) {
 gulp.task('bundle:finalize', function() {
 
     return gulp.src([
+        './module/**/vendor-js/*',
         './module/**/*.html',
         './module/**/*.css'
     ], { base: "./module" })
