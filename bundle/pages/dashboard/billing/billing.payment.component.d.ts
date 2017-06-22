@@ -2,7 +2,7 @@ import { AfterViewInit, OnDestroy, NgZone } from "@angular/core";
 import { Router } from "@angular/router";
 import { BillingService } from "../../../services/billing.service";
 import { MessageService } from "../../../services/message.service";
-import { Modal } from "../../../services/modal.service";
+import { ModalService } from "../../../services/modal.service";
 export declare class TeleportDevPortalBillingPaymentComponent implements AfterViewInit, OnDestroy {
     private router;
     private billing;
@@ -13,7 +13,7 @@ export declare class TeleportDevPortalBillingPaymentComponent implements AfterVi
     isBusy: boolean;
     amount: number;
     private _checkout;
-    constructor(router: Router, billing: BillingService, messages: MessageService, modal: Modal.Service, zone: NgZone);
+    constructor(router: Router, billing: BillingService, messages: MessageService, modal: ModalService, zone: NgZone);
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     onCancel(): void;

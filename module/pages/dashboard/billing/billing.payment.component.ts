@@ -4,7 +4,7 @@ import { Router }                                              from "@angular/ro
 
 import { BillingService } from "../../../services/billing.service";
 import { MessageService } from "../../../services/message.service";
-import { Modal }          from "../../../services/modal.service";
+import { ModalService }   from "../../../services/modal.service";
 
 declare const braintree: any;
 
@@ -27,7 +27,7 @@ export class TeleportDevPortalBillingPaymentComponent implements AfterViewInit, 
         @Inject(Router)         private router: Router,
         @Inject(BillingService) private billing: BillingService,
         @Inject(MessageService) private messages: MessageService,
-        @Inject(Modal.Service)  private modal: Modal.Service,
+        @Inject(ModalService)  private modal: ModalService,
         @Inject(NgZone)         private zone: NgZone,
     ) {}
 

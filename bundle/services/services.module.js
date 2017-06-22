@@ -33,7 +33,7 @@ var DevPortalServicesModule = (function () {
                         login_service_1.LoginService,
                         logs_service_1.LogsService,
                         message_service_1.MessageService,
-                        modal_service_1.Modal.Service,
+                        modal_service_1.ModalService,
                         perms_guard_service_1.PermsGuardCanActivate,
                         session_service_1.SessionService,
                         top_up_service_1.TopUpService,

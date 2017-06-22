@@ -3,7 +3,7 @@ import { NgModule }      from "@angular/core";
 
 import { LoginService }              from "./login.service";
 import { MessageService }            from "./message.service";
-import { Modal }                     from "./modal.service";
+import { ModalService }              from "./modal.service";
 import { AccountCredentialsService } from "./account.credentials.service";
 import { AccountService }            from "./account.service";
 import { AlertsService }             from "./alerts.service";
@@ -34,7 +34,7 @@ import { UserService }               from "./user.service";
         LoginService,
         LogsService,
         MessageService,
-        Modal.Service,
+        ModalService,
         PermsGuardCanActivate,
         SessionService,
         TopUpService,

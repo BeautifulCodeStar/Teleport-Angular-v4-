@@ -2,86 +2,83 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
-var Modal;
-(function (Modal) {
-    var MODAL_HTML = "\n        <div class=\"modal fade in\" tabindex=\"-1\" role=\"dialog\">\n            <div class=\"modal-dialog\">\n                <div class=\"modal-content\">\n                    <div class=\"modal-header\">\n                        <button role=\"close\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n                        <h4 class=\"modal-title\"></h4>\n                    </div>\n                    <div class=\"modal-body\"></div>\n                    <div class=\"modal-footer\">\n                        <button role=\"cancel\" type=\"button\" class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</button>\n                        <button role=\"ok\" type=\"button\" class=\"btn btn-link\">Ok</button>\n                    </div>\n                </div><!-- /.modal-content -->\n            </div><!-- /.modal-dialog -->\n        </div><!-- /.modal -->\n    ";
-    var Service = (function () {
-        function Service(doc) {
-            this.doc = doc;
-        }
-        Service.prototype.show = function (title, message, config) {
-            return this.initModal(title, message, config);
-        };
-        Service.prototype.initModal = function (title, message, config) {
-            var _this = this;
-            return new Promise(function (resolve, reject) {
-                try {
-                    var modal_1 = _this.doc.createElement("div");
-                    modal_1.innerHTML = MODAL_HTML;
-                    modal_1 = modal_1.firstElementChild;
-                    var titleEl = modal_1.getElementsByClassName("modal-title").item(0), bodyEl = modal_1.getElementsByClassName("modal-body").item(0), cancelButtonEl = new HTMLButtonElement(), closeIconEl = new HTMLButtonElement(), okButtonEl = new HTMLButtonElement();
-                    titleEl.innerHTML = title;
-                    bodyEl.innerHTML = message;
-                    var buttons = modal_1.getElementsByTagName("button");
-                    var _loop_1 = function (i) {
-                        var el = buttons.item(i), role = el.attributes.getNamedItem("role").value;
-                        if (role) {
-                            if (role === "cancel") {
-                                cancelButtonEl = el;
-                            }
-                            else if (role === "close") {
-                                closeIconEl = el;
-                            }
-                            else if (role === "ok") {
-                                okButtonEl = el;
-                            }
-                            el.addEventListener("click", function () {
-                                resolve(role === "ok");
-                                modal_1.remove();
-                            });
+var MODAL_HTML = "\n    <div class=\"modal fade in\" tabindex=\"-1\" role=\"dialog\">\n        <div class=\"modal-dialog\">\n            <div class=\"modal-content\">\n                <div class=\"modal-header\">\n                    <button role=\"close\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n                    <h4 class=\"modal-title\"></h4>\n                </div>\n                <div class=\"modal-body\"></div>\n                <div class=\"modal-footer\">\n                    <button role=\"cancel\" type=\"button\" class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</button>\n                    <button role=\"ok\" type=\"button\" class=\"btn btn-link\">Ok</button>\n                </div>\n            </div><!-- /.modal-content -->\n        </div><!-- /.modal-dialog -->\n    </div><!-- /.modal -->\n";
+var ModalService = (function () {
+    function ModalService(doc) {
+        this.doc = doc;
+    }
+    ModalService.prototype.show = function (title, message, config) {
+        return this.initModal(title, message, config);
+    };
+    ModalService.prototype.initModal = function (title, message, config) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            try {
+                var modal_1 = _this.doc.createElement("div");
+                modal_1.innerHTML = MODAL_HTML;
+                modal_1 = modal_1.firstElementChild;
+                var titleEl = modal_1.getElementsByClassName("modal-title").item(0), bodyEl = modal_1.getElementsByClassName("modal-body").item(0), cancelButtonEl = new HTMLButtonElement(), closeIconEl = new HTMLButtonElement(), okButtonEl = new HTMLButtonElement();
+                titleEl.innerHTML = title;
+                bodyEl.innerHTML = message;
+                var buttons = modal_1.getElementsByTagName("button");
+                var _loop_1 = function (i) {
+                    var el = buttons.item(i), role = el.attributes.getNamedItem("role").value;
+                    if (role) {
+                        if (role === "cancel") {
+                            cancelButtonEl = el;
                         }
-                    };
-                    for (var i = 0; i < buttons.length; i++) {
-                        _loop_1(i);
+                        else if (role === "close") {
+                            closeIconEl = el;
+                        }
+                        else if (role === "ok") {
+                            okButtonEl = el;
+                        }
+                        el.addEventListener("click", function () {
+                            resolve(role === "ok");
+                            modal_1.remove();
+                        });
                     }
-                    if (config) {
-                        if (config.type !== "confirm") {
-                            cancelButtonEl.remove();
-                        }
-                        if (config.showClose === false) {
-                            closeIconEl.remove();
-                        }
-                        if (config.buttons) {
-                            if (config.buttons.cancel) {
-                                cancelButtonEl.innerText = config.buttons.cancel.text || "Cancel";
-                                cancelButtonEl.className = "btn btn-" + (config.buttons.cancel.type || "link");
-                            }
-                            if (config.buttons.ok) {
-                                okButtonEl.innerText = config.buttons.ok.text || "Ok";
-                                okButtonEl.className = "btn btn-" + (config.buttons.ok.type || "link");
-                            }
-                        }
-                    }
-                    else {
+                };
+                for (var i = 0; i < buttons.length; i++) {
+                    _loop_1(i);
+                }
+                if (config) {
+                    if (config.type !== "confirm") {
                         cancelButtonEl.remove();
+                    }
+                    if (config.showClose === false) {
                         closeIconEl.remove();
                     }
-                    _this.doc.body.appendChild(modal_1);
+                    if (config.buttons) {
+                        if (config.buttons.cancel) {
+                            cancelButtonEl.innerText = config.buttons.cancel.text || "Cancel";
+                            cancelButtonEl.className = "btn btn-" + (config.buttons.cancel.type || "link");
+                        }
+                        if (config.buttons.ok) {
+                            okButtonEl.innerText = config.buttons.ok.text || "Ok";
+                            okButtonEl.className = "btn btn-" + (config.buttons.ok.type || "link");
+                        }
+                    }
                 }
-                catch (err) {
-                    console.error("Modal.show()", err, err.stack);
-                    reject(err);
+                else {
+                    cancelButtonEl.remove();
+                    closeIconEl.remove();
                 }
-            });
-        };
-        Service.decorators = [
-            { type: core_1.Injectable },
-        ];
-        Service.ctorParameters = function () { return [
-            { type: HTMLDocument, decorators: [{ type: core_1.Inject, args: [platform_browser_1.DOCUMENT,] },] },
-        ]; };
-        return Service;
-    }());
-    Modal.Service = Service;
-})(Modal = exports.Modal || (exports.Modal = {}));
+                _this.doc.body.appendChild(modal_1);
+            }
+            catch (err) {
+                console.error("Modal.show()", err, err.stack);
+                reject(err);
+            }
+        });
+    };
+    ModalService.decorators = [
+        { type: core_1.Injectable },
+    ];
+    ModalService.ctorParameters = function () { return [
+        { type: HTMLDocument, decorators: [{ type: core_1.Inject, args: [platform_browser_1.DOCUMENT,] },] },
+    ]; };
+    return ModalService;
+}());
+exports.ModalService = ModalService;
 //# sourceMappingURL=modal.service.js.map

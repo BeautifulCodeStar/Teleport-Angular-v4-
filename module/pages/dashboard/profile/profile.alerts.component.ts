@@ -4,7 +4,7 @@ import { Subscription } from "rxjs/Subscription";
 
 import { IAlert }        from "../../../models/interfaces";
 import { AlertsService } from "../../../services/alerts.service";
-import { Modal }         from "../../../services/modal.service";
+import { ModalService }  from "../../../services/modal.service";
 
 
 @Component({
@@ -22,7 +22,7 @@ export class TeleportDevPortalProfileAlertsComponent implements OnInit, OnDestro
 
     constructor (
         @Inject(AlertsService) private alerts: AlertsService,
-        @Inject(Modal.Service) private modal: Modal.Service,
+        @Inject(ModalService) private modal: ModalService,
     ) {}
 
     public ngOnInit () {

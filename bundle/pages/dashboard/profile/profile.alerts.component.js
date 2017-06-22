@@ -63,7 +63,7 @@ var TeleportDevPortalProfileAlertsComponent = (function () {
     ];
     TeleportDevPortalProfileAlertsComponent.ctorParameters = function () { return [
         { type: alerts_service_1.AlertsService, decorators: [{ type: core_1.Inject, args: [alerts_service_1.AlertsService,] },] },
-        { type: modal_service_1.Modal.Service, decorators: [{ type: core_1.Inject, args: [modal_service_1.Modal.Service,] },] },
+        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
     ]; };
     return TeleportDevPortalProfileAlertsComponent;
 }());

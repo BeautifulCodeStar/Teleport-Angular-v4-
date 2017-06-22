@@ -4,7 +4,7 @@ import { ActivatedRoute }               from "@angular/router";
 import { ApplicationService }                     from "../../../../services/application.service";
 import { IAWSPutRequest, IntegrationsAWSService } from "../../../../services/integrations.aws.service";
 import { IApplication, IAWS }                     from "../../../../models/interfaces";
-import { Modal }                                  from "../../../../services/modal.service";
+import { ModalService }                           from "../../../../services/modal.service";
 import { MessageService }                         from "../../../../services/message.service";
 
 
@@ -32,7 +32,7 @@ export class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
         @Inject(ActivatedRoute)         private route: ActivatedRoute,
         @Inject(ApplicationService)     private apps: ApplicationService,
         @Inject(IntegrationsAWSService) private aws: IntegrationsAWSService,
-        @Inject(Modal.Service)          private modal: Modal.Service,
+        @Inject(ModalService)          private modal: ModalService,
         @Inject(MessageService)         private message: MessageService,
     ) {
         this.isBusy = true;

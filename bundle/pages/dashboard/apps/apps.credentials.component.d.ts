@@ -1,7 +1,7 @@
 import { OnDestroy } from "@angular/core";
 import { ApplicationService } from "../../../services/application.service";
 import { IApplication, IAppCredentials } from "../../../models/interfaces";
-import { Modal } from "../../../services/modal.service";
+import { ModalService } from "../../../services/modal.service";
 export declare class TeleportDevPortalAppCredentialsComponent implements OnDestroy {
     private applications;
     private modal;
@@ -9,7 +9,7 @@ export declare class TeleportDevPortalAppCredentialsComponent implements OnDestr
     isBusy: boolean;
     Credentials: IAppCredentials[];
     private _app;
-    constructor(applications: ApplicationService, modal: Modal.Service);
+    constructor(applications: ApplicationService, modal: ModalService);
     ngOnDestroy(): void;
     createCred(): void;
     deleteCred(cred: IAppCredentials): void;

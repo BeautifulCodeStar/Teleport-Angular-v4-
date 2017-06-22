@@ -2,7 +2,7 @@ import { Component, Inject, Input, OnDestroy } from "@angular/core";
 
 import { ApplicationService }            from "../../../services/application.service";
 import { IApplication, IAppCredentials } from "../../../models/interfaces";
-import { Modal }                         from "../../../services/modal.service";
+import { ModalService }                  from "../../../services/modal.service";
 
 
 @Component({
@@ -25,7 +25,7 @@ export class TeleportDevPortalAppCredentialsComponent implements OnDestroy {
 
     constructor (
         @Inject(ApplicationService) private applications: ApplicationService,
-        @Inject(Modal.Service)      private modal: Modal.Service,
+        @Inject(ModalService)      private modal: ModalService,
     ) {
         console.log("new UIAppCredentials ()", this._app, arguments);
     }

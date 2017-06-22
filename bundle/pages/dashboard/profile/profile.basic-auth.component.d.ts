@@ -3,7 +3,7 @@ import { IUserBasicAuth } from "../../../models/interfaces";
 import { AccountService } from "../../../services/account.service";
 import { AccountCredentialsService } from "../../../services/account.credentials.service";
 import { MessageService } from "../../../services/message.service";
-import { Modal } from "../../../services/modal.service";
+import { ModalService } from "../../../services/modal.service";
 export declare class TeleportDevPortalProfileBasicAuthComponent implements AfterViewInit, OnDestroy {
     private account;
     private creds;
@@ -12,7 +12,7 @@ export declare class TeleportDevPortalProfileBasicAuthComponent implements After
     isBusy: boolean;
     Credentials: IUserBasicAuth[];
     private _userId;
-    constructor(account: AccountService, creds: AccountCredentialsService, modal: Modal.Service, messages: MessageService);
+    constructor(account: AccountService, creds: AccountCredentialsService, modal: ModalService, messages: MessageService);
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     create(): void;

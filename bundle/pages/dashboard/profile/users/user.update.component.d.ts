@@ -4,7 +4,7 @@ import { IUser } from "../../../../models/interfaces";
 import { AccountService } from "../../../../services/account.service";
 import { UserService } from "../../../../services/user.service";
 import { MessageService } from "../../../../services/message.service";
-import { Modal } from "../../../../services/modal.service";
+import { ModalService } from "../../../../services/modal.service";
 export declare class TeleportDevPortalUserUpdateComponent implements OnInit, OnDestroy {
     private router;
     private route;
@@ -17,7 +17,7 @@ export declare class TeleportDevPortalUserUpdateComponent implements OnInit, OnD
     private _developer;
     private _origUser;
     private _user;
-    constructor(router: Router, route: ActivatedRoute, account: AccountService, users: UserService, messages: MessageService, modal: Modal.Service);
+    constructor(router: Router, route: ActivatedRoute, account: AccountService, users: UserService, messages: MessageService, modal: ModalService);
     ngOnInit(): void;
     ngOnDestroy(): void;
     readonly User: IUser;

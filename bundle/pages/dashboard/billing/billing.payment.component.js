@@ -87,7 +87,7 @@ var TeleportDevPortalBillingPaymentComponent = (function () {
         { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
         { type: billing_service_1.BillingService, decorators: [{ type: core_1.Inject, args: [billing_service_1.BillingService,] },] },
         { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
-        { type: modal_service_1.Modal.Service, decorators: [{ type: core_1.Inject, args: [modal_service_1.Modal.Service,] },] },
+        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
         { type: core_1.NgZone, decorators: [{ type: core_1.Inject, args: [core_1.NgZone,] },] },
     ]; };
     return TeleportDevPortalBillingPaymentComponent;

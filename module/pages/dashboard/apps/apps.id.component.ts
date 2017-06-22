@@ -3,7 +3,7 @@ import { Router, ActivatedRoute }       from "@angular/router";
 
 import { ApplicationService } from "../../../services/application.service";
 import { IApplication }       from "../../../models/interfaces";
-import { Modal }              from "../../../services/modal.service";
+import { ModalService }       from "../../../services/modal.service";
 
 
 @Component({
@@ -24,7 +24,7 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
     constructor (
         @Inject(Router)             private router: Router,
         @Inject(ApplicationService) private apps: ApplicationService,
-        @Inject(Modal.Service)      private modal: Modal.Service,
+        @Inject(ModalService)      private modal: ModalService,
         @Inject(ActivatedRoute)     private route: ActivatedRoute,
     ) {}
 

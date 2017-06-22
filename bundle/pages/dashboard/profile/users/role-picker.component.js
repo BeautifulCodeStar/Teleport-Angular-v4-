@@ -140,7 +140,7 @@ var TeleportDevPortalRolePickerRowComponent = (function () {
                 },] },
     ];
     TeleportDevPortalRolePickerRowComponent.ctorParameters = function () { return [
-        { type: modal_service_1.Modal.Service, decorators: [{ type: core_1.Inject, args: [modal_service_1.Modal.Service,] },] },
+        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
     ]; };
     TeleportDevPortalRolePickerRowComponent.propDecorators = {
         'dev': [{ type: core_1.Input, args: ["dev",] },],

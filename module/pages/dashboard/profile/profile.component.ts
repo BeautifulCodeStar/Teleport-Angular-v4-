@@ -5,7 +5,7 @@ import { Subscription } from "rxjs/Subscription";
 
 import { AccountService } from "../../../services/account.service";
 import { MessageService } from "../../../services/message.service";
-import { Modal }          from "../../../services/modal.service";
+import { ModalService }   from "../../../services/modal.service";
 import { IDeveloper }     from "../../../models/interfaces";
 import { Developer }      from "../../../models/Developer";
 
@@ -31,7 +31,7 @@ export class TeleportDevPortalProfileComponent implements OnInit, OnDestroy {
     constructor (
         @Inject(Router)         private router: Router,
         @Inject(AccountService) private account: AccountService,
-        @Inject(Modal.Service)  private modal: Modal.Service,
+        @Inject(ModalService)  private modal: ModalService,
         @Inject(MessageService) private messages: MessageService,
     ) {}
 

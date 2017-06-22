@@ -4,7 +4,7 @@ import { ActivatedRoute }               from "@angular/router";
 import { ApplicationService }                           from "../../../../services/application.service";
 import { IWatsonPutRequest, IntegrationsWatsonService } from "../../../../services/integrations.watson.service";
 import { IApplication, IWatson }                        from "../../../../models/interfaces";
-import { Modal }                                        from "../../../../services/modal.service";
+import { ModalService }                                 from "../../../../services/modal.service";
 import { MessageService }                               from "../../../../services/message.service";
 
 
@@ -30,7 +30,7 @@ export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy
         @Inject(ActivatedRoute)            private route: ActivatedRoute,
         @Inject(ApplicationService)        private apps: ApplicationService,
         @Inject(IntegrationsWatsonService) private watson: IntegrationsWatsonService,
-        @Inject(Modal.Service)             private modal: Modal.Service,
+        @Inject(ModalService)             private modal: ModalService,
         @Inject(MessageService)            private message: MessageService,
     ) {
         this.isBusy = true;

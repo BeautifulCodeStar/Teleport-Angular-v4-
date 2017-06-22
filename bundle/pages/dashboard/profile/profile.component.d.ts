@@ -2,7 +2,7 @@ import { OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { AccountService } from "../../../services/account.service";
 import { MessageService } from "../../../services/message.service";
-import { Modal } from "../../../services/modal.service";
+import { ModalService } from "../../../services/modal.service";
 import { IDeveloper } from "../../../models/interfaces";
 export declare class TeleportDevPortalProfileComponent implements OnInit, OnDestroy {
     private router;
@@ -15,7 +15,7 @@ export declare class TeleportDevPortalProfileComponent implements OnInit, OnDest
     isChangePassword: boolean;
     private _developer;
     private _subscription;
-    constructor(router: Router, account: AccountService, modal: Modal.Service, messages: MessageService);
+    constructor(router: Router, account: AccountService, modal: ModalService, messages: MessageService);
     ngOnInit(): void;
     ngOnDestroy(): void;
     onStartEditMode(): void;

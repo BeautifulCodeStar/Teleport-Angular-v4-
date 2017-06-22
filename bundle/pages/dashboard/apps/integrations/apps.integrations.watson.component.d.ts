@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ApplicationService } from "../../../../services/application.service";
 import { IntegrationsWatsonService } from "../../../../services/integrations.watson.service";
 import { IApplication, IWatson } from "../../../../models/interfaces";
-import { Modal } from "../../../../services/modal.service";
+import { ModalService } from "../../../../services/modal.service";
 import { MessageService } from "../../../../services/message.service";
 export declare class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy {
     private route;
@@ -17,7 +17,7 @@ export declare class TeleportDevPortalAppIntegrationWatsonComponent implements O
     password: string;
     private _application;
     private _watson;
-    constructor(route: ActivatedRoute, apps: ApplicationService, watson: IntegrationsWatsonService, modal: Modal.Service, message: MessageService);
+    constructor(route: ActivatedRoute, apps: ApplicationService, watson: IntegrationsWatsonService, modal: ModalService, message: MessageService);
     ngOnDestroy(): void;
     readonly App: IApplication;
     readonly Watson: IWatson;

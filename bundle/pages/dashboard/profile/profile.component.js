@@ -98,7 +98,7 @@ var TeleportDevPortalProfileComponent = (function () {
     TeleportDevPortalProfileComponent.ctorParameters = function () { return [
         { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
         { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
-        { type: modal_service_1.Modal.Service, decorators: [{ type: core_1.Inject, args: [modal_service_1.Modal.Service,] },] },
+        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
         { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
     ]; };
     return TeleportDevPortalProfileComponent;

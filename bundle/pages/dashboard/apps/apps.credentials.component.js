@@ -64,7 +64,7 @@ var TeleportDevPortalAppCredentialsComponent = (function () {
     ];
     TeleportDevPortalAppCredentialsComponent.ctorParameters = function () { return [
         { type: application_service_1.ApplicationService, decorators: [{ type: core_1.Inject, args: [application_service_1.ApplicationService,] },] },
-        { type: modal_service_1.Modal.Service, decorators: [{ type: core_1.Inject, args: [modal_service_1.Modal.Service,] },] },
+        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
     ]; };
     TeleportDevPortalAppCredentialsComponent.propDecorators = {
         'app': [{ type: core_1.Input },],

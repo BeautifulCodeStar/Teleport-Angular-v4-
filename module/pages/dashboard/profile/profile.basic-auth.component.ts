@@ -6,7 +6,7 @@ import { IUserBasicAuth } from "../../../models/interfaces";
 import { AccountService }            from "../../../services/account.service";
 import { AccountCredentialsService } from "../../../services/account.credentials.service";
 import { MessageService }            from "../../../services/message.service";
-import { Modal }                     from "../../../services/modal.service";
+import { ModalService }              from "../../../services/modal.service";
 
 
 @Component({
@@ -25,7 +25,7 @@ export class TeleportDevPortalProfileBasicAuthComponent implements AfterViewInit
     constructor (
         @Inject(AccountService)            private account: AccountService,
         @Inject(AccountCredentialsService) private creds: AccountCredentialsService,
-        @Inject(Modal.Service)             private modal: Modal.Service,
+        @Inject(ModalService)             private modal: ModalService,
         @Inject(MessageService)            private messages: MessageService,
     ) {
         console.log("new UIProfileBasicAuth ()", this._userId);

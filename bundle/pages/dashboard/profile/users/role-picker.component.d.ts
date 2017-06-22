@@ -1,7 +1,7 @@
 import { OnInit, OnDestroy } from "@angular/core";
 import { IUser, IDeveloper, IUserRole, IUserPermissionsTree, IUserPermissions } from "../../../../models/interfaces";
 import { AccountService } from "../../../../services/account.service";
-import { Modal } from "../../../../services/modal.service";
+import { ModalService } from "../../../../services/modal.service";
 export declare class TeleportDevPortalRolePickerComponent implements OnInit, OnDestroy {
     private account;
     user: IUser;
@@ -31,7 +31,7 @@ export declare class TeleportDevPortalRolePickerRowComponent implements OnInit {
     readOnly: boolean;
     private _isCollapsed;
     private _nodes;
-    constructor(modal: Modal.Service);
+    constructor(modal: ModalService);
     ngOnInit(): void;
     readonly Nodes: string[];
     isCollapsed(node: string): boolean;

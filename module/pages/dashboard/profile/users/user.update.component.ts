@@ -6,7 +6,7 @@ import { IUser, IDeveloper } from "../../../../models/interfaces";
 import { AccountService } from "../../../../services/account.service";
 import { UserService }    from "../../../../services/user.service";
 import { MessageService } from "../../../../services/message.service";
-import { Modal }          from "../../../../services/modal.service";
+import { ModalService }   from "../../../../services/modal.service";
 
 import { EmailValidator } from "../../../../utils/EmailValidator";
 import * as Permissions   from "../../../../utils/Permissions";
@@ -33,7 +33,7 @@ export class TeleportDevPortalUserUpdateComponent implements OnInit, OnDestroy {
         @Inject(AccountService) private account: AccountService,
         @Inject(UserService)    private users: UserService,
         @Inject(MessageService) private messages: MessageService,
-        @Inject(Modal.Service)  private modal: Modal.Service,
+        @Inject(ModalService)  private modal: ModalService,
     ) {}
 
 

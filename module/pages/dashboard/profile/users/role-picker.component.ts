@@ -7,7 +7,7 @@ import {
 } from "../../../../models/interfaces";
 
 import { AccountService } from "../../../../services/account.service";
-import { Modal }          from "../../../../services/modal.service";
+import { ModalService }   from "../../../../services/modal.service";
 
 import * as Permissions from "../../../../utils/Permissions";
 
@@ -122,7 +122,7 @@ export class TeleportDevPortalRolePickerRowComponent implements OnInit {
     private _nodes: string[] = [];
 
     constructor (
-        @Inject(Modal.Service) private modal: Modal.Service,
+        @Inject(ModalService) private modal: ModalService,
     ) {}
 
     public ngOnInit () {

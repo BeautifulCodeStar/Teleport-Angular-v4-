@@ -2,8 +2,8 @@
   "name": "teleport-module-dev-portal",
   "version": "1.1.2",
   "description": "Dev Portal module for Shoutpoint's TelePort web app.",
-  "main": "bundle/index.js",
-  "types": "bundle/index.d.ts",
+  "main": "./bundle/index.js",
+  "types": "./bundle/index.d.ts",
   "scripts": {
     "fresh-start": "./node_modules/.bin/gulp 'fresh-project'",
     "bundle": "./node_modules/.bin/gulp 'bundle:prepare' && ./node_modules/typescript/bin/tsc && ./node_modules/webpack/bin/webpack.js -p --config webpack.config.js && ./node_modules/.bin/gulp 'bundle:finalize'",

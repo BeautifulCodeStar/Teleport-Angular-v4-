@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ApplicationService } from "../../../../services/application.service";
 import { IntegrationsAWSService } from "../../../../services/integrations.aws.service";
 import { IApplication, IAWS } from "../../../../models/interfaces";
-import { Modal } from "../../../../services/modal.service";
+import { ModalService } from "../../../../services/modal.service";
 import { MessageService } from "../../../../services/message.service";
 export declare class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
     private route;
@@ -19,7 +19,7 @@ export declare class TeleportDevPortalAppIntegrationAwsComponent implements OnDe
     region: string;
     private _application;
     private _aws;
-    constructor(route: ActivatedRoute, apps: ApplicationService, aws: IntegrationsAWSService, modal: Modal.Service, message: MessageService);
+    constructor(route: ActivatedRoute, apps: ApplicationService, aws: IntegrationsAWSService, modal: ModalService, message: MessageService);
     ngOnDestroy(): void;
     readonly App: IApplication;
     readonly AWS: IAWS;

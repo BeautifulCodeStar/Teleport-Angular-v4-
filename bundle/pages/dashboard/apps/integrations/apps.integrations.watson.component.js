@@ -119,7 +119,7 @@ var TeleportDevPortalAppIntegrationWatsonComponent = (function () {
         { type: router_1.ActivatedRoute, decorators: [{ type: core_1.Inject, args: [router_1.ActivatedRoute,] },] },
         { type: application_service_1.ApplicationService, decorators: [{ type: core_1.Inject, args: [application_service_1.ApplicationService,] },] },
         { type: integrations_watson_service_1.IntegrationsWatsonService, decorators: [{ type: core_1.Inject, args: [integrations_watson_service_1.IntegrationsWatsonService,] },] },
-        { type: modal_service_1.Modal.Service, decorators: [{ type: core_1.Inject, args: [modal_service_1.Modal.Service,] },] },
+        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
         { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
     ]; };
     return TeleportDevPortalAppIntegrationWatsonComponent;
