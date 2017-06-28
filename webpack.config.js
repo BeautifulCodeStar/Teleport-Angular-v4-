@@ -27,7 +27,7 @@ module.exports = {
             { test: /\.css$/,                  loader : 'raw-loader' },
             { test: /\.scss/,                  loaders: [ "raw-loader", "sass-loader" ] },
             { test: /\.html$/,                 loader : 'html-loader', query: { minimize: false } },
-            { test: /\.ts$/,                   loaders: [ 'angular2-template-loader', 'awesome-typescript-loader' ] }
+            { test: /\.ts$/,                   loaders: [ 'angular2-template-loader', 'awesome-typescript-loader?configFileName=tsconfig.ngc.json' ] }
         ]
     },
 

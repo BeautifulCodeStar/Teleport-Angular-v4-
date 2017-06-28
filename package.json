@@ -2,7 +2,7 @@
   "name": "teleport-module-dev-portal",
   "version": "1.1.4",
   "description": "Dev Portal module for Shoutpoint's TelePort web app.",
-  "main": "./bundle/index.js",
+  "main": "./bundle/module.umd.js",
   "types": "./bundle/index.d.ts",
   "scripts": {
     "fresh-start": "./node_modules/.bin/gulp 'fresh-project'",
@@ -107,7 +107,7 @@
     "tslint": "^5.3.2",
     "typescript": "^2.3.3",
     "url-loader": "^0.5.8",
-    "webpack": "^2.6.0",
+    "webpack": "^3.0.0",
     "zone.js": "0.8.12"
   }
 }

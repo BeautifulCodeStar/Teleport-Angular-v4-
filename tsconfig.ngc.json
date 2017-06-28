@@ -23,5 +23,8 @@
   ],
   "angularCompilerOptions": {
     "skipTemplateCodegen": true
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "compiler": "@angular/compiler-cli"
   }
 }
