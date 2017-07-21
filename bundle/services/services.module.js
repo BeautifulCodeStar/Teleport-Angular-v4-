@@ -20,27 +20,31 @@ var user_service_1 = require("./user.service");
 var DevPortalServicesModule = (function () {
     function DevPortalServicesModule() {
     }
+    DevPortalServicesModule.forRoot = function () {
+        return {
+            ngModule: DevPortalServicesModule,
+            providers: [
+                account_credentials_service_1.AccountCredentialsService,
+                account_service_1.AccountService,
+                alerts_service_1.AlertsService,
+                application_service_1.ApplicationService,
+                billing_service_1.BillingService,
+                integrations_aws_service_1.IntegrationsAWSService,
+                integrations_watson_service_1.IntegrationsWatsonService,
+                login_service_1.LoginService,
+                logs_service_1.LogsService,
+                message_service_1.MessageService,
+                modal_service_1.ModalService,
+                perms_guard_service_1.PermsGuardCanActivate,
+                session_service_1.SessionService,
+                top_up_service_1.TopUpService,
+                usage_service_1.UsageService,
+                user_service_1.UserService,
+            ],
+        };
+    };
     DevPortalServicesModule.decorators = [
-        { type: core_1.NgModule, args: [{
-                    providers: [
-                        account_credentials_service_1.AccountCredentialsService,
-                        account_service_1.AccountService,
-                        alerts_service_1.AlertsService,
-                        application_service_1.ApplicationService,
-                        billing_service_1.BillingService,
-                        integrations_aws_service_1.IntegrationsAWSService,
-                        integrations_watson_service_1.IntegrationsWatsonService,
-                        login_service_1.LoginService,
-                        logs_service_1.LogsService,
-                        message_service_1.MessageService,
-                        modal_service_1.ModalService,
-                        perms_guard_service_1.PermsGuardCanActivate,
-                        session_service_1.SessionService,
-                        top_up_service_1.TopUpService,
-                        usage_service_1.UsageService,
-                        user_service_1.UserService,
-                    ],
-                },] },
+        { type: core_1.NgModule, args: [{},] },
     ];
     DevPortalServicesModule.ctorParameters = function () { return []; };
     return DevPortalServicesModule;

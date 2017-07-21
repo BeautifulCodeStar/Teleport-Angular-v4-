@@ -30,7 +30,7 @@ import * as devPortalServices from "./services/index";
 
         DevPortalComponentsModule,
         DevPortalPagesModule,
-        DevPortalServicesModule,
+        DevPortalServicesModule.forRoot(),
     ],
     exports: [
         DevPortalComponentsModule,

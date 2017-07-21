@@ -1,5 +1,5 @@
 
-import { NgModule }      from "@angular/core";
+import { NgModule, ModuleWithProviders }      from "@angular/core";
 
 import { LoginService }              from "./login.service";
 import { MessageService }            from "./message.service";
@@ -22,24 +22,31 @@ import { UserService }               from "./user.service";
 /**
  * Exposes DevPortalModule to importing app.
  */
-@NgModule({
-    providers: [
-        AccountCredentialsService,
-        AccountService,
-        AlertsService,
-        ApplicationService,
-        BillingService,
-        IntegrationsAWSService,
-        IntegrationsWatsonService,
-        LoginService,
-        LogsService,
-        MessageService,
-        ModalService,
-        PermsGuardCanActivate,
-        SessionService,
-        TopUpService,
-        UsageService,
-        UserService,
-    ],
-})
-export class DevPortalServicesModule {}
+@NgModule({})
+export class DevPortalServicesModule {
+
+    public static forRoot (): ModuleWithProviders {
+
+        return {
+            ngModule : DevPortalServicesModule,
+            providers: [
+                AccountCredentialsService,
+                AccountService,
+                AlertsService,
+                ApplicationService,
+                BillingService,
+                IntegrationsAWSService,
+                IntegrationsWatsonService,
+                LoginService,
+                LogsService,
+                MessageService,
+                ModalService,
+                PermsGuardCanActivate,
+                SessionService,
+                TopUpService,
+                UsageService,
+                UserService,
+            ],
+        };
+    }
+}

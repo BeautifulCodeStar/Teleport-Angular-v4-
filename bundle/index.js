@@ -28,7 +28,7 @@ var DevPortalModule = (function () {
                         http_1.HttpModule,
                         components_module_1.DevPortalComponentsModule,
                         pages_module_1.DevPortalPagesModule,
-                        services_module_1.DevPortalServicesModule,
+                        services_module_1.DevPortalServicesModule.forRoot(),
                     ],
                     exports: [
                         components_module_1.DevPortalComponentsModule,
