@@ -5,7 +5,7 @@ import { IDeveloper, IUserPermissions, IUser } from "./interfaces";
  * Developer class is immutable.
  */
 export class Developer implements IDeveloper {
-
+    
     private _id: string;
     private _status: string;
     private _createdAt: Date;
