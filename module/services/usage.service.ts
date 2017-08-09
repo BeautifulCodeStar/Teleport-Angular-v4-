@@ -4,8 +4,17 @@ import { Http }               from "@angular/http";
 
 import { Observable }      from "rxjs/Observable";
 
-import { IUsageAggregateData, IDeveloper } from "../models/interfaces";
-import { AccountService }                  from "./account.service";
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { Message } from "teleport-module-services/services/models/Message";
+import * as msgActions from "teleport-module-services/services/ngrx/messages/messages.actions";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { IUsageAggregateData } from "../models/interfaces";
+
 
 declare const API_BASE_URL: string;
 
@@ -30,12 +39,13 @@ export class UsageService {
 
 
     constructor(
-        @Inject(Http)           private http: Http,
-        @Inject(AccountService) private account: AccountService,
+        @Inject(Http)  private http: Http,
+        @Inject(Store) private store$: Store<TeleportCoreState>,
     ) {
-        this.account.Observable
-            .first(d => !! d)
-            .subscribe (d => this._developer = d);
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just())
+            .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
     }
 
     /**
@@ -44,15 +54,7 @@ export class UsageService {
      */
     public pullUsage (req: IUsageRequest): Promise<IUsageResponse> {
 
-        // const resp = {
-        //     beginDate : req.beginDate, // new Date(mockData.begin_date),
-        //     endDate   : req.endDate, // new Date(mockData.end_date),
-        //     usage     : mockData.usage,
-        // };
-
-        // return new Promise <IUsageResponse> (resolve => setTimeout(() => resolve(resp), 2000));
-
-        let url = [
+        const url = [
             API_BASE_URL,
             "developers",
             encodeURIComponent(this._developer.id),
@@ -66,14 +68,17 @@ export class UsageService {
         if (req.appId) { search.set("app_id", req.appId); }
 
         return this.http.get(url, { search: search.toString(), withCredentials: true })
-            .catch(err  => Observable.throw(new Error(err.json().user_message)))
             .map  (resp => resp.json().data)
             .map  ((data: any) => ({
                 beginDate : new Date(data.begin_date),
                 endDate   : new Date(data.end_date),
                 usage     : data.usage,
             }))
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Usage Report Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 }
 

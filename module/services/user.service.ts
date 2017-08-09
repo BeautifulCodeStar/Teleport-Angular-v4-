@@ -3,21 +3,19 @@ import { Http, Headers }      from "@angular/http";
 
 import { Observable }      from "rxjs/Observable";
 
-import { IDeveloper, IUser } from "../models/interfaces";
-import { AccountService }    from "./account.service";
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { Message } from "teleport-module-services/services/models/Message";
+import * as msgActions from "teleport-module-services/services/ngrx/messages/messages.actions";
+
+import { IUser } from "teleport-module-services/services/v1/models/User";
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+
 
 declare const API_BASE_URL: string;
-
-
-// interface IUserDetailResponse {
-//     developer: IDeveloper;
-//     portalUser: IUser;
-// }
-//
-// interface IUserListResponse {
-//     developer: IDeveloper;
-//     portalUsers: IUser[];
-// }
 
 
 /**
@@ -29,12 +27,13 @@ export class UserService {
     private _developer: IDeveloper;
 
     constructor(
-        @Inject(Http)           private http: Http,
-        @Inject(AccountService) private account: AccountService,
+        @Inject(Http)  private http: Http,
+        @Inject(Store) private store$: Store<TeleportCoreState>,
     ) {
-        this.account.Observable
-            .first(d => !! d)
-            .subscribe (d => this._developer = d);
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just())
+            .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
     }
 
     /**
@@ -54,9 +53,12 @@ export class UserService {
 
         return this.http
             .get  (url, options)
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
             .map  (r => r.json().portalUsers)
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("List Users Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 
     /**
@@ -78,9 +80,12 @@ export class UserService {
 
         return this.http
             .get  (url, options)
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
             .map  (r => r.json().portalUser)
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("User Info Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 
     /**
@@ -102,9 +107,12 @@ export class UserService {
 
         return this.http
             .post (url, JSON.stringify(user), options)
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
             .map  (r => r.json().portalUser)
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Create User Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 
     /**
@@ -127,9 +135,12 @@ export class UserService {
 
         return this.http
             .put  (url, JSON.stringify(user), options)
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
             .map  (r => r.json().portalUser)
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Update User Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 
     /**
@@ -155,9 +166,12 @@ export class UserService {
 
         return this.http
             .put  (url, JSON.stringify({ oldPassword, password }), options)
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
             .map  (r => r.json().portalUser)
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Update Password Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 
     /**
@@ -179,9 +193,12 @@ export class UserService {
 
         return this.http
             .delete(url, options)
-            .catch (err => Observable.throw(new Error(err.json().user_message)))
             .map   (() => true)
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Remove User Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 
     /**
@@ -205,8 +222,11 @@ export class UserService {
 
         return this.http
             .post (url, JSON.stringify(user), options)
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
             .map  (() => true)
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Send Invite Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 }

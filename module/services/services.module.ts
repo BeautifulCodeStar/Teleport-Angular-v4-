@@ -1,19 +1,19 @@
 
 import { NgModule, ModuleWithProviders }      from "@angular/core";
 
-import { LoginService }              from "./login.service";
+// import { LoginService }              from "./login.service";
 import { MessageService }            from "./message.service";
 import { ModalService }              from "./modal.service";
-import { AccountCredentialsService } from "./account.credentials.service";
-import { AccountService }            from "./account.service";
+// import { AccountCredentialsService } from "./account.credentials.service";
+// import { AccountService }            from "./account.service";
 import { AlertsService }             from "./alerts.service";
-import { ApplicationService }        from "./application.service";
+// import { ApplicationService }        from "./application.service";
 import { BillingService }            from "./billing.service";
 import { IntegrationsAWSService }    from "./integrations.aws.service";
 import { IntegrationsWatsonService } from "./integrations.watson.service";
 import { LogsService }               from "./logs.service";
 import { PermsGuardCanActivate }     from "./perms-guard.service";
-import { SessionService }            from "./session.service";
+// import { SessionService }            from "./session.service";
 import { TopUpService }              from "./top-up.service";
 import { UsageService }              from "./usage.service";
 import { UserService }               from "./user.service";
@@ -30,19 +30,19 @@ export class DevPortalServicesModule {
         return {
             ngModule : DevPortalServicesModule,
             providers: [
-                AccountCredentialsService,
-                AccountService,
+                // AccountCredentialsService,
+                // AccountService,
                 AlertsService,
-                ApplicationService,
+                // ApplicationService,
                 BillingService,
                 IntegrationsAWSService,
                 IntegrationsWatsonService,
-                LoginService,
+                // LoginService,
                 LogsService,
                 MessageService,
                 ModalService,
                 PermsGuardCanActivate,
-                SessionService,
+                // SessionService,
                 TopUpService,
                 UsageService,
                 UserService,

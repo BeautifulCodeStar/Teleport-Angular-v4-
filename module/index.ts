@@ -6,6 +6,11 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FormsModule }             from "@angular/forms";
 import { HttpModule }              from "@angular/http";
 
+import { StoreModule } from "@ngrx/store";
+
+import * as v1Services from "teleport-module-services/services/v1/services/index";
+import * as v1Ngrx from "teleport-module-services/services/v1/ngrx/index";
+
 // Components
 
 // Modules
@@ -27,6 +32,9 @@ import * as devPortalServices from "./services/index";
         CommonModule,
         FormsModule,
         HttpModule,
+
+        v1Services.APIv1ServicesModule,
+        StoreModule.forRoot(v1Ngrx.getReducers()),
 
         DevPortalComponentsModule,
         DevPortalPagesModule,

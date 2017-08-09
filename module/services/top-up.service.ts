@@ -5,9 +5,17 @@ import { Observable }      from "rxjs/Observable";
 import { Observer }        from "rxjs/Observer";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-import { IDeveloper, ITopUp } from "../models/interfaces";
+import { Store } from "@ngrx/store";
 
-import { AccountService } from "./account.service";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { Message } from "teleport-module-services/services/models/Message";
+import * as msgActions from "teleport-module-services/services/ngrx/messages/messages.actions";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { ITopUp } from "../models/interfaces";
+
 
 declare const API_BASE_URL: string;
 
@@ -22,12 +30,13 @@ export class TopUpService {
     private _observer: Observer<ITopUp>;
 
     constructor(
-        @Inject(Http)           private http: Http,
-        @Inject(AccountService) private account: AccountService,
+        @Inject(Http)  private http: Http,
+        @Inject(Store) private store$: Store<TeleportCoreState>,
     ) {
-        this.account.Observable
-            .first(d => !! d)
-            .subscribe (d => this._developer = d);
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just())
+            .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
     }
 
 
@@ -58,11 +67,10 @@ export class TopUpService {
         ].join("/");
 
         this.http.get(url, { withCredentials: true })
-            .catch     (err  => Observable.throw(new Error(err.json().user_message)))
-            .map       (resp => resp.json().topUp as ITopUp)
-            .subscribe (
+            .map(resp => resp.json().topUp as ITopUp)
+            .subscribe(
                 resp => this._observer.next(resp),
-                err  => this._observer.error(err),
+                err  => this.store$.dispatch(new msgActions.Add(new Message("Top-Up Failure", err.json().user_message))),
             );
     }
 
@@ -79,12 +87,10 @@ export class TopUpService {
         const headers = new Headers({ "Content-Type": "application/json" });
 
         this.http.post(url, JSON.stringify(data), { headers, withCredentials: true })
-            .catch     (err  => Observable.throw(new Error(err.json().user_message)))
-            .map       (resp => resp.json().topUp as ITopUp)
-            .subscribe (
-            resp => this._observer.next(resp),
-            err  => this._observer.error(err),
-        );
-
+            .map(resp => resp.json().topUp as ITopUp)
+            .subscribe(
+                resp => this._observer.next(resp),
+                err  => this.store$.dispatch(new msgActions.Add(new Message("Top-Up Failure", err.json().user_message))),
+            );
     }
 }

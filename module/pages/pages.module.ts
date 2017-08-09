@@ -18,7 +18,6 @@ import { TeleportDevPortalRecoverPasswordComponent } from "./recover-password/re
 import { TeleportDevPortalRegisterComponent }        from "./register/register.component";
 
 // Directives
-// import { directives } from "shoutpoint-teleport-core";
 
 
 @NgModule({
@@ -29,7 +28,6 @@ import { TeleportDevPortalRegisterComponent }        from "./register/register.c
         FormsModule,
         HttpModule,
         RouterModule,
-        // directives.PublicDirectivesModule,
 
         DevPortalDashboardModule,
     ],

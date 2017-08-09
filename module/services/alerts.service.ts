@@ -5,11 +5,24 @@ import { Http, RequestOptions, Headers } from "@angular/http";
 import { Observable }      from "rxjs/Observable";
 import { Observer }        from "rxjs/Observer";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import "rxjs/add/operator/do";
+import "rxjs/add/operator/first";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/share";
+import "rxjs/add/operator/toPromise";
 
-import { IAlert, IDeveloper } from "../models/interfaces";
-import { Alert }              from "../models/Alert";
+import { Store } from "@ngrx/store";
 
-import { AccountService } from "./account.service";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { Message } from "teleport-module-services/services/models/Message";
+import * as msgActions from "teleport-module-services/services/ngrx/messages/messages.actions";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { IAlert } from "../models/interfaces";
+import { Alert }  from "../models/Alert";
+
 
 declare const API_BASE_URL: string;
 
@@ -17,68 +30,62 @@ declare const API_BASE_URL: string;
 @Injectable()
 export class AlertsService {
 
-    private _developer: IDeveloper;
+    private _developerId: string;
 
+    private subject$: BehaviorSubject<IAlert[]>;
     private _observable: Observable<IAlert[]>;
-    private _observer: Observer<IAlert[]>;
-
-    private _alerts: IAlert[];
 
     private _lastRefresh = 0;
 
     constructor(
-        @Inject(Http) private http: Http,
-        @Inject(AccountService) private account: AccountService,
+        @Inject(Http)  private http: Http,
+        @Inject(Store) private store$: Store<TeleportCoreState>,
     ) {
         console.log("new AlertsService()", arguments);
 
-        this.account.Observable
-            .first(d => !! d)
-            .subscribe (d => this._developer = d);
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just())
+            .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developerId = s.userData.id);
 
-        this._observable = Observable
-            .create((observer: Observer<IAlert[]>) => this._observer = observer)
-            .do((a: IAlert[]) => this._alerts = a)
-            .multicast(new BehaviorSubject(this._alerts))
-            .refCount();
+        this.subject$ = new BehaviorSubject<IAlert[]>([]);
+        this._observable = this.subject$.share();
     }
 
 
     public cleanup () {
-        this._alerts = [];
+        // this._alerts = [];
+        this.subject$.complete();
     }
 
 
     public get Observable (): Observable<IAlert[]> {
-        this.refresh().catch(err => this._observer.error(err));
+        this.refresh().catch(err => console.error(err));
         return this._observable;
     }
 
 
     public refresh (): Promise<IAlert[]> {
 
-        if (this._lastRefresh > Date.now() - 5000) { return Promise.resolve(this._alerts); }
+        if (this._lastRefresh > Date.now() - 5000) { return Promise.resolve(this.subject$.getValue()); }
         this._lastRefresh = Date.now();
 
         const url = [
             API_BASE_URL,
             "developers",
-            encodeURIComponent(this._developer.id),
+            encodeURIComponent(this._developerId),
             "alerts",
         ].join("/");
 
         return this.http
             .get(url, { withCredentials: true })
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
-            .map  (res => res.json().alerts.map((a: IAlert) => new Alert(a)))
-            .do   ((a: IAlert[])   => {
-                if (this._observer) {
-                    this._observer.next(a);
-                } else {
-                    this._alerts = a;
-                }
-            })
-            .toPromise();
+            .map   (res => res.json().alerts.map((a: IAlert) => new Alert(a)))
+            .do    ((a: IAlert[]) => this.subject$.next(a))
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Alert List Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
     
 
@@ -90,16 +97,19 @@ export class AlertsService {
         const url = [
             API_BASE_URL,
             "developers",
-            encodeURIComponent(this._developer.id),
+            encodeURIComponent(this._developerId),
             "alerts",
         ].join("/");
 
         return this.http
             .post(url, JSON.stringify(alert), options)
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
-            .map  (()  => true)
-            .do   (()  => this.refresh())
-            .toPromise();
+            .map(() => true)
+            .do(() => this.refresh())
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Add Alert Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 
 
@@ -108,16 +118,19 @@ export class AlertsService {
         const url = [
             API_BASE_URL,
             "developers",
-            encodeURIComponent(this._developer.id),
+            encodeURIComponent(this._developerId),
             "alerts",
             alert.id,
         ].join("/");
 
         return this.http
             .delete(url, { withCredentials: true })
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
-            .map  (()  => true)
-            .do   (()  => this.refresh())
-            .toPromise();
+            .map(() => true)
+            .do(() => this.refresh())
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Remove Alert Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 }

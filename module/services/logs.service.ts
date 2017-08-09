@@ -6,8 +6,16 @@ import { Observable }      from "rxjs/Observable";
 import { Observer }        from "rxjs/Observer";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-import { ILog, IDeveloper } from "../models/interfaces";
-import { AccountService }   from "./account.service";
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { Message } from "teleport-module-services/services/models/Message";
+import * as msgActions from "teleport-module-services/services/ngrx/messages/messages.actions";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { ILog } from "../models/interfaces";
 
 declare const API_BASE_URL: string;
 
@@ -42,12 +50,13 @@ export class LogsService {
     private _lastRefresh = 0;
 
     constructor(
-        @Inject(Http)           private http: Http,
-        @Inject(AccountService) private account: AccountService,
+        @Inject(Http)  private http: Http,
+        @Inject(Store) private store$: Store<TeleportCoreState>,
     ) {
-        this.account.Observable
-            .first(d => !! d)
-            .subscribe (d => this._developer = d);
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just())
+            .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
     }
 
     public destroy () {
@@ -87,7 +96,6 @@ export class LogsService {
         ].join("/");
 
         return this.http.get(url, { search: this._searchParams, withCredentials: true })
-            .catch(err  => Observable.throw(new Error(err.json().user_message)))
             .map  (resp => resp.json().data)
             .map  ((data: any) => ({
                 isTruncated: data.is_truncated,
@@ -97,7 +105,11 @@ export class LogsService {
                 logs: data.logs.map((l: ILog) => Object.assign({}, l, { start_time: new Date(l.start_time as string), end_time: new Date(l.end_time as string) })),
             }))
             .do   ((logs: ILogsResponse)  => { if (this._observer) { this._observer.next(logs); }})
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Logs Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 
     /**
