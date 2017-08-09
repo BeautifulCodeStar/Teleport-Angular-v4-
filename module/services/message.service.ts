@@ -4,6 +4,12 @@ import { DOCUMENT }           from "@angular/platform-browser";
 import { Observable }      from "rxjs/Observable";
 import { ErrorObservable } from "rxjs/observable/ErrorObservable";
 
+import { Store, ReducerManagerDispatcher } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { Message } from "teleport-module-services/services/models/Message";
+import * as actions from "teleport-module-services/services/ngrx/messages/messages.actions";
+
 
 @Injectable()
 export class MessageService {
@@ -12,6 +18,8 @@ export class MessageService {
 
     constructor (
         @Inject(DOCUMENT) private doc: HTMLDocument,
+        @Inject(Store) private store$: Store<TeleportCoreState>,
+        @Inject(ReducerManagerDispatcher) private dispatcher$: ReducerManagerDispatcher,
     ) {
         const div = doc.getElementById("message-container-ber2z79jspqlg14i");
         if (div !== null) {
@@ -22,23 +30,29 @@ export class MessageService {
             this.containerDiv.className = "messages-container";
             doc.body.appendChild(this.containerDiv);
         }
+
+        const LevelMap = { "info": "success", "warn": "warning", "error": "danger" };
+        this.dispatcher$
+            .filter(action => action.type === actions.ADD)
+            .subscribe((action: actions.Add) => {
+                const msg = action.payload;
+                this.initAlert(msg.title, msg.message, LevelMap[msg.level] as "success" | "warning" | "danger");
+                this.store$.dispatch(new actions.Remove(msg));
+            });
     }
 
     public info (title: string, message: string) {
-        console.log("Info Message", title, message);
         this.initAlert(title, message, "success");
     }
 
 
     public warning (title: string, message: string, err?: Error): ErrorObservable {
-        console.log("Warning Message", title, message, err);
         this.initAlert(title, message, "warning");
         return Observable.throw(err || new Error(message));
     }
 
 
     public error (title: string, message: string, err?: Error): ErrorObservable {
-        console.error("Error Message", title, message, err);
         this.initAlert(title, message, "danger");
         return Observable.throw(err || new Error(message));
     }

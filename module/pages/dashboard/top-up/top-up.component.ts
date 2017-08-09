@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 
 import { Subscription } from "rxjs/Subscription";
+import "rxjs/add/operator/skipWhile";
 
 import { TopUpService }   from "../../../services/top-up.service";
 import { MessageService } from "../../../services/message.service";
@@ -12,7 +13,6 @@ import { ITopUp } from "../../../models/interfaces";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-top-up",
     templateUrl: "top-up.html",
-    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalTopUpComponent implements OnInit, OnDestroy {
 

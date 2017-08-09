@@ -7,8 +7,6 @@ import "rxjs/add/operator/map";
 import { Store } from "@ngrx/store";
 
 import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
-// import { Message } from "teleport-module-services/services/models/Message";
-// import * as msgActions from "teleport-module-services/services/ngrx/messages/messages.actions";
 import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
 
 import { APIv1State } from "teleport-module-services/services/v1/ngrx/index";

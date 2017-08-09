@@ -1,7 +1,17 @@
 import { Component, Inject, Output, EventEmitter, Input } from "@angular/core";
 
-import { IUser }          from "../../../models/interfaces";
-import { AccountService } from "../../../services/account.service";
+import "rxjs/add/operator/first";
+
+import { Store, ReducerManagerDispatcher } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { IUser } from "teleport-module-services/services/v1/models/User";
+import { IApplication } from "teleport-module-services/services/v1/models/Application";
+
+import * as actions from "teleport-module-services/services/v1/ngrx/account/account.actions";
+
 import { UserService }    from "../../../services/user.service";
 import { MessageService } from "../../../services/message.service";
 import PasswordUtil       from "../../../utils/PasswordUtil";
@@ -11,19 +21,20 @@ import PasswordUtil       from "../../../utils/PasswordUtil";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-profile-password",
     templateUrl: "profile.password.html",
-    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalProfilePasswordComponent {
+
+    @Output() public onComplete = new EventEmitter<void>();
 
     public isBusy = false;
     public password = "";
     public newPassword = "";
     public newPasswordVerify = "";
-    @Output() private onComplete = new EventEmitter<void>();
 
     constructor(
-        @Inject(AccountService) private account: AccountService,
-        @Inject(MessageService) private messages: MessageService,
+        @Inject(Store)                    private store$: Store<TeleportCoreState>,
+        @Inject(ReducerManagerDispatcher) private dispatcher: ReducerManagerDispatcher,
+        @Inject(MessageService)           private messages: MessageService,
     ) {}
 
 
@@ -59,14 +70,23 @@ export class TeleportDevPortalProfilePasswordComponent {
 
         this.isBusy = true;
 
-        this.account.updatePassword(this.password, this.newPassword)
-            .then(() => {
-                this.messages.info("Password Change Success", "Your password has been updated.");
-                this.onComplete.emit();
-            })
-            .catch(err => {
-                this.messages.error("Password Change Failure", err.message, err);
-                this.isBusy = false;
+        this.store$.dispatch(new actions.UpdatePassword({ dev: null, password: this.password, newPassword: this.newPassword }));
+
+        this.dispatcher
+            .first(action => action.type === actions.UPDATE_PASSWORD_SUCCESS || action.type === actions.UPDATE_PASSWORD_FAILURE)
+            .subscribe((action: actions.UpdatePasswordSuccess) => {
+
+                switch (action.type) {
+
+                    case actions.UPDATE_PASSWORD_SUCCESS:
+                        this.messages.info("Password Change Success", "Your password has been updated.");
+                        this.onComplete.emit();
+                        break;
+
+                    default:
+                        this.messages.error("Password Change Failure", "Your password could not be updated.");
+                        this.isBusy = false;
+                }
             });
     }
 
@@ -81,7 +101,6 @@ export class TeleportDevPortalProfilePasswordComponent {
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-user-profile-password",
     templateUrl: "profile.password.html",
-    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalUserProfilePasswordComponent {
 

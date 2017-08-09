@@ -2,11 +2,14 @@ import {
     Component, OnInit, OnDestroy, Input, Inject,
 } from "@angular/core";
 
-import {
-    IUser, IDeveloper, IUserRole, IUserPermissionsTree, IUserPermissions,
-} from "../../../../models/interfaces";
+import { Store } from "@ngrx/store";
 
-import { AccountService } from "../../../../services/account.service";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+
+import { IUser, IUserBasicAuth, IUserRole, IUserPermissionsTree, IUserPermissions } from "teleport-module-services/services/v1/models/User";
+
 import { ModalService }   from "../../../../services/modal.service";
 
 import * as Permissions from "../../../../utils/Permissions";
@@ -16,7 +19,6 @@ import * as Permissions from "../../../../utils/Permissions";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-role-picker",
     templateUrl: "role-picker.html",
-    // styleUrls  : [ "../../../css/bootswatch.min.css", "../../../css/main.min.css" ],
 })
 export class TeleportDevPortalRolePickerComponent implements OnInit, OnDestroy {
 
@@ -33,15 +35,16 @@ export class TeleportDevPortalRolePickerComponent implements OnInit, OnDestroy {
 
 
     constructor (
-        @Inject(AccountService) private account: AccountService,
+        @Inject(Store) private store$: Store<TeleportCoreState>,
     ) {}
 
 
     public ngOnInit() {
 
-        this.account.Observable
-            .first(d => !! d)
-            .subscribe(d => {
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just().userData)
+            .subscribe((d: IDeveloper) => {
 
                 this._developer = d;
 
@@ -55,7 +58,6 @@ export class TeleportDevPortalRolePickerComponent implements OnInit, OnDestroy {
 
 
     public ngOnDestroy() {
-
         delete this._developer;
         delete this.user;
     }
