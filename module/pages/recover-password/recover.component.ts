@@ -3,8 +3,11 @@ import { ActivatedRoute }                       from "@angular/router";
 
 import { Observable } from "rxjs/Observable";
 import { Observer }   from "rxjs/Observer";
+import "rxjs/add/operator/toPromise";
 
-import { LoginService }   from "../../services/login.service";
+import { LoginService } from "teleport-module-services/services/services/login/login.service";
+import * as i from "teleport-module-services/services/services/login/login.service.interface";
+
 import { MessageService } from "../../services/message.service";
 
 import PasswordUtil       from "../../utils/PasswordUtil";
@@ -92,7 +95,8 @@ export class TeleportDevPortalRecoverPasswordComponent implements OnInit, OnDest
 
         const authKey = (this.route.snapshot.params as any).key;
 
-        this.logins.resetPassword(this.email, this.newPassword, authKey, this.reCaptchaResponse)
+        this.logins.resetPassword({ email: this.email, password: this.newPassword, authKey, reCaptchaResponse: this.reCaptchaResponse })
+            .toPromise()
             .then(() => {
                 this.isSuccess = true;
                 this.isBusy = false;

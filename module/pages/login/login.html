@@ -1,21 +1,3 @@
-<!--div class="row app-menu">
-
-    <div class="col-xs-3 text-left">
-        <a [routerLink]="['/']"><img class="logo" src="../img/shoutpoint_logo.png"></a>
-    </div>
-    <div class="hidden-sm hidden-xs col-md-6 text-center">
-        <a class="btn btn-link" href="http://developers.shoutpoint.com">Services</a>
-        <a class="btn btn-link" href="http://developers.shoutpoint.com/documents">Documents</a>
-        <a class="btn btn-link" href="http://developers.shoutpoint.com/api-reference">API Reference</a>
-        <a class="btn btn-link" href="http://shoutpoint.com/get-started">Support</a>
-    </div>
-    <div class="col-md-3 col-sm-9 col-xs-9 text-right login-block">
-        <a class="btn btn-link" [routerLink]="['/register']">Sign Up</a>
-        <button class="btn btn-default" [routerLink]="['/login']">Log In</button>
-        <span></span>
-    </div>
-
-</div-->
 
 <div class="row">
 
@@ -45,12 +27,6 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-10 col-md-offset-2">
-                            <teleport-sp-recaptcha theme="light" sitekey="6Lf3RBETAAAAAKtkTgxjrn9AnYlhcfvh0tS7hFZo" [onReset]="resetCaptchaObservable()" (callback)="onCaptcha($event, true)" (expiredCallback)="onCaptcha($event, false)"></teleport-sp-recaptcha>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <div class="col-md-12 text-center">
                             <button class="btn btn-success" type="submit" [disabled]="! (loginForm.form.valid && isCaptchaOk && isEmailValid(username.value) && isPasswordValid(password.value))">Login</button>
                         </div>
@@ -72,27 +48,17 @@
 </div>
 
 
-<div class="login-user-list animated bounceIn" *ngIf="showMultiLogin">
+<div class="login-user-list animated bounceIn" *ngIf="userLogins">
 
     <h4 class="text-center">Multiple Accounts Found</h4>
 
-    <div class="list-group" *ngIf="!! devLogin">
-
-        <a class="list-group-item" (click)="loginAs(devLogin)">
-            <h5 class="list-group-item-heading">{{ devLogin.firstName }} {{ devLogin.lastName }}</h5>
-            <div>Company <strong>{{ devLogin.company }}</strong></div>
-        </a>
-
-    </div>
-
-    <div class="list-group" *ngIf="!! userLogins && userLogins.length > 0">
+    <div class="list-group">
 
         <h5 class="text-center">User Accounts</h5>
 
         <a class="list-group-item" *ngFor="let d of userLogins" (click)="loginAs(d)">
-            <h5 class="list-group-item-heading">{{ d.firstName }} {{ d.lastName }}</h5>
-            <div>Acct <strong>{{ d.developerId.slice(0,4) }}...{{ d.developerId.slice(-4) }}</strong> // Position <strong>{{ d.position || '--' }}</strong></div>
-            <div>{{ d.notes }}</div>
+            <h5 class="list-group-item-heading">{{ d.fullName }} ({{ d.userType }}</h5>
+            <div>Acct <strong>{{ d.accountOwner }}</strong> // Position <strong>{{ d.role || '--' }}</strong></div>
         </a>
 
     </div>
