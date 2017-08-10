@@ -8,8 +8,10 @@ import { HttpModule }              from "@angular/http";
 
 import { StoreModule } from "@ngrx/store";
 
-import * as v1Services from "teleport-module-services/services/v1/services/index";
-import * as v1Ngrx from "teleport-module-services/services/v1/ngrx/index";
+import { TeleportServicesModule } from "teleport-module-services/services/services/services.module";
+// import * as coreNgrx from "teleport-module-services/services/ngrx/index";
+import { APIv1ServicesModule } from "teleport-module-services/services/v1/services/services.module";
+// import * as v1Ngrx from "teleport-module-services/services/v1/ngrx/index";
 
 // Components
 
@@ -33,17 +35,21 @@ import * as devPortalServices from "./services/index";
         FormsModule,
         HttpModule,
 
-        v1Services.APIv1ServicesModule,
-        StoreModule.forRoot(v1Ngrx.getReducers()),
+        TeleportServicesModule.forRoot(),
+        APIv1ServicesModule.forRoot(),
+        // StoreModule.forRoot({ ...coreNgrx.getReducers(), ...v1Ngrx.getReducers() }, { metaReducers: coreNgrx.getMetaReducers() }),
+        StoreModule,
 
         DevPortalComponentsModule,
         DevPortalPagesModule,
-        DevPortalServicesModule.forRoot(),
+        DevPortalServicesModule,
     ],
     exports: [
         DevPortalComponentsModule,
         DevPortalPagesModule,
         DevPortalServicesModule,
+        TeleportServicesModule,
+        APIv1ServicesModule,
     ],
 })
 export class DevPortalModule { }
