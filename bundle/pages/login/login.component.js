@@ -1,98 +1,84 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var Observable_1 = require("rxjs/Observable");
-var login_service_1 = require("../../services/login.service");
-var message_service_1 = require("../../services/message.service");
-var PasswordUtil_1 = require("../../utils/PasswordUtil");
-var EmailValidator_1 = require("../../utils/EmailValidator");
+import { Component, Inject } from "@angular/core";
+import "rxjs/add/operator/toPromise";
+import { LoginService } from "teleport-module-services/services/services/login/login.service";
+import { MessageService } from "../../services/message.service";
+import PasswordUtil from "../../utils/PasswordUtil";
+import { EmailValidator } from "../../utils/EmailValidator";
 var TeleportDevPortalLoginComponent = (function () {
     function TeleportDevPortalLoginComponent(logins, messages) {
-        var _this = this;
         this.logins = logins;
         this.messages = messages;
         this.userName = "";
         this.passWord = "";
         this.isBusy = false;
-        this.isCaptchaOk = false;
-        this.showMultiLogin = false;
-        this.reCaptchaResponse = "";
-        this._resetCaptchaObservable = Observable_1.Observable.create(function (observer) { return _this._resetCaptchaObserver = observer; });
     }
+    TeleportDevPortalLoginComponent.prototype.ngOnInit = function () {
+        this.userLogins = undefined;
+        this.userName = "";
+        this.passWord = "";
+        this.isBusy = false;
+    };
+    TeleportDevPortalLoginComponent.prototype.ngOnDestroy = function () {
+        this.userLogins = undefined;
+        this.userName = "";
+        this.passWord = "";
+        this.isBusy = false;
+    };
     TeleportDevPortalLoginComponent.prototype.isPasswordValid = function (pw) {
-        return PasswordUtil_1.default.satisfies(pw);
+        return PasswordUtil.satisfies(pw);
     };
     TeleportDevPortalLoginComponent.prototype.isEmailValid = function (email) {
-        return EmailValidator_1.EmailValidator.isValid(email);
-    };
-    TeleportDevPortalLoginComponent.prototype.onCaptcha = function (resp, isOk) {
-        this.reCaptchaResponse = resp;
-        this.isCaptchaOk = isOk;
-    };
-    TeleportDevPortalLoginComponent.prototype.resetCaptchaObservable = function () {
-        return this._resetCaptchaObservable;
+        return EmailValidator.isValid(email);
     };
     TeleportDevPortalLoginComponent.prototype.onSubmit = function () {
         var _this = this;
         this.isBusy = true;
-        this.logins.login(this.userName, this.passWord, this.reCaptchaResponse)
+        this.logins.login({ userName: this.userName, password: this.passWord })
+            .toPromise()
             .then(function (res) {
-            console.log("LOGIN =>", res);
-            if (res.developer) {
-                console.log("Login Success", res.developer);
-                _this.messages.info("Welcome, " + res.developer.firstName + ".", "You are now logged in to your account.");
+            if (res.v1.length === 1) {
+                _this.loginAs(res.v1[0]);
+                return;
             }
-            else if (res.possibleLogins) {
-                _this._resetCaptchaObserver.next(true);
-                _this.isCaptchaOk = false;
-                _this.isBusy = false;
-                _this.showMultiLogin = true;
-                _this.devLogin = res.possibleLogins.find(function (d) { return d.id === d.developerId; });
-                _this.userLogins = res.possibleLogins.filter(function (d) { return d.id !== d.developerId; });
-            }
+            _this.userLogins = res.v1;
+            _this.isBusy = false;
         })
             .catch(function (err) {
-            console.error("Login Failure", err);
-            _this._resetCaptchaObserver.next(true);
-            _this.isCaptchaOk = false;
             _this.isBusy = false;
-            _this.messages.error("Login Failure", err.message, err);
+            _this.messages.error("Login Failure", "The username/password combination was not provided.", err);
         });
     };
-    TeleportDevPortalLoginComponent.prototype.loginAs = function (dev) {
+    TeleportDevPortalLoginComponent.prototype.loginAs = function (req) {
         var _this = this;
         this.isBusy = true;
-        this.logins.loginAs(this.userName, this.passWord, dev.id, dev.authCode)
-            .then(function (d) {
-            console.log("Login Success", d);
-            _this.messages.info("Welcome, " + d.firstName + ".", "You are now logged in to your account.");
+        this.logins.loginAs(req)
+            .toPromise()
+            .then(function (res) {
+            console.log("Login Success", res);
+            _this.messages.info("Welcome, " + res.userData.firstName + ".", "You are now logged in to your account.");
         })
             .catch(function (err) {
             console.error("Login Failure", err);
-            _this._resetCaptchaObserver.next(true);
-            _this.isCaptchaOk = false;
             _this.isBusy = false;
             _this.closeMultiLogin();
-            _this.messages.error("Login Failure", err.message, err);
+            _this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
         });
     };
     TeleportDevPortalLoginComponent.prototype.closeMultiLogin = function () {
-        this.showMultiLogin = false;
-        delete this.devLogin;
-        delete this.userLogins;
+        this.userLogins = undefined;
     };
     TeleportDevPortalLoginComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-login",
                     templateUrl: "login.html",
                 },] },
     ];
     TeleportDevPortalLoginComponent.ctorParameters = function () { return [
-        { type: login_service_1.LoginService, decorators: [{ type: core_1.Inject, args: [login_service_1.LoginService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: LoginService, decorators: [{ type: Inject, args: [LoginService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
     ]; };
     return TeleportDevPortalLoginComponent;
 }());
-exports.TeleportDevPortalLoginComponent = TeleportDevPortalLoginComponent;
+export { TeleportDevPortalLoginComponent };
 //# sourceMappingURL=login.component.js.map

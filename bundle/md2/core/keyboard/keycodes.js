@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var KeyCodes;
+export var KeyCodes;
 (function (KeyCodes) {
     KeyCodes[KeyCodes["UP_ARROW"] = 38] = "UP_ARROW";
     KeyCodes[KeyCodes["DOWN_ARROW"] = 40] = "DOWN_ARROW";
@@ -17,5 +15,5 @@ var KeyCodes;
     KeyCodes[KeyCodes["TAB"] = 9] = "TAB";
     KeyCodes[KeyCodes["ESCAPE"] = 27] = "ESCAPE";
     KeyCodes[KeyCodes["COMMA"] = 188] = "COMMA";
-})(KeyCodes = exports.KeyCodes || (exports.KeyCodes = {}));
+})(KeyCodes || (KeyCodes = {}));
 //# sourceMappingURL=keycodes.js.map

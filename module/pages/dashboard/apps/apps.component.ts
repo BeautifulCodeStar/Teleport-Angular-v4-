@@ -1,17 +1,24 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 
 import { Subscription } from "rxjs/Subscription";
+import "rxjs/add/operator/filter";
+import "rxjs/add/operator/map";
 
-import { ApplicationService }       from "../../../services/application.service";
-import { IApplication, IDeveloper } from "../../../models/interfaces";
-import { SessionService }           from "../../../services/session.service";
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { APIv1State } from "teleport-module-services/services/v1/ngrx/index";
+import { Refresh } from "teleport-module-services/services/v1/ngrx/applications/applications.actions";
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { IApplication } from "teleport-module-services/services/v1/models/Application";
 
 
 @Component({
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-apps",
     templateUrl: "apps.html",
-    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalAppsComponent implements OnInit, OnDestroy {
 
@@ -22,26 +29,23 @@ export class TeleportDevPortalAppsComponent implements OnInit, OnDestroy {
     public showNum = 20;
 
     private _applications: IApplication[] = [];
-    private _subscription: Subscription;
 
     private _isBusy = false;
 
     constructor (
-        @Inject(SessionService)     private session: SessionService,
-        @Inject(ApplicationService) private applications: ApplicationService,
+        @Inject(Store) private store$: Store<TeleportCoreState & APIv1State>,
     ) {}
 
     public ngOnInit () {
 
         this._isBusy = true;
 
-        this.session.Observable
-            .filter(s => !!s)
-            .take(1)
-            .subscribe(s => { if (s !== null) { this.Developer = s.developer; } });
+        this.store$.select("session")
+            .filter(s => s.isJust())
+            .map(s => s.just())
+            .subscribe((s: ILoginAsResponse<IDeveloper>) => this.Developer = s.userData);
 
-        this._subscription = this.applications.Observable
-            .filter(a => !! a)
+        this.store$.select("v1_applications")
             .subscribe((apps: IApplication[]) => {
                 this._isBusy = false;
                 this._applications = apps;
@@ -49,13 +53,8 @@ export class TeleportDevPortalAppsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy () {
-        console.log("Destroy apps.components");
-        if (this._subscription) {
-            this._subscription.unsubscribe();
-        }
         delete this.Developer;
         this._applications = [];
-        delete this._subscription;
         // Just to shutup the TS checker.
         this.sortBy = [ this.sortByNameDesc, this.sortByNotesAsc, this.sortByNotesDesc, this.sortByCreatedOnAsc, this.sortByCreatedOnDesc ];
     }
@@ -76,7 +75,7 @@ export class TeleportDevPortalAppsComponent implements OnInit, OnDestroy {
     }
 
     public requestAppsRefresh () {
-        this.applications.refreshApps();
+        this.store$.dispatch(new Refresh({ dev: this.Developer }));
     }
 
 

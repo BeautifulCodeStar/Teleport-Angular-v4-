@@ -1,24 +1,23 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var http_1 = require("@angular/http");
-var Observable_1 = require("rxjs/Observable");
-var BehaviorSubject_1 = require("rxjs/BehaviorSubject");
-var message_service_1 = require("./message.service");
-var account_service_1 = require("./account.service");
+import { Injectable, Inject } from "@angular/core";
+import { Http, RequestOptions, Headers } from "@angular/http";
+import { Observable } from "rxjs/Observable";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Store } from "@ngrx/store";
+import { MessageService } from "./message.service";
 var BillingService = (function () {
-    function BillingService(http, message, account) {
+    function BillingService(http, message, store$) {
         var _this = this;
         this.http = http;
         this.message = message;
-        this.account = account;
+        this.store$ = store$;
         this._paymentsFrom = Date.now() - 1000 * 60 * 60 * 24 * 7;
         this._paymentsTo = Date.now();
         this._lastRefresh = 0;
         this._billingPayload = {};
-        this.account.Observable
-            .first(function (d) { return !!d; })
-            .subscribe(function (d) { return _this._developer = d; });
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just(); })
+            .subscribe(function (s) { return _this._developer = s.userData; });
     }
     BillingService.prototype.cleanup = function () {
         this._billingPayload = {};
@@ -27,14 +26,14 @@ var BillingService = (function () {
         get: function () {
             var _this = this;
             if (!this._observable) {
-                this._observable = Observable_1.Observable
+                this._observable = Observable
                     .create(function (observer) { return _this._observer = observer; })
                     .do(function (payload) { return _this._billingPayload = {
                     balance: payload.balance === undefined ? payload.balance : _this._billingPayload.balance,
                     payments: payload.payments || _this._billingPayload.payments,
                     dateRange: payload.dateRange || _this._billingPayload.dateRange,
                 }; })
-                    .multicast(new BehaviorSubject_1.BehaviorSubject(this._billingPayload))
+                    .multicast(new BehaviorSubject(this._billingPayload))
                     .refCount();
             }
             this.refresh().catch(function (err) { return _this._observer.error(err); });
@@ -80,7 +79,7 @@ var BillingService = (function () {
             "payments",
         ].join("/");
         return this.http.get(url, { search: "begin_date=" + new Date(from).toISOString() + "&end_date=" + new Date(to).toISOString(), withCredentials: true })
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().user_message)); })
+            .catch(function (err) { return Observable.throw(new Error(err.json().user_message)); })
             .map(function (resp) { return resp.json().payments; })
             .map(function (payments) { return payments.map(function (p) { return Object.assign({}, p, { submitted_on: new Date(String(p.submitted_on)) }); }); })
             .do(function (payments) { return payments.sort(function (a, b) { return b.submitted_on - a.submitted_on; }); })
@@ -103,7 +102,7 @@ var BillingService = (function () {
             "payments/balance",
         ].join("/");
         return this.http.get(url, { withCredentials: true })
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().user_message)); })
+            .catch(function (err) { return Observable.throw(new Error(err.json().user_message)); })
             .map(function (resp) { return resp.json().balance; })
             .do(function (balance) { return _this._observer.next({ balance: balance }); })
             .catch(function (err) { return _this.message.error("Account Balance Load Failure", err.message, err); })
@@ -118,7 +117,7 @@ var BillingService = (function () {
             "payments/braintree-client-token",
         ].join("/");
         return this.http.get(url, { withCredentials: true })
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().user_message)); })
+            .catch(function (err) { return Observable.throw(new Error(err.json().user_message)); })
             .map(function (resp) { return resp.json().clientToken; })
             .catch(function (err) { return _this.message.error("Payment Setup Failure", err.message, err); })
             .toPromise();
@@ -131,22 +130,22 @@ var BillingService = (function () {
             encodeURIComponent(this._developer.id),
             "payments",
         ].join("/");
-        var headers = new http_1.Headers({ "Content-Type": "application/json" });
-        var options = new http_1.RequestOptions({ headers: headers, withCredentials: true });
+        var headers = new Headers({ "Content-Type": "application/json" });
+        var options = new RequestOptions({ headers: headers, withCredentials: true });
         return this.http.post(url, JSON.stringify({ amount: amount, payment_method: payment_method }), options)
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().help)); })
+            .catch(function (err) { return Observable.throw(new Error(err.json().help)); })
             .map(function (resp) { return resp.json().transaction; })
             .toPromise();
     };
     BillingService.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
     BillingService.ctorParameters = function () { return [
-        { type: http_1.Http, decorators: [{ type: core_1.Inject, args: [http_1.Http,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
+        { type: Http, decorators: [{ type: Inject, args: [Http,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return BillingService;
 }());
-exports.BillingService = BillingService;
+export { BillingService };
 //# sourceMappingURL=billing.service.js.map

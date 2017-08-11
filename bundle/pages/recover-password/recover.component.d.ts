@@ -1,7 +1,8 @@
 import { OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs/Observable";
-import { LoginService } from "../../services/login.service";
+import "rxjs/add/operator/toPromise";
+import { LoginService } from "teleport-module-services/services/services/login/login.service";
 import { MessageService } from "../../services/message.service";
 export declare class TeleportDevPortalRecoverPasswordComponent implements OnInit, OnDestroy {
     private route;

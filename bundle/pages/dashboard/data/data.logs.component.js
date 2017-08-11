@@ -1,19 +1,18 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var common_1 = require("@angular/common");
-var router_1 = require("@angular/router");
-var logs_service_1 = require("../../../services/logs.service");
-var application_service_1 = require("../../../services/application.service");
-var message_service_1 = require("../../../services/message.service");
+import { Component, Inject } from "@angular/core";
+import { Location } from "@angular/common";
+import { Router } from "@angular/router";
+import "rxjs/add/operator/filter";
+import { Store } from "@ngrx/store";
+import { LogsService } from "../../../services/logs.service";
+import { MessageService } from "../../../services/message.service";
 var FIND_APPID_IN_URL = /^\/apiv1\/applications\/([a-z0-9\-]+)\/history\/logs/;
 var TeleportDevPortalDataLogsComponent = (function () {
-    function TeleportDevPortalDataLogsComponent(logs, apps, messages, router, location) {
+    function TeleportDevPortalDataLogsComponent(logs, messages, router, location, store$) {
         this.logs = logs;
-        this.apps = apps;
         this.messages = messages;
         this.router = router;
         this.location = location;
+        this.store$ = store$;
         this._isBusy = false;
         this._sortFuncs = {
             "callIdDesc": function (a, b) { return b.call_id.localeCompare(a.call_id); },
@@ -57,8 +56,7 @@ var TeleportDevPortalDataLogsComponent = (function () {
                 _this.filters.beginDate = new Date(String(logs.beginDate)).toLocaleString();
                 _this.filters.endDate = new Date(String(logs.endDate)).toLocaleString();
             }),
-            this.apps.Observable
-                .filter(function (a) { return !!a; })
+            this.store$.select("v1_applications")
                 .subscribe(function (apps) { return _this._apps = apps; }),
         ];
         setImmediate(function () { return _this.loadLogs(); });
@@ -158,20 +156,20 @@ var TeleportDevPortalDataLogsComponent = (function () {
         }
     };
     TeleportDevPortalDataLogsComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-data-logs",
                     templateUrl: "data.logs.html",
                 },] },
     ];
     TeleportDevPortalDataLogsComponent.ctorParameters = function () { return [
-        { type: logs_service_1.LogsService, decorators: [{ type: core_1.Inject, args: [logs_service_1.LogsService,] },] },
-        { type: application_service_1.ApplicationService, decorators: [{ type: core_1.Inject, args: [application_service_1.ApplicationService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
-        { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
-        { type: common_1.Location, decorators: [{ type: core_1.Inject, args: [common_1.Location,] },] },
+        { type: LogsService, decorators: [{ type: Inject, args: [LogsService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
+        { type: Location, decorators: [{ type: Inject, args: [Location,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return TeleportDevPortalDataLogsComponent;
 }());
-exports.TeleportDevPortalDataLogsComponent = TeleportDevPortalDataLogsComponent;
+export { TeleportDevPortalDataLogsComponent };
 //# sourceMappingURL=data.logs.component.js.map

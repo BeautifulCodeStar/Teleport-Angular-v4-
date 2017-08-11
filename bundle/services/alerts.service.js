@@ -1,34 +1,35 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var http_1 = require("@angular/http");
-var Observable_1 = require("rxjs/Observable");
-var BehaviorSubject_1 = require("rxjs/BehaviorSubject");
-var Alert_1 = require("../models/Alert");
-var account_service_1 = require("./account.service");
+import { Injectable, Inject } from "@angular/core";
+import { Http, RequestOptions, Headers } from "@angular/http";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import "rxjs/add/operator/do";
+import "rxjs/add/operator/first";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/share";
+import "rxjs/add/operator/toPromise";
+import { Store } from "@ngrx/store";
+import { Message } from "teleport-module-services/services/models/Message";
+import * as msgActions from "teleport-module-services/services/ngrx/messages/messages.actions";
+import { Alert } from "../models/Alert";
 var AlertsService = (function () {
-    function AlertsService(http, account) {
+    function AlertsService(http, store$) {
         var _this = this;
         this.http = http;
-        this.account = account;
+        this.store$ = store$;
         this._lastRefresh = 0;
         console.log("new AlertsService()", arguments);
-        this.account.Observable
-            .first(function (d) { return !!d; })
-            .subscribe(function (d) { return _this._developer = d; });
-        this._observable = Observable_1.Observable
-            .create(function (observer) { return _this._observer = observer; })
-            .do(function (a) { return _this._alerts = a; })
-            .multicast(new BehaviorSubject_1.BehaviorSubject(this._alerts))
-            .refCount();
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just(); })
+            .subscribe(function (s) { return _this._developerId = s.userData.id; });
+        this.subject$ = new BehaviorSubject([]);
+        this._observable = this.subject$.share();
     }
     AlertsService.prototype.cleanup = function () {
-        this._alerts = [];
+        this.subject$.complete();
     };
     Object.defineProperty(AlertsService.prototype, "Observable", {
         get: function () {
-            var _this = this;
-            this.refresh().catch(function (err) { return _this._observer.error(err); });
+            this.refresh().catch(function (err) { return console.error(err); });
             return this._observable;
         },
         enumerable: true,
@@ -37,70 +38,72 @@ var AlertsService = (function () {
     AlertsService.prototype.refresh = function () {
         var _this = this;
         if (this._lastRefresh > Date.now() - 5000) {
-            return Promise.resolve(this._alerts);
+            return Promise.resolve(this.subject$.getValue());
         }
         this._lastRefresh = Date.now();
         var url = [
             API_BASE_URL,
             "developers",
-            encodeURIComponent(this._developer.id),
+            encodeURIComponent(this._developerId),
             "alerts",
         ].join("/");
         return this.http
             .get(url, { withCredentials: true })
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().user_message)); })
-            .map(function (res) { return res.json().alerts.map(function (a) { return new Alert_1.Alert(a); }); })
-            .do(function (a) {
-            if (_this._observer) {
-                _this._observer.next(a);
-            }
-            else {
-                _this._alerts = a;
-            }
-        })
-            .toPromise();
+            .map(function (res) { return res.json().alerts.map(function (a) { return new Alert(a); }); })
+            .do(function (a) { return _this.subject$.next(a); })
+            .toPromise()
+            .catch(function (err) {
+            _this.store$.dispatch(new msgActions.Add(new Message("Alert List Failure", err.json().user_message)));
+            return Promise.reject(err);
+        });
     };
     AlertsService.prototype.add = function (alert) {
         var _this = this;
-        var headers = new http_1.Headers({ "Content-Type": "application/json" });
-        var options = new http_1.RequestOptions({ headers: headers, withCredentials: true });
+        var headers = new Headers({ "Content-Type": "application/json" });
+        var options = new RequestOptions({ headers: headers, withCredentials: true });
         var url = [
             API_BASE_URL,
             "developers",
-            encodeURIComponent(this._developer.id),
+            encodeURIComponent(this._developerId),
             "alerts",
         ].join("/");
         return this.http
             .post(url, JSON.stringify(alert), options)
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().user_message)); })
             .map(function () { return true; })
             .do(function () { return _this.refresh(); })
-            .toPromise();
+            .toPromise()
+            .catch(function (err) {
+            _this.store$.dispatch(new msgActions.Add(new Message("Add Alert Failure", err.json().user_message)));
+            return Promise.reject(err);
+        });
     };
     AlertsService.prototype.remove = function (alert) {
         var _this = this;
         var url = [
             API_BASE_URL,
             "developers",
-            encodeURIComponent(this._developer.id),
+            encodeURIComponent(this._developerId),
             "alerts",
             alert.id,
         ].join("/");
         return this.http
             .delete(url, { withCredentials: true })
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().user_message)); })
             .map(function () { return true; })
             .do(function () { return _this.refresh(); })
-            .toPromise();
+            .toPromise()
+            .catch(function (err) {
+            _this.store$.dispatch(new msgActions.Add(new Message("Remove Alert Failure", err.json().user_message)));
+            return Promise.reject(err);
+        });
     };
     AlertsService.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
     AlertsService.ctorParameters = function () { return [
-        { type: http_1.Http, decorators: [{ type: core_1.Inject, args: [http_1.Http,] },] },
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
+        { type: Http, decorators: [{ type: Inject, args: [Http,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return AlertsService;
 }());
-exports.AlertsService = AlertsService;
+export { AlertsService };
 //# sourceMappingURL=alerts.service.js.map

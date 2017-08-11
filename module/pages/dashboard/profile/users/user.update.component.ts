@@ -1,9 +1,14 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router }               from "@angular/router";
 
-import { IUser, IDeveloper } from "../../../../models/interfaces";
+import { Store } from "@ngrx/store";
 
-import { AccountService } from "../../../../services/account.service";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { IUser } from "teleport-module-services/services/v1/models/User";
+
 import { UserService }    from "../../../../services/user.service";
 import { MessageService } from "../../../../services/message.service";
 import { ModalService }   from "../../../../services/modal.service";
@@ -16,7 +21,6 @@ import * as Permissions   from "../../../../utils/Permissions";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-user-update",
     templateUrl: "user.update.html",
-    // styleUrls  : [ "../../../css/bootswatch.min.css", "../../../css/main.min.css" ],
 })
 export class TeleportDevPortalUserUpdateComponent implements OnInit, OnDestroy {
 
@@ -30,10 +34,10 @@ export class TeleportDevPortalUserUpdateComponent implements OnInit, OnDestroy {
     constructor (
         @Inject(Router)         private router: Router,
         @Inject(ActivatedRoute) private route: ActivatedRoute,
-        @Inject(AccountService) private account: AccountService,
         @Inject(UserService)    private users: UserService,
         @Inject(MessageService) private messages: MessageService,
-        @Inject(ModalService)  private modal: ModalService,
+        @Inject(ModalService)   private modal: ModalService,
+        @Inject(Store)          private store$: Store<TeleportCoreState>,
     ) {}
 
 
@@ -44,15 +48,16 @@ export class TeleportDevPortalUserUpdateComponent implements OnInit, OnDestroy {
 
         console.log("UIUserUpdate Init", userId);
 
-        this.account.Observable
-            .first(d => !! d)
-            .subscribe (dev => {
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just().userData)
+            .subscribe((dev: IDeveloper) => {
 
                 this._developer = dev;
 
                 if (this._developer.portalUser && this._developer.portalUser.id === userId ) {
                     this.messages.warning("That way madness lies!", "You cannot edit your own user here.");
-                    return this.router.navigateByUrl("/apiv1/account/users");
+                    return this.router.navigateByUrl("/v1/account/users");
                 }
 
                 if (["account.users.delete", "account.users.update"].some(p => Permissions.validate(dev.permissions, { [p]: true }))) {
@@ -62,7 +67,7 @@ export class TeleportDevPortalUserUpdateComponent implements OnInit, OnDestroy {
 
                             if (! Permissions.validate(dev.permissions, user.permissions)) {
                                 this.messages.warning("Your Permission Kung-Fu is Weak", "You do not have all the permissions required to edit this user.");
-                                this.router.navigateByUrl("/apiv1/account/users");
+                                this.router.navigateByUrl("/v1/account/users");
                                 return;
                             }
 
@@ -73,11 +78,11 @@ export class TeleportDevPortalUserUpdateComponent implements OnInit, OnDestroy {
                         })
                         .catch(err => {
                             this.messages.error("Failed to Load User", err.message, err);
-                            return this.router.navigateByUrl("/apiv1/account/users");
+                            return this.router.navigateByUrl("/v1/account/users");
                         });
 
                 } else {
-                    return this.router.navigate(["/apiv1/access-denied"], { queryParams: { perms: "account.users.update account.users.delete" }});
+                    return this.router.navigate(["/v1/access-denied"], { queryParams: { perms: "account.users.update account.users.delete" }});
                 }
             });
     }
@@ -107,7 +112,7 @@ export class TeleportDevPortalUserUpdateComponent implements OnInit, OnDestroy {
                     this.users.remove(this._user)
                         .then(() => {
                             this.messages.warning("User Deleted", `Alas, poor ${this._user.firstName}! I knew him, ${this._developer.firstName}.`);
-                            return this.router.navigate(["/apiv1/account/users"]);
+                            return this.router.navigate(["/v1/account/users"]);
                         })
                         .catch(err => {
                             this.isBusy = false;

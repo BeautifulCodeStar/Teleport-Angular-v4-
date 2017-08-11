@@ -1,11 +1,12 @@
 import { Http } from "@angular/http";
-import { IUser } from "../models/interfaces";
-import { AccountService } from "./account.service";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { IUser } from "teleport-module-services/services/v1/models/User";
 export declare class UserService {
     private http;
-    private account;
+    private store$;
     private _developer;
-    constructor(http: Http, account: AccountService);
+    constructor(http: Http, store$: Store<TeleportCoreState>);
     list(): Promise<IUser[]>;
     detail(userId: number): Promise<IUser>;
     create(user: IUser): Promise<IUser>;

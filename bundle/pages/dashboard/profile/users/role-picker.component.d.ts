@@ -1,9 +1,11 @@
 import { OnInit, OnDestroy } from "@angular/core";
-import { IUser, IDeveloper, IUserRole, IUserPermissionsTree, IUserPermissions } from "../../../../models/interfaces";
-import { AccountService } from "../../../../services/account.service";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { IUser, IUserRole, IUserPermissionsTree, IUserPermissions } from "teleport-module-services/services/v1/models/User";
 import { ModalService } from "../../../../services/modal.service";
 export declare class TeleportDevPortalRolePickerComponent implements OnInit, OnDestroy {
-    private account;
+    private store$;
     user: IUser;
     isRolesSelectorOpen: boolean;
     role: IUserRole | undefined;
@@ -13,7 +15,7 @@ export declare class TeleportDevPortalRolePickerComponent implements OnInit, OnD
         [key: string]: IUserPermissionsTree;
     };
     private _developer;
-    constructor(account: AccountService);
+    constructor(store$: Store<TeleportCoreState>);
     ngOnInit(): void;
     ngOnDestroy(): void;
     readonly Developer: IDeveloper;

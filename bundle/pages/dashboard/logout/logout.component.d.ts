@@ -1,11 +1,8 @@
 import { OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { LoginService } from "../../../services/login.service";
-import { MessageService } from "../../../services/message.service";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 export declare class TeleportDevPortalLogoutComponent implements OnInit {
-    private router;
-    private login;
-    private message;
-    constructor(router: Router, login: LoginService, message: MessageService);
+    private store$;
+    constructor(store$: Store<TeleportCoreState>);
     ngOnInit(): void;
 }

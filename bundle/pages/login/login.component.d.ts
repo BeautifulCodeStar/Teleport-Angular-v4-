@@ -1,32 +1,21 @@
-import { Observable } from "rxjs/Observable";
-import { LoginService } from "../../services/login.service";
+import { OnInit, OnDestroy } from "@angular/core";
+import "rxjs/add/operator/toPromise";
+import { LoginService } from "teleport-module-services/services/services/login/login.service";
+import * as i from "teleport-module-services/services/services/login/login.service.interface";
 import { MessageService } from "../../services/message.service";
-import { IDeveloper } from "../../models/interfaces";
-export declare class TeleportDevPortalLoginComponent {
+export declare class TeleportDevPortalLoginComponent implements OnInit, OnDestroy {
     private logins;
     private messages;
     userName: string;
     passWord: string;
     isBusy: boolean;
-    isCaptchaOk: boolean;
-    showMultiLogin: boolean;
-    devLogin: IDeveloper & {
-        authCode: string;
-    } | undefined;
-    userLogins: (IDeveloper & {
-        authCode: string;
-    })[];
-    private reCaptchaResponse;
-    private _resetCaptchaObservable;
-    private _resetCaptchaObserver;
+    userLogins: i.ILoginAsRequest[];
     constructor(logins: LoginService, messages: MessageService);
+    ngOnInit(): void;
+    ngOnDestroy(): void;
     isPasswordValid(pw: string): boolean;
     isEmailValid(email: string): boolean;
-    onCaptcha(resp: string, isOk: boolean): void;
-    resetCaptchaObservable(): Observable<boolean>;
     onSubmit(): void;
-    loginAs(dev: IDeveloper & {
-        authCode: string;
-    }): void;
+    loginAs(req: i.ILoginAsRequest): void;
     closeMultiLogin(): void;
 }

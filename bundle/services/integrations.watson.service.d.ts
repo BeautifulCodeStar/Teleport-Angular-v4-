@@ -1,6 +1,7 @@
 import { Http } from "@angular/http";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 import { IWatson } from "../models/interfaces";
-import { AccountService } from "./account.service";
 export interface IWatsonPutRequest {
     textToSpeech: {
         username: string;
@@ -9,9 +10,9 @@ export interface IWatsonPutRequest {
 }
 export declare class IntegrationsWatsonService {
     private http;
-    private account;
+    private store$;
     private _developer;
-    constructor(http: Http, account: AccountService);
+    constructor(http: Http, store$: Store<TeleportCoreState>);
     getTextToSpeech(appId: string): Promise<IWatson>;
     putTextToSpeech(appId: string, watson: IWatsonPutRequest): Promise<IWatson>;
     deleteTextToSpeech(appId: string): Promise<IWatson>;

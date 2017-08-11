@@ -1,30 +1,31 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var account_service_1 = require("../../../services/account.service");
-var user_service_1 = require("../../../services/user.service");
-var message_service_1 = require("../../../services/message.service");
-var modal_service_1 = require("../../../services/modal.service");
-var Developer_1 = require("../../../models/Developer");
-var EmailValidator_1 = require("../../../utils/EmailValidator");
+import { Component, Inject } from "@angular/core";
+import { Router } from "@angular/router";
+import "rxjs/add/operator/filter";
+import "rxjs/add/operator/map";
+import { Store } from "@ngrx/store";
+import { Developer } from "teleport-module-services/services/v1/models/Developer";
+import { UserService } from "../../../services/user.service";
+import { MessageService } from "../../../services/message.service";
+import { ModalService } from "../../../services/modal.service";
+import { EmailValidator } from "../../../utils/EmailValidator";
 var TeleportDevPortalUserProfileComponent = (function () {
-    function TeleportDevPortalUserProfileComponent(router, account, users, modal, messages) {
+    function TeleportDevPortalUserProfileComponent(router, users, modal, messages, store$) {
         this.router = router;
-        this.account = account;
         this.users = users;
         this.modal = modal;
         this.messages = messages;
+        this.store$ = store$;
         this.isBusy = false;
         this.isEditProfile = false;
         this.isChangePassword = false;
     }
     TeleportDevPortalUserProfileComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this._subscription = this.account.Observable
-            .filter(function (d) { return !!d; })
+        this.store$.select("session")
+            .filter(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just().userData; })
             .subscribe(function (dev) {
-            var user = new Developer_1.Developer(dev).toJSON().portalUser;
+            var user = new Developer(dev).toJSON().portalUser;
             if (user === undefined) {
                 throw new ReferenceError("The PortalUser was undefined on the Developer object.");
             }
@@ -50,7 +51,7 @@ var TeleportDevPortalUserProfileComponent = (function () {
         this.isChangePassword = false;
     };
     TeleportDevPortalUserProfileComponent.prototype.isEmailValid = function (email) {
-        return EmailValidator_1.EmailValidator.isValid(email);
+        return EmailValidator.isValid(email);
     };
     TeleportDevPortalUserProfileComponent.prototype.onSubmit = function () {
         var _this = this;
@@ -89,20 +90,20 @@ var TeleportDevPortalUserProfileComponent = (function () {
         this.User = Object.assign({}, this._user);
     };
     TeleportDevPortalUserProfileComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-user-profile",
                     templateUrl: "profile.user.html",
                 },] },
     ];
     TeleportDevPortalUserProfileComponent.ctorParameters = function () { return [
-        { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
-        { type: user_service_1.UserService, decorators: [{ type: core_1.Inject, args: [user_service_1.UserService,] },] },
-        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
+        { type: UserService, decorators: [{ type: Inject, args: [UserService,] },] },
+        { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return TeleportDevPortalUserProfileComponent;
 }());
-exports.TeleportDevPortalUserProfileComponent = TeleportDevPortalUserProfileComponent;
+export { TeleportDevPortalUserProfileComponent };
 //# sourceMappingURL=profile.user.component.js.map

@@ -1,25 +1,24 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var account_service_1 = require("../../../../services/account.service");
-var user_service_1 = require("../../../../services/user.service");
-var message_service_1 = require("../../../../services/message.service");
-var EmailValidator_1 = require("../../../../utils/EmailValidator");
-var Permissions = require("../../../../utils/Permissions");
+import { Component, Inject } from "@angular/core";
+import { Router } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { UserService } from "../../../../services/user.service";
+import { MessageService } from "../../../../services/message.service";
+import { EmailValidator } from "../../../../utils/EmailValidator";
+import * as Permissions from "../../../../utils/Permissions";
 var TeleportDevPortalUserCreateComponent = (function () {
-    function TeleportDevPortalUserCreateComponent(router, account, users, messages) {
+    function TeleportDevPortalUserCreateComponent(router, users, messages, store$) {
         this.router = router;
-        this.account = account;
         this.users = users;
         this.messages = messages;
+        this.store$ = store$;
         this.isBusy = false;
         this.isSendInvite = true;
     }
     TeleportDevPortalUserCreateComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.account.Observable
-            .first(function (d) { return !!d; })
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just().userData; })
             .subscribe(function (dev) {
             _this._developer = dev;
             if (Permissions.validate(dev.permissions, { "account.users.create": true })) {
@@ -40,7 +39,7 @@ var TeleportDevPortalUserCreateComponent = (function () {
                 _this.isBusy = false;
             }
             else {
-                return _this.router.navigate(["/apiv1/access-denied"], { queryParams: { perms: "account.users.create" } });
+                return _this.router.navigate(["/v1/access-denied"], { queryParams: { perms: "account.users.create" } });
             }
         });
     };
@@ -50,7 +49,7 @@ var TeleportDevPortalUserCreateComponent = (function () {
         delete this.User;
     };
     TeleportDevPortalUserCreateComponent.prototype.isEmailValid = function () {
-        return EmailValidator_1.EmailValidator.isValid(this.User.email);
+        return EmailValidator.isValid(this.User.email);
     };
     TeleportDevPortalUserCreateComponent.prototype.isUserValid = function () {
         return this.isEmailValid() && Permissions.validate(this._developer.permissions, this.User.permissions);
@@ -69,7 +68,7 @@ var TeleportDevPortalUserCreateComponent = (function () {
                 _this.users.sendInvite(user);
                 _this.messages.info("Email Invite Sent", "An email invitation has been sent to the user.");
             }
-            _this.router.navigateByUrl("/apiv1/account/users").catch(function (err) { return console.error(err); });
+            _this.router.navigateByUrl("/v1/account/users").catch(function (err) { return console.error(err); });
         })
             .catch(function (err) {
             _this.isBusy = false;
@@ -77,19 +76,19 @@ var TeleportDevPortalUserCreateComponent = (function () {
         });
     };
     TeleportDevPortalUserCreateComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-user-create",
                     templateUrl: "user.create.html",
                 },] },
     ];
     TeleportDevPortalUserCreateComponent.ctorParameters = function () { return [
-        { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
-        { type: user_service_1.UserService, decorators: [{ type: core_1.Inject, args: [user_service_1.UserService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
+        { type: UserService, decorators: [{ type: Inject, args: [UserService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return TeleportDevPortalUserCreateComponent;
 }());
-exports.TeleportDevPortalUserCreateComponent = TeleportDevPortalUserCreateComponent;
+export { TeleportDevPortalUserCreateComponent };
 //# sourceMappingURL=user.create.component.js.map

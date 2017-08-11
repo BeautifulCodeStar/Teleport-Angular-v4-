@@ -1,27 +1,28 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var http_1 = require("@angular/http");
-var Observable_1 = require("rxjs/Observable");
-var BehaviorSubject_1 = require("rxjs/BehaviorSubject");
-var account_service_1 = require("./account.service");
+import { Injectable, Inject } from "@angular/core";
+import { Http, Headers } from "@angular/http";
+import { Observable } from "rxjs/Observable";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Store } from "@ngrx/store";
+import { Message } from "teleport-module-services/services/models/Message";
+import * as msgActions from "teleport-module-services/services/ngrx/messages/messages.actions";
 var TopUpService = (function () {
-    function TopUpService(http, account) {
+    function TopUpService(http, store$) {
         var _this = this;
         this.http = http;
-        this.account = account;
-        this.account.Observable
-            .first(function (d) { return !!d; })
-            .subscribe(function (d) { return _this._developer = d; });
+        this.store$ = store$;
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just(); })
+            .subscribe(function (s) { return _this._developer = s.userData; });
     }
     Object.defineProperty(TopUpService.prototype, "Observable", {
         get: function () {
             var _this = this;
             if (!this._observable) {
-                this._observable = Observable_1.Observable
+                this._observable = Observable
                     .create(function (observer) { return _this._observer = observer; })
                     .do(function (topUp) { return _this._topUp = topUp; })
-                    .multicast(new BehaviorSubject_1.BehaviorSubject(this._topUp))
+                    .multicast(new BehaviorSubject(this._topUp))
                     .refCount();
                 this.refresh();
             }
@@ -39,9 +40,8 @@ var TopUpService = (function () {
             "payments/top-up",
         ].join("/");
         this.http.get(url, { withCredentials: true })
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().user_message)); })
             .map(function (resp) { return resp.json().topUp; })
-            .subscribe(function (resp) { return _this._observer.next(resp); }, function (err) { return _this._observer.error(err); });
+            .subscribe(function (resp) { return _this._observer.next(resp); }, function (err) { return _this.store$.dispatch(new msgActions.Add(new Message("Top-Up Failure", err.json().user_message))); });
     };
     TopUpService.prototype.updateTopUp = function (data) {
         var _this = this;
@@ -51,20 +51,19 @@ var TopUpService = (function () {
             encodeURIComponent(this._developer.id),
             "payments/top-up",
         ].join("/");
-        var headers = new http_1.Headers({ "Content-Type": "application/json" });
+        var headers = new Headers({ "Content-Type": "application/json" });
         this.http.post(url, JSON.stringify(data), { headers: headers, withCredentials: true })
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().user_message)); })
             .map(function (resp) { return resp.json().topUp; })
-            .subscribe(function (resp) { return _this._observer.next(resp); }, function (err) { return _this._observer.error(err); });
+            .subscribe(function (resp) { return _this._observer.next(resp); }, function (err) { return _this.store$.dispatch(new msgActions.Add(new Message("Top-Up Failure", err.json().user_message))); });
     };
     TopUpService.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
     TopUpService.ctorParameters = function () { return [
-        { type: http_1.Http, decorators: [{ type: core_1.Inject, args: [http_1.Http,] },] },
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
+        { type: Http, decorators: [{ type: Inject, args: [Http,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return TopUpService;
 }());
-exports.TopUpService = TopUpService;
+export { TopUpService };
 //# sourceMappingURL=top-up.service.js.map

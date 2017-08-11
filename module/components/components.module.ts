@@ -1,5 +1,5 @@
 
-import { NgModule }                from "@angular/core";
+import { NgModule } from "@angular/core";
 
 // Components
 import { TeleportReCaptchaComponent } from "./recaptcha/recaptcha.component";

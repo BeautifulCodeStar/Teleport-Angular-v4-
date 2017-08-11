@@ -1,19 +1,20 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var application_service_1 = require("../../../../services/application.service");
-var integrations_aws_service_1 = require("../../../../services/integrations.aws.service");
-var modal_service_1 = require("../../../../services/modal.service");
-var message_service_1 = require("../../../../services/message.service");
+import { Component, Inject } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import "rxjs/add/operator/first";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/toPromise";
+import { Store } from "@ngrx/store";
+import { IntegrationsAWSService } from "../../../../services/integrations.aws.service";
+import { ModalService } from "../../../../services/modal.service";
+import { MessageService } from "../../../../services/message.service";
 var TeleportDevPortalAppIntegrationAwsComponent = (function () {
-    function TeleportDevPortalAppIntegrationAwsComponent(route, apps, aws, modal, message) {
+    function TeleportDevPortalAppIntegrationAwsComponent(route, aws, modal, message, store$) {
         var _this = this;
         this.route = route;
-        this.apps = apps;
         this.aws = aws;
         this.modal = modal;
         this.message = message;
+        this.store$ = store$;
         this.isBusy = false;
         this.isEditing = false;
         this.accessKey = "";
@@ -25,7 +26,7 @@ var TeleportDevPortalAppIntegrationAwsComponent = (function () {
             .filter(function (param) { return !!param.appId; })
             .forEach(function (param) {
             Promise.all([
-                _this.apps.getAppByName(param.appId),
+                _this.store$.select("v1_applications").first().map(function (apps) { return apps.find(function (app) { return app.id === param.appId; }); }).toPromise(),
                 _this.aws.getAWS(param.appId),
             ])
                 .then(function (r) {
@@ -119,20 +120,20 @@ var TeleportDevPortalAppIntegrationAwsComponent = (function () {
         this.region = this._aws && this._aws.s3.region || "";
     };
     TeleportDevPortalAppIntegrationAwsComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-app-integrations-aws",
                     templateUrl: "apps.integrations.aws.html",
                 },] },
     ];
     TeleportDevPortalAppIntegrationAwsComponent.ctorParameters = function () { return [
-        { type: router_1.ActivatedRoute, decorators: [{ type: core_1.Inject, args: [router_1.ActivatedRoute,] },] },
-        { type: application_service_1.ApplicationService, decorators: [{ type: core_1.Inject, args: [application_service_1.ApplicationService,] },] },
-        { type: integrations_aws_service_1.IntegrationsAWSService, decorators: [{ type: core_1.Inject, args: [integrations_aws_service_1.IntegrationsAWSService,] },] },
-        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: ActivatedRoute, decorators: [{ type: Inject, args: [ActivatedRoute,] },] },
+        { type: IntegrationsAWSService, decorators: [{ type: Inject, args: [IntegrationsAWSService,] },] },
+        { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return TeleportDevPortalAppIntegrationAwsComponent;
 }());
-exports.TeleportDevPortalAppIntegrationAwsComponent = TeleportDevPortalAppIntegrationAwsComponent;
+export { TeleportDevPortalAppIntegrationAwsComponent };
 //# sourceMappingURL=apps.integrations.aws.component.js.map

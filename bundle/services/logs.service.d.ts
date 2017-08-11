@@ -1,7 +1,8 @@
 import { Http } from "@angular/http";
 import { Observable } from "rxjs/Observable";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 import { ILog } from "../models/interfaces";
-import { AccountService } from "./account.service";
 export interface ILogsRequest {
     beginDate?: Date | string;
     endDate?: Date | string;
@@ -18,14 +19,14 @@ export interface ILogsResponse {
 }
 export declare class LogsService {
     private http;
-    private account;
+    private store$;
     private _developer;
     private _observable;
     private _observer;
     private _logs;
     private _searchParams;
     private _lastRefresh;
-    constructor(http: Http, account: AccountService);
+    constructor(http: Http, store$: Store<TeleportCoreState>);
     destroy(): void;
     readonly Observable: Observable<ILogsResponse>;
     refresh(): Promise<ILogsResponse>;

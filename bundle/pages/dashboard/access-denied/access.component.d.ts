@@ -1,12 +1,15 @@
 import { OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { SessionService } from "../../../services/session.service";
+import "rxjs/add/operator/first";
+import "rxjs/add/operator/map";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 export declare class TeleportDevPortalAccessDeniedComponent implements OnInit, OnDestroy {
-    private session;
+    private store$;
     private route;
     private _reqPerms;
     private _devPerms;
-    constructor(session: SessionService, route: ActivatedRoute);
+    constructor(store$: Store<TeleportCoreState>, route: ActivatedRoute);
     ngOnInit(): void;
     ngOnDestroy(): void;
     readonly RequiredPermissions: string[];

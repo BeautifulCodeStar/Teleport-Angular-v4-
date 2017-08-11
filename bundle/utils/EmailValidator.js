@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var EmailValidator;
+export var EmailValidator;
 (function (EmailValidator) {
     var EMAIL_TESTER = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
     function isValid(email) {
@@ -22,5 +20,5 @@ var EmailValidator;
         return !domainParts.some(function (part) { return part.length > 63; });
     }
     EmailValidator.isValid = isValid;
-})(EmailValidator = exports.EmailValidator || (exports.EmailValidator = {}));
+})(EmailValidator || (EmailValidator = {}));
 //# sourceMappingURL=EmailValidator.js.map

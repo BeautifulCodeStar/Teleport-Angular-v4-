@@ -1,14 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var overlay_state_1 = require("./overlay-state");
-var dom_portal_host_1 = require("../portal/dom-portal-host");
-var overlay_ref_1 = require("./overlay-ref");
-var overlay_position_builder_1 = require("./position/overlay-position-builder");
-var viewport_ruler_1 = require("./position/viewport-ruler");
-var overlay_container_1 = require("./overlay-container");
+import { ComponentFactoryResolver, Injectable, } from '@angular/core';
+import { OverlayState } from './overlay-state';
+import { DomPortalHost } from '../portal/dom-portal-host';
+import { OverlayRef } from './overlay-ref';
+import { OverlayPositionBuilder } from './position/overlay-position-builder';
+import { ViewportRuler } from './position/viewport-ruler';
+import { OverlayContainer } from './overlay-container';
 var nextUniqueId = 0;
-var defaultState = new overlay_state_1.OverlayState();
+var defaultState = new OverlayState();
 var Overlay = (function () {
     function Overlay(_overlayContainer, _componentFactoryResolver, _positionBuilder) {
         this._overlayContainer = _overlayContainer;
@@ -30,26 +28,26 @@ var Overlay = (function () {
         return pane;
     };
     Overlay.prototype._createPortalHost = function (pane) {
-        return new dom_portal_host_1.DomPortalHost(pane, this._componentFactoryResolver);
+        return new DomPortalHost(pane, this._componentFactoryResolver);
     };
     Overlay.prototype._createOverlayRef = function (pane, state) {
-        return new overlay_ref_1.OverlayRef(this._createPortalHost(pane), pane, state);
+        return new OverlayRef(this._createPortalHost(pane), pane, state);
     };
     Overlay.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
     Overlay.ctorParameters = function () { return [
-        { type: overlay_container_1.OverlayContainer, },
-        { type: core_1.ComponentFactoryResolver, },
-        { type: overlay_position_builder_1.OverlayPositionBuilder, },
+        { type: OverlayContainer, },
+        { type: ComponentFactoryResolver, },
+        { type: OverlayPositionBuilder, },
     ]; };
     return Overlay;
 }());
-exports.Overlay = Overlay;
-exports.OVERLAY_PROVIDERS = [
-    viewport_ruler_1.ViewportRuler,
-    overlay_position_builder_1.OverlayPositionBuilder,
+export { Overlay };
+export var OVERLAY_PROVIDERS = [
+    ViewportRuler,
+    OverlayPositionBuilder,
     Overlay,
-    overlay_container_1.OverlayContainer,
+    OverlayContainer,
 ];
 //# sourceMappingURL=overlay.js.map

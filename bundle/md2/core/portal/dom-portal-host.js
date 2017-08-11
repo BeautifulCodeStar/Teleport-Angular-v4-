@@ -1,4 +1,3 @@
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9,9 +8,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
-var portal_1 = require("./portal");
-var portal_errors_1 = require("./portal-errors");
+import { BasePortalHost } from './portal';
+import { MdComponentPortalAttachedToDomWithoutOriginError } from './portal-errors';
 var DomPortalHost = (function (_super) {
     __extends(DomPortalHost, _super);
     function DomPortalHost(_hostDomElement, _componentFactoryResolver) {
@@ -22,7 +20,7 @@ var DomPortalHost = (function (_super) {
     }
     DomPortalHost.prototype.attachComponentPortal = function (portal) {
         if (portal.viewContainerRef == null) {
-            throw new portal_errors_1.MdComponentPortalAttachedToDomWithoutOriginError();
+            throw new MdComponentPortalAttachedToDomWithoutOriginError();
         }
         var componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
         var ref = portal.viewContainerRef.createComponent(componentFactory, portal.viewContainerRef.length, portal.injector || portal.viewContainerRef.parentInjector);
@@ -51,6 +49,6 @@ var DomPortalHost = (function (_super) {
         }
     };
     return DomPortalHost;
-}(portal_1.BasePortalHost));
-exports.DomPortalHost = DomPortalHost;
+}(BasePortalHost));
+export { DomPortalHost };
 //# sourceMappingURL=dom-portal-host.js.map

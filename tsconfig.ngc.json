@@ -7,11 +7,12 @@
     "experimentalDecorators": true,
     "removeComments": true,
     "target": "es5",
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
     "stripInternal": true,
+    "skipLibCheck": true,
     "lib": [
-      "es2016",
+      "es2015",
       "dom"
     ]
   },
@@ -22,7 +23,9 @@
     "./module/index.ts"
   ],
   "angularCompilerOptions": {
-    "skipTemplateCodegen": true
+    "genDir": "aot",
+    "skipTemplateCodegen": false,
+    "skipMetadataEmit": false
   },
   "awesomeTypescriptLoaderOptions": {
     "compiler": "@angular/compiler-cli"

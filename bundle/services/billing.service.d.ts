@@ -1,8 +1,9 @@
 import { Http } from "@angular/http";
 import { Observable } from "rxjs/Observable";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 import { IPayment } from "../models/interfaces";
 import { MessageService } from "./message.service";
-import { AccountService } from "./account.service";
 export interface IBillingPayload {
     balance?: number;
     payments?: IPayment[];
@@ -14,7 +15,7 @@ export interface IBillingPayload {
 export declare class BillingService {
     private http;
     private message;
-    private account;
+    private store$;
     private _developer;
     private _observable;
     private _observer;
@@ -22,7 +23,7 @@ export declare class BillingService {
     private _paymentsTo;
     private _lastRefresh;
     private _billingPayload;
-    constructor(http: Http, message: MessageService, account: AccountService);
+    constructor(http: Http, message: MessageService, store$: Store<TeleportCoreState>);
     cleanup(): void;
     readonly Observable: Observable<IBillingPayload>;
     refresh(): Promise<IBillingPayload>;

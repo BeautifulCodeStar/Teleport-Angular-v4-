@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var alerts_service_1 = require("../../../services/alerts.service");
+import { Component, Inject } from "@angular/core";
+import { Router } from "@angular/router";
+import { AlertsService } from "../../../services/alerts.service";
 var TeleportDevPortalProfileAlertsCreateComponent = (function () {
     function TeleportDevPortalProfileAlertsCreateComponent(router, alerts) {
         this.router = router;
@@ -76,17 +74,17 @@ var TeleportDevPortalProfileAlertsCreateComponent = (function () {
             .catch(function () { return _this._isBusy = false; });
     };
     TeleportDevPortalProfileAlertsCreateComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-alerts-create",
                     templateUrl: "profile.alerts.create.html",
                 },] },
     ];
     TeleportDevPortalProfileAlertsCreateComponent.ctorParameters = function () { return [
-        { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
-        { type: alerts_service_1.AlertsService, decorators: [{ type: core_1.Inject, args: [alerts_service_1.AlertsService,] },] },
+        { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
+        { type: AlertsService, decorators: [{ type: Inject, args: [AlertsService,] },] },
     ]; };
     return TeleportDevPortalProfileAlertsCreateComponent;
 }());
-exports.TeleportDevPortalProfileAlertsCreateComponent = TeleportDevPortalProfileAlertsCreateComponent;
+export { TeleportDevPortalProfileAlertsCreateComponent };
 //# sourceMappingURL=profile.alerts.create.component.js.map

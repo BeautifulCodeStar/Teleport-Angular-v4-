@@ -1,17 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var http_1 = require("@angular/http");
-var Observable_1 = require("rxjs/Observable");
-var account_service_1 = require("./account.service");
+import { Injectable, Inject } from "@angular/core";
+import { Http, Headers } from "@angular/http";
+import { Observable } from "rxjs/Observable";
+import { Store } from "@ngrx/store";
 var AccountCredentialsService = (function () {
-    function AccountCredentialsService(http, account) {
+    function AccountCredentialsService(http, store$) {
         var _this = this;
         this.http = http;
-        this.account = account;
-        this.account.Observable
-            .first(function (d) { return !!d; })
-            .subscribe(function (d) { return _this._developer = d; });
+        this.store$ = store$;
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just(); })
+            .subscribe(function (s) { return _this._developer = s.userData; });
     }
     AccountCredentialsService.prototype.cleanup = function () {
         delete this._developer;
@@ -24,14 +23,14 @@ var AccountCredentialsService = (function () {
             "credentials",
         ].join("/");
         return this.http.get(url, { withCredentials: true })
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().user_message)); })
+            .catch(function (err) { return Observable.throw(new Error(err.json().user_message)); })
             .map(function (res) { return res.json().basicAuthPasswords; })
             .map(function (p) { return p.map(function (p2) { return ({ userName: userId, password: p2 }); }); })
-            .catch(function (err) { return Observable_1.Observable.throw(err); })
+            .catch(function (err) { return Observable.throw(err); })
             .toPromise();
     };
     AccountCredentialsService.prototype.create = function (userId) {
-        var headers = new http_1.Headers({ "Content-Type": "application/json" });
+        var headers = new Headers({ "Content-Type": "application/json" });
         var url = [
             API_BASE_URL,
             "developers",
@@ -39,10 +38,10 @@ var AccountCredentialsService = (function () {
             "credentials",
         ].join("/");
         return this.http.post(url, "", { headers: headers, withCredentials: true })
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().user_message)); })
+            .catch(function (err) { return Observable.throw(new Error(err.json().user_message)); })
             .map(function (res) { return res.json().basicAuthPasswords; })
             .map(function (p) { return p.map(function (p2) { return ({ userName: userId, password: p2 }); }); })
-            .catch(function (err) { return Observable_1.Observable.throw(err); })
+            .catch(function (err) { return Observable.throw(err); })
             .toPromise();
     };
     AccountCredentialsService.prototype.remove = function (userId, password) {
@@ -54,20 +53,20 @@ var AccountCredentialsService = (function () {
             encodeURIComponent(password),
         ].join("/");
         return this.http.delete(url, { withCredentials: true })
-            .catch(function (err) { return Observable_1.Observable.throw(new Error(err.json().user_message)); })
+            .catch(function (err) { return Observable.throw(new Error(err.json().user_message)); })
             .map(function (res) { return res.json().basicAuthPasswords; })
             .map(function (p) { return p.map(function (p2) { return ({ userName: userId, password: p2 }); }); })
-            .catch(function (err) { return Observable_1.Observable.throw(err); })
+            .catch(function (err) { return Observable.throw(err); })
             .toPromise();
     };
     AccountCredentialsService.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
     AccountCredentialsService.ctorParameters = function () { return [
-        { type: http_1.Http, decorators: [{ type: core_1.Inject, args: [http_1.Http,] },] },
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
+        { type: Http, decorators: [{ type: Inject, args: [Http,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return AccountCredentialsService;
 }());
-exports.AccountCredentialsService = AccountCredentialsService;
+export { AccountCredentialsService };
 //# sourceMappingURL=account.credentials.service.js.map

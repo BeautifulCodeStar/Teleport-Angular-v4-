@@ -1,4 +1,4 @@
-import { IUserPermissions, IUserPermissionsTree, IUserRole } from "../models/interfaces";
+import { IUserPermissions, IUserPermissionsTree, IUserRole } from "teleport-module-services/services/v1/models/User";
 export declare const Template: IUserPermissions;
 export declare const Roles: ReadonlyArray<IUserRole>;
 export declare const Tree: IUserPermissionsTree;

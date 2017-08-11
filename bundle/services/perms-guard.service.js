@@ -1,22 +1,21 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var account_service_1 = require("./account.service");
-var Permissions_1 = require("../utils/Permissions");
+import { Injectable, Inject } from "@angular/core";
+import { Router, } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { validate } from "../utils/Permissions";
 var PermsGuardCanActivate = (function () {
-    function PermsGuardCanActivate(account, router) {
-        this.account = account;
+    function PermsGuardCanActivate(router, store$) {
         this.router = router;
+        this.store$ = store$;
     }
     PermsGuardCanActivate.prototype.canActivateChild = function (route) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this.account.Observable
-                .first(function (d) { return !!d; })
+            _this.store$.select("session")
+                .first(function (s) { return s.isJust(); })
+                .map(function (s) { return s.just().userData; })
                 .subscribe(function (dev) {
                 var routeData = route.data;
-                if (routeData.perms && !Permissions_1.validate(dev.permissions, routeData.perms.reduce(function (p, c) { return (p[c] = true) && p; }, {}))) {
+                if (routeData.perms && !validate(dev.permissions, routeData.perms.reduce(function (p, c) { return (p[c] = true) && p; }, {}))) {
                     _this.router.navigate(["/apiv1/access-denied"], { queryParams: { perms: routeData.perms.join("|") } })
                         .then(function () { return resolve(false); })
                         .catch(function (err) { return reject(err); });
@@ -26,13 +25,13 @@ var PermsGuardCanActivate = (function () {
         });
     };
     PermsGuardCanActivate.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
     PermsGuardCanActivate.ctorParameters = function () { return [
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
-        { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
+        { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return PermsGuardCanActivate;
 }());
-exports.PermsGuardCanActivate = PermsGuardCanActivate;
+export { PermsGuardCanActivate };
 //# sourceMappingURL=perms-guard.service.js.map

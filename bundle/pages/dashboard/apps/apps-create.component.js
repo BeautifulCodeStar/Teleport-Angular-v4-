@@ -1,46 +1,54 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var application_service_1 = require("../../../services/application.service");
+import { Component, Inject } from "@angular/core";
+import { Router } from "@angular/router";
+import "rxjs/add/operator/first";
+import { Store, ReducerManagerDispatcher } from "@ngrx/store";
+import * as actions from "teleport-module-services/services/v1/ngrx/applications/applications.actions";
 var TeleportDevPortalAppsCreateComponent = (function () {
-    function TeleportDevPortalAppsCreateComponent(router, applications) {
+    function TeleportDevPortalAppsCreateComponent(router, store$, dispatcher) {
+        var _this = this;
         this.router = router;
-        this.applications = applications;
+        this.store$ = store$;
+        this.dispatcher = dispatcher;
         this.isBusy = false;
         this.appName = "";
         this.appNotes = "";
-        this.isCaptchaOk = false;
-        this.reCaptchaResponse = "";
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just(); })
+            .subscribe(function (s) { return _this._developer = s.userData; });
     }
-    TeleportDevPortalAppsCreateComponent.prototype.onCaptcha = function (resp, isOk) {
-        this.reCaptchaResponse = resp;
-        this.isCaptchaOk = isOk;
-    };
     TeleportDevPortalAppsCreateComponent.prototype.onSubmitCreateApp = function () {
         var _this = this;
         this.isBusy = true;
-        this.applications.createApp(this.appName, this.appNotes, this.reCaptchaResponse)
-            .then(function (app) {
-            _this.isBusy = false;
-            return _this.router.navigate(["/apiv1/applications", app.name]);
-        })
-            .catch(function () {
-            _this.isBusy = false;
+        var dev = this._developer;
+        var appName = this.appName;
+        var notes = this.appNotes;
+        this.store$.dispatch(new actions.Create({ dev: dev, appName: appName, notes: notes }));
+        this.dispatcher
+            .first(function (action) { return action.type === actions.CREATE_SUCCESS || action.type === actions.CREATE_FAILURE; })
+            .subscribe(function (action) {
+            switch (action.type) {
+                case actions.CREATE_SUCCESS:
+                    _this.isBusy = false;
+                    return _this.router.navigate(["/v1/applications", action.payload.app.name]);
+                default:
+                    _this.isBusy = false;
+            }
         });
     };
     TeleportDevPortalAppsCreateComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-apps-create",
                     templateUrl: "apps-create.html",
                 },] },
     ];
     TeleportDevPortalAppsCreateComponent.ctorParameters = function () { return [
-        { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
-        { type: application_service_1.ApplicationService, decorators: [{ type: core_1.Inject, args: [application_service_1.ApplicationService,] },] },
+        { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
+        { type: ReducerManagerDispatcher, decorators: [{ type: Inject, args: [ReducerManagerDispatcher,] },] },
     ]; };
     return TeleportDevPortalAppsCreateComponent;
 }());
-exports.TeleportDevPortalAppsCreateComponent = TeleportDevPortalAppsCreateComponent;
+export { TeleportDevPortalAppsCreateComponent };
 //# sourceMappingURL=apps-create.component.js.map

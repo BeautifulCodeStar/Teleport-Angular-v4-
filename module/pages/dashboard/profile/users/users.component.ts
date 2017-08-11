@@ -1,8 +1,13 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 
-import { IUser, IDeveloper } from "../../../../models/interfaces";
+import { Store } from "@ngrx/store";
 
-import { AccountService } from "../../../../services/account.service";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { IUser } from "teleport-module-services/services/v1/models/User";
+
 import { UserService }    from "../../../../services/user.service";
 import { MessageService } from "../../../../services/message.service";
 
@@ -13,7 +18,6 @@ import * as Permissions   from "../../../../utils/Permissions";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-users",
     templateUrl: "users.html",
-    // styleUrls  : [ "../../../css/bootswatch.min.css", "../../../css/main.min.css" ],
 })
 export class TeleportDevPortalUsersComponent implements OnInit, OnDestroy {
 
@@ -23,9 +27,9 @@ export class TeleportDevPortalUsersComponent implements OnInit, OnDestroy {
     private _users: IUser[];
 
     constructor (
-        @Inject(AccountService) private account: AccountService,
         @Inject(UserService)    private users: UserService,
         @Inject(MessageService) private messages: MessageService,
+        @Inject(Store)          private store$: Store<TeleportCoreState>,
     ) {}
 
 
@@ -33,9 +37,10 @@ export class TeleportDevPortalUsersComponent implements OnInit, OnDestroy {
 
         this.isBusy = true;
 
-        this.account.Observable
-            .first(d => !! d)
-            .subscribe(d => this._developer = d);
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just())
+            .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
 
         this.users.list()
             .then(users => {

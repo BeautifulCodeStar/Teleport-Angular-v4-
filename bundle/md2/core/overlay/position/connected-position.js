@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var ConnectionPositionPair = (function () {
     function ConnectionPositionPair(origin, overlay) {
         this.originX = origin.originX;
@@ -9,5 +7,5 @@ var ConnectionPositionPair = (function () {
     }
     return ConnectionPositionPair;
 }());
-exports.ConnectionPositionPair = ConnectionPositionPair;
+export { ConnectionPositionPair };
 //# sourceMappingURL=connected-position.js.map

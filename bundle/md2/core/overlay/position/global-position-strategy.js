@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var apply_transform_1 = require("../../style/apply-transform");
+import { applyCssTransform } from '../../style/apply-transform';
 var GlobalPositionStrategy = (function () {
     function GlobalPositionStrategy() {
         this._cssPosition = 'absolute';
@@ -65,7 +63,7 @@ var GlobalPositionStrategy = (function () {
         element.style.right = this._right;
         var tranlateX = this._reduceTranslateValues('translateX', this._translateX);
         var translateY = this._reduceTranslateValues('translateY', this._translateY);
-        apply_transform_1.applyCssTransform(element, tranlateX + " " + translateY);
+        applyCssTransform(element, tranlateX + " " + translateY);
         return Promise.resolve(null);
     };
     GlobalPositionStrategy.prototype._reduceTranslateValues = function (translateFn, values) {
@@ -73,5 +71,5 @@ var GlobalPositionStrategy = (function () {
     };
     return GlobalPositionStrategy;
 }());
-exports.GlobalPositionStrategy = GlobalPositionStrategy;
+export { GlobalPositionStrategy };
 //# sourceMappingURL=global-position-strategy.js.map

@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function booleanFieldValueFactory() {
     return function booleanFieldValueMetadata(target, key) {
         var defaultValue = target[key];
@@ -13,5 +11,5 @@ function booleanFieldValueFactory() {
         });
     };
 }
-exports.BooleanFieldValue = booleanFieldValueFactory;
+export { booleanFieldValueFactory as BooleanFieldValue };
 //# sourceMappingURL=field-value.js.map

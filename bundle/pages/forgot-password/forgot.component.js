@@ -1,11 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var Observable_1 = require("rxjs/Observable");
-var login_service_1 = require("../../services/login.service");
-var message_service_1 = require("../../services/message.service");
-var EmailValidator_1 = require("../../utils/EmailValidator");
+import { Component, Inject } from "@angular/core";
+import { Router } from "@angular/router";
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/toPromise";
+import { LoginService } from "teleport-module-services/services/services/login/login.service";
+import { MessageService } from "../../services/message.service";
+import { EmailValidator } from "../../utils/EmailValidator";
 var TeleportDevPortalForgotPasswordComponent = (function () {
     function TeleportDevPortalForgotPasswordComponent(router, logins, messages) {
         var _this = this;
@@ -16,10 +15,10 @@ var TeleportDevPortalForgotPasswordComponent = (function () {
         this.isBusy = false;
         this.isCaptchaOk = false;
         this.reCaptchaResponse = "";
-        this._resetCaptchaObservable = Observable_1.Observable.create(function (observer) { return _this._resetCaptchaObserver = observer; });
+        this._resetCaptchaObservable = Observable.create(function (observer) { return _this._resetCaptchaObserver = observer; });
     }
     TeleportDevPortalForgotPasswordComponent.prototype.isEmailValid = function (email) {
-        return EmailValidator_1.EmailValidator.isValid(email);
+        return EmailValidator.isValid(email);
     };
     TeleportDevPortalForgotPasswordComponent.prototype.onCaptcha = function (resp, isOk) {
         this.reCaptchaResponse = resp;
@@ -31,7 +30,8 @@ var TeleportDevPortalForgotPasswordComponent = (function () {
     TeleportDevPortalForgotPasswordComponent.prototype.onRecoverPassword = function () {
         var _this = this;
         this.isBusy = true;
-        this.logins.recoverPassword(this.userName.toLowerCase(), this.reCaptchaResponse)
+        this.logins.recoverPassword({ email: this.userName, reCaptchaResponse: this.reCaptchaResponse })
+            .toPromise()
             .then(function (resp) {
             console.log("Password Recovery Success", resp);
             _this.messages.info("Password Recovery Success", "An email will be sent with recovery instructions.");
@@ -45,18 +45,18 @@ var TeleportDevPortalForgotPasswordComponent = (function () {
         });
     };
     TeleportDevPortalForgotPasswordComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-forgot-password",
                     templateUrl: "forgot.html",
                 },] },
     ];
     TeleportDevPortalForgotPasswordComponent.ctorParameters = function () { return [
-        { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
-        { type: login_service_1.LoginService, decorators: [{ type: core_1.Inject, args: [login_service_1.LoginService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
+        { type: LoginService, decorators: [{ type: Inject, args: [LoginService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
     ]; };
     return TeleportDevPortalForgotPasswordComponent;
 }());
-exports.TeleportDevPortalForgotPasswordComponent = TeleportDevPortalForgotPasswordComponent;
+export { TeleportDevPortalForgotPasswordComponent };
 //# sourceMappingURL=forgot.component.js.map

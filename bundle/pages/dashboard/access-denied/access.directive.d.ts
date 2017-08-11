@@ -1,10 +1,13 @@
 import { ElementRef, Renderer2, AfterViewInit } from "@angular/core";
-import { SessionService } from "../../../services/session.service";
+import "rxjs/add/operator/first";
+import "rxjs/add/operator/map";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 export declare class AllowAccessDirective implements AfterViewInit {
     private el;
     private renderer;
-    private session;
+    private store$;
     private allowAccess;
-    constructor(el: ElementRef, renderer: Renderer2, session: SessionService);
+    constructor(el: ElementRef, renderer: Renderer2, store$: Store<TeleportCoreState>);
     ngAfterViewInit(): void;
 }

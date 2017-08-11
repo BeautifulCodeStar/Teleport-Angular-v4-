@@ -1,19 +1,28 @@
 
 import { Component, Inject, AfterViewInit, OnDestroy } from "@angular/core";
 
-import { IUserBasicAuth } from "../../../models/interfaces";
+import "rxjs/add/operator/first";
 
-import { AccountService }            from "../../../services/account.service";
-import { AccountCredentialsService } from "../../../services/account.credentials.service";
+import { Store, ReducerManagerDispatcher } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+
+import { IUser, IUserBasicAuth } from "teleport-module-services/services/v1/models/User";
+
+import * as actions from "teleport-module-services/services/v1/ngrx/account/account.actions";
+
+
 import { MessageService }            from "../../../services/message.service";
 import { ModalService }              from "../../../services/modal.service";
+import { AccountCredentialsService } from "../../../services/account.credentials.service";
 
 
 @Component({
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-dashboard-profile-basic-auth",
     templateUrl: "profile.basic-auth.html",
-    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalProfileBasicAuthComponent implements AfterViewInit, OnDestroy {
 
@@ -23,12 +32,12 @@ export class TeleportDevPortalProfileBasicAuthComponent implements AfterViewInit
     private _userId: string;
 
     constructor (
-        @Inject(AccountService)            private account: AccountService,
-        @Inject(AccountCredentialsService) private creds: AccountCredentialsService,
-        @Inject(ModalService)             private modal: ModalService,
+        @Inject(ModalService)              private modal: ModalService,
         @Inject(MessageService)            private messages: MessageService,
+        @Inject(AccountCredentialsService) private creds: AccountCredentialsService,
+        @Inject(Store)                     private store$: Store<TeleportCoreState>,
+        @Inject(ReducerManagerDispatcher)  private dispatcher: ReducerManagerDispatcher,
     ) {
-        console.log("new UIProfileBasicAuth ()", this._userId);
         this.isBusy = true;
     }
 
@@ -36,9 +45,10 @@ export class TeleportDevPortalProfileBasicAuthComponent implements AfterViewInit
 
         this.isBusy = true;
 
-        this.account.Observable
-            .first(acct => !! acct)
-            .subscribe(dev => {
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just().userData)
+            .subscribe((dev: IDeveloper) => {
 
                 this._userId = dev.portalUser ? dev.portalUser.developerId : dev.id;
 

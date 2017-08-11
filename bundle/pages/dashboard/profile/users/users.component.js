@@ -1,23 +1,22 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var account_service_1 = require("../../../../services/account.service");
-var user_service_1 = require("../../../../services/user.service");
-var message_service_1 = require("../../../../services/message.service");
-var Permissions = require("../../../../utils/Permissions");
+import { Component, Inject } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { UserService } from "../../../../services/user.service";
+import { MessageService } from "../../../../services/message.service";
+import * as Permissions from "../../../../utils/Permissions";
 var TeleportDevPortalUsersComponent = (function () {
-    function TeleportDevPortalUsersComponent(account, users, messages) {
-        this.account = account;
+    function TeleportDevPortalUsersComponent(users, messages, store$) {
         this.users = users;
         this.messages = messages;
+        this.store$ = store$;
         this.isBusy = false;
     }
     TeleportDevPortalUsersComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.isBusy = true;
-        this.account.Observable
-            .first(function (d) { return !!d; })
-            .subscribe(function (d) { return _this._developer = d; });
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just(); })
+            .subscribe(function (s) { return _this._developer = s.userData; });
         this.users.list()
             .then(function (users) {
             _this.isBusy = false;
@@ -56,18 +55,18 @@ var TeleportDevPortalUsersComponent = (function () {
         });
     };
     TeleportDevPortalUsersComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-users",
                     templateUrl: "users.html",
                 },] },
     ];
     TeleportDevPortalUsersComponent.ctorParameters = function () { return [
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
-        { type: user_service_1.UserService, decorators: [{ type: core_1.Inject, args: [user_service_1.UserService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: UserService, decorators: [{ type: Inject, args: [UserService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return TeleportDevPortalUsersComponent;
 }());
-exports.TeleportDevPortalUsersComponent = TeleportDevPortalUsersComponent;
+export { TeleportDevPortalUsersComponent };
 //# sourceMappingURL=users.component.js.map

@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var platform_browser_1 = require("@angular/platform-browser");
+import { Injectable, Inject } from "@angular/core";
+import { DOCUMENT } from "@angular/platform-browser";
 var MODAL_HTML = "\n    <div class=\"modal fade in\" tabindex=\"-1\" role=\"dialog\">\n        <div class=\"modal-dialog\">\n            <div class=\"modal-content\">\n                <div class=\"modal-header\">\n                    <button role=\"close\" type=\"button\" class=\"close\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n                    <h4 class=\"modal-title\"></h4>\n                </div>\n                <div class=\"modal-body\"></div>\n                <div class=\"modal-footer\">\n                    <button role=\"cancel\" type=\"button\" class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</button>\n                    <button role=\"ok\" type=\"button\" class=\"btn btn-link\">Ok</button>\n                </div>\n            </div><!-- /.modal-content -->\n        </div><!-- /.modal-dialog -->\n    </div><!-- /.modal -->\n";
 var ModalService = (function () {
     function ModalService(doc) {
@@ -73,12 +71,12 @@ var ModalService = (function () {
         });
     };
     ModalService.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
     ModalService.ctorParameters = function () { return [
-        { type: HTMLDocument, decorators: [{ type: core_1.Inject, args: [platform_browser_1.DOCUMENT,] },] },
+        { type: HTMLDocument, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     ]; };
     return ModalService;
 }());
-exports.ModalService = ModalService;
+export { ModalService };
 //# sourceMappingURL=modal.service.js.map

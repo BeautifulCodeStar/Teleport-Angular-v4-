@@ -1,44 +1,50 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var common_1 = require("@angular/common");
-var platform_browser_1 = require("@angular/platform-browser");
-var animations_1 = require("@angular/platform-browser/animations");
-var forms_1 = require("@angular/forms");
-var http_1 = require("@angular/http");
-var components_module_1 = require("./components/components.module");
-var pages_module_1 = require("./pages/pages.module");
-var services_module_1 = require("./services/services.module");
-var devPortalUtils = require("./utils/index");
-exports.devPortalUtils = devPortalUtils;
-var devPortalModels = require("./models/index");
-exports.devPortalModels = devPortalModels;
-var devPortalServices = require("./services/index");
-exports.devPortalServices = devPortalServices;
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { FormsModule } from "@angular/forms";
+import { HttpModule } from "@angular/http";
+import { StoreModule } from "@ngrx/store";
+import { TeleportServicesModule } from "teleport-module-services/services/services/services.module";
+import { APIv1ServicesModule } from "teleport-module-services/services/v1/services/services.module";
+import { DevPortalComponentsModule } from "./components/components.module";
+import { DevPortalPagesModule } from "./pages/pages.module";
+import { DevPortalServicesModule } from "./services/services.module";
+import * as devPortalUtils from "./utils/index";
+import * as devPortalModels from "./models/index";
+import * as devPortalServices from "./services/index";
 var DevPortalModule = (function () {
     function DevPortalModule() {
     }
     DevPortalModule.decorators = [
-        { type: core_1.NgModule, args: [{
+        { type: NgModule, args: [{
                     imports: [
-                        platform_browser_1.BrowserModule,
-                        animations_1.BrowserAnimationsModule,
-                        common_1.CommonModule,
-                        forms_1.FormsModule,
-                        http_1.HttpModule,
-                        components_module_1.DevPortalComponentsModule,
-                        pages_module_1.DevPortalPagesModule,
-                        services_module_1.DevPortalServicesModule.forRoot(),
+                        BrowserModule,
+                        BrowserAnimationsModule,
+                        CommonModule,
+                        FormsModule,
+                        HttpModule,
+                        TeleportServicesModule.forRoot(),
+                        APIv1ServicesModule.forRoot(),
+                        StoreModule,
+                        DevPortalComponentsModule,
+                        DevPortalPagesModule,
+                        DevPortalServicesModule,
                     ],
                     exports: [
-                        components_module_1.DevPortalComponentsModule,
-                        pages_module_1.DevPortalPagesModule,
-                        services_module_1.DevPortalServicesModule,
+                        DevPortalComponentsModule,
+                        DevPortalPagesModule,
+                        DevPortalServicesModule,
+                        TeleportServicesModule,
+                        APIv1ServicesModule,
                     ],
                 },] },
     ];
     DevPortalModule.ctorParameters = function () { return []; };
     return DevPortalModule;
 }());
-exports.DevPortalModule = DevPortalModule;
+export { DevPortalModule };
+export { devPortalUtils };
+export { devPortalModels };
+export { devPortalServices };
 //# sourceMappingURL=index.js.map

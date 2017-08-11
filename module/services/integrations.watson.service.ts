@@ -4,8 +4,16 @@ import { Http, RequestOptions, Headers } from "@angular/http";
 
 import { Observable }      from "rxjs/Observable";
 
-import { IWatson, IDeveloper } from "../models/interfaces";
-import { AccountService }      from "./account.service";
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { Message } from "teleport-module-services/services/models/Message";
+import * as msgActions from "teleport-module-services/services/ngrx/messages/messages.actions";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { IWatson } from "../models/interfaces";
 
 declare const API_BASE_URL: string;
 
@@ -24,11 +32,14 @@ export class IntegrationsWatsonService {
     private _developer: IDeveloper;
 
     constructor(
-        @Inject(Http)           private http: Http,
-        @Inject(AccountService) private account: AccountService,
+        @Inject(Http)  private http: Http,
+        @Inject(Store) private store$: Store<TeleportCoreState>,
     ) {
 
-        this.account.Observable.first(d => !!d).subscribe(d => this._developer = d);
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just())
+            .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
     }
 
 
@@ -41,9 +52,12 @@ export class IntegrationsWatsonService {
 
         return this.http
             .get(url, { withCredentials: true })
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
             .map(r => r.json().settings)
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Watson Service Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 
 
@@ -59,9 +73,12 @@ export class IntegrationsWatsonService {
 
         return this.http
             .put(url, JSON.stringify(watson), options)
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
             .map(r => r.json().settings)
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Watson Service Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 
 
@@ -74,8 +91,11 @@ export class IntegrationsWatsonService {
 
         return this.http
             .delete(url, { withCredentials: true })
-            .catch(err => Observable.throw(new Error(err.json().user_message)))
             .map(r => r.json().settings)
-            .toPromise();
+            .toPromise()
+            .catch(err => {
+                this.store$.dispatch(new msgActions.Add(new Message("Watson Service Failure", err.json().user_message)));
+                return Promise.reject(err);
+            });
     }
 }

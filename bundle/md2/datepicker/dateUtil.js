@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
+import { Injectable } from "@angular/core";
 var Md2DateUtil = (function () {
     function Md2DateUtil() {
     }
@@ -117,10 +115,10 @@ var Md2DateUtil = (function () {
             (!maxDate || maxDate.getFullYear() > year || maxDate.getMonth() >= month);
     };
     Md2DateUtil.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
     Md2DateUtil.ctorParameters = function () { return []; };
     return Md2DateUtil;
 }());
-exports.Md2DateUtil = Md2DateUtil;
+export { Md2DateUtil };
 //# sourceMappingURL=dateUtil.js.map

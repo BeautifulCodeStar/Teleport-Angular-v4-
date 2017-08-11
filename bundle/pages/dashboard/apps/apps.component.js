@@ -1,12 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var application_service_1 = require("../../../services/application.service");
-var session_service_1 = require("../../../services/session.service");
+import { Component, Inject } from "@angular/core";
+import "rxjs/add/operator/filter";
+import "rxjs/add/operator/map";
+import { Store } from "@ngrx/store";
+import { Refresh } from "teleport-module-services/services/v1/ngrx/applications/applications.actions";
 var TeleportDevPortalAppsComponent = (function () {
-    function TeleportDevPortalAppsComponent(session, applications) {
-        this.session = session;
-        this.applications = applications;
+    function TeleportDevPortalAppsComponent(store$) {
+        this.store$ = store$;
         this.sortBy = [this.sortByNameAsc];
         this.filterOn = "";
         this.showNum = 20;
@@ -16,27 +15,19 @@ var TeleportDevPortalAppsComponent = (function () {
     TeleportDevPortalAppsComponent.prototype.ngOnInit = function () {
         var _this = this;
         this._isBusy = true;
-        this.session.Observable
-            .filter(function (s) { return !!s; })
-            .take(1)
-            .subscribe(function (s) { if (s !== null) {
-            _this.Developer = s.developer;
-        } });
-        this._subscription = this.applications.Observable
-            .filter(function (a) { return !!a; })
+        this.store$.select("session")
+            .filter(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just(); })
+            .subscribe(function (s) { return _this.Developer = s.userData; });
+        this.store$.select("v1_applications")
             .subscribe(function (apps) {
             _this._isBusy = false;
             _this._applications = apps;
         });
     };
     TeleportDevPortalAppsComponent.prototype.ngOnDestroy = function () {
-        console.log("Destroy apps.components");
-        if (this._subscription) {
-            this._subscription.unsubscribe();
-        }
         delete this.Developer;
         this._applications = [];
-        delete this._subscription;
         this.sortBy = [this.sortByNameDesc, this.sortByNotesAsc, this.sortByNotesDesc, this.sortByCreatedOnAsc, this.sortByCreatedOnDesc];
     };
     Object.defineProperty(TeleportDevPortalAppsComponent.prototype, "isBusy", {
@@ -65,7 +56,7 @@ var TeleportDevPortalAppsComponent = (function () {
         configurable: true
     });
     TeleportDevPortalAppsComponent.prototype.requestAppsRefresh = function () {
-        this.applications.refreshApps();
+        this.store$.dispatch(new Refresh({ dev: this.Developer }));
     };
     TeleportDevPortalAppsComponent.prototype.hasSort = function (funcName) {
         return this.sortBy.indexOf(this[funcName]) !== -1;
@@ -101,17 +92,16 @@ var TeleportDevPortalAppsComponent = (function () {
         return +b.createdAt - +a.createdAt;
     };
     TeleportDevPortalAppsComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-apps",
                     templateUrl: "apps.html",
                 },] },
     ];
     TeleportDevPortalAppsComponent.ctorParameters = function () { return [
-        { type: session_service_1.SessionService, decorators: [{ type: core_1.Inject, args: [session_service_1.SessionService,] },] },
-        { type: application_service_1.ApplicationService, decorators: [{ type: core_1.Inject, args: [application_service_1.ApplicationService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return TeleportDevPortalAppsComponent;
 }());
-exports.TeleportDevPortalAppsComponent = TeleportDevPortalAppsComponent;
+export { TeleportDevPortalAppsComponent };
 //# sourceMappingURL=apps.component.js.map

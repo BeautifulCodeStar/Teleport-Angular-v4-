@@ -1,6 +1,7 @@
 import { Http } from "@angular/http";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 import { IAWS } from "../models/interfaces";
-import { AccountService } from "./account.service";
 export interface IAWSPutRequest {
     accessKey: string;
     securityKey: string;
@@ -11,9 +12,9 @@ export interface IAWSPutRequest {
 }
 export declare class IntegrationsAWSService {
     private http;
-    private account;
+    private store$;
     private _developer;
-    constructor(http: Http, account: AccountService);
+    constructor(http: Http, store$: Store<TeleportCoreState>);
     getAWS(appId: string): Promise<IAWS>;
     putAWS(appId: string, aws: IAWSPutRequest): Promise<IAWS>;
     deleteAWS(appId: string): Promise<IAWS>;

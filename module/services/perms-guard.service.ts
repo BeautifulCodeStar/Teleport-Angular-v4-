@@ -6,8 +6,14 @@ import {
     Router,
 } from "@angular/router";
 
-import { IUserPermissions } from "../models/interfaces";
-import { AccountService }   from "./account.service";
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { IUserPermissions } from "teleport-module-services/services/v1/models/User";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
 import { validate }         from "../utils/Permissions";
 
 
@@ -20,17 +26,18 @@ interface IRouteData {
 export class PermsGuardCanActivate implements CanActivateChild {
 
     constructor (
-        @Inject(AccountService) private account: AccountService,
-        @Inject(Router)         private router: Router,
+        @Inject(Router) private router: Router,
+        @Inject(Store)  private store$: Store<TeleportCoreState>,
     ) {}
 
     public canActivateChild (route: ActivatedRouteSnapshot): Promise<boolean> {
 
         return new Promise<boolean>((resolve, reject) => {
 
-            this.account.Observable
-                .first(d => !!d)
-                .subscribe(dev => {
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just().userData)
+            .subscribe(dev => {
 
                     const routeData = route.data as IRouteData;
 

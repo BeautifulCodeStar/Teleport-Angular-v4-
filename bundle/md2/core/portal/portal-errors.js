@@ -1,4 +1,3 @@
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9,8 +8,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
-var error_1 = require("../errors/error");
+import { MdError } from '../errors/error';
 var MdComponentPortalAttachedToDomWithoutOriginError = (function (_super) {
     __extends(MdComponentPortalAttachedToDomWithoutOriginError, _super);
     function MdComponentPortalAttachedToDomWithoutOriginError() {
@@ -18,32 +16,32 @@ var MdComponentPortalAttachedToDomWithoutOriginError = (function (_super) {
             'because the DOM element is not part of the Angular application context.') || this;
     }
     return MdComponentPortalAttachedToDomWithoutOriginError;
-}(error_1.MdError));
-exports.MdComponentPortalAttachedToDomWithoutOriginError = MdComponentPortalAttachedToDomWithoutOriginError;
+}(MdError));
+export { MdComponentPortalAttachedToDomWithoutOriginError };
 var MdNullPortalError = (function (_super) {
     __extends(MdNullPortalError, _super);
     function MdNullPortalError() {
         return _super.call(this, 'Must provide a portal to attach') || this;
     }
     return MdNullPortalError;
-}(error_1.MdError));
-exports.MdNullPortalError = MdNullPortalError;
+}(MdError));
+export { MdNullPortalError };
 var MdPortalAlreadyAttachedError = (function (_super) {
     __extends(MdPortalAlreadyAttachedError, _super);
     function MdPortalAlreadyAttachedError() {
         return _super.call(this, 'Host already has a portal attached') || this;
     }
     return MdPortalAlreadyAttachedError;
-}(error_1.MdError));
-exports.MdPortalAlreadyAttachedError = MdPortalAlreadyAttachedError;
+}(MdError));
+export { MdPortalAlreadyAttachedError };
 var MdPortalHostAlreadyDisposedError = (function (_super) {
     __extends(MdPortalHostAlreadyDisposedError, _super);
     function MdPortalHostAlreadyDisposedError() {
         return _super.call(this, 'This PortalHost has already been disposed') || this;
     }
     return MdPortalHostAlreadyDisposedError;
-}(error_1.MdError));
-exports.MdPortalHostAlreadyDisposedError = MdPortalHostAlreadyDisposedError;
+}(MdError));
+export { MdPortalHostAlreadyDisposedError };
 var MdUnknownPortalTypeError = (function (_super) {
     __extends(MdUnknownPortalTypeError, _super);
     function MdUnknownPortalTypeError() {
@@ -51,22 +49,22 @@ var MdUnknownPortalTypeError = (function (_super) {
             'BasePortalHost accepts either a ComponentPortal or a TemplatePortal.') || this;
     }
     return MdUnknownPortalTypeError;
-}(error_1.MdError));
-exports.MdUnknownPortalTypeError = MdUnknownPortalTypeError;
+}(MdError));
+export { MdUnknownPortalTypeError };
 var MdNullPortalHostError = (function (_super) {
     __extends(MdNullPortalHostError, _super);
     function MdNullPortalHostError() {
         return _super.call(this, 'Attempting to attach a portal to a null PortalHost') || this;
     }
     return MdNullPortalHostError;
-}(error_1.MdError));
-exports.MdNullPortalHostError = MdNullPortalHostError;
+}(MdError));
+export { MdNullPortalHostError };
 var MdNoPortalAttachedError = (function (_super) {
     __extends(MdNoPortalAttachedError, _super);
     function MdNoPortalAttachedError() {
         return _super.call(this, 'Attempting to detach a portal that is not attached to a host') || this;
     }
     return MdNoPortalAttachedError;
-}(error_1.MdError));
-exports.MdNoPortalAttachedError = MdNoPortalAttachedError;
+}(MdError));
+export { MdNoPortalAttachedError };
 //# sourceMappingURL=portal-errors.js.map

@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var alerts_service_1 = require("../../../services/alerts.service");
-var modal_service_1 = require("../../../services/modal.service");
+import { Component, Inject } from "@angular/core";
+import { AlertsService } from "../../../services/alerts.service";
+import { ModalService } from "../../../services/modal.service";
 var TeleportDevPortalProfileAlertsComponent = (function () {
     function TeleportDevPortalProfileAlertsComponent(alerts, modal) {
         this.alerts = alerts;
@@ -55,17 +53,17 @@ var TeleportDevPortalProfileAlertsComponent = (function () {
         });
     };
     TeleportDevPortalProfileAlertsComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-alerts",
                     templateUrl: "profile.alerts.html",
                 },] },
     ];
     TeleportDevPortalProfileAlertsComponent.ctorParameters = function () { return [
-        { type: alerts_service_1.AlertsService, decorators: [{ type: core_1.Inject, args: [alerts_service_1.AlertsService,] },] },
-        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
+        { type: AlertsService, decorators: [{ type: Inject, args: [AlertsService,] },] },
+        { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
     ]; };
     return TeleportDevPortalProfileAlertsComponent;
 }());
-exports.TeleportDevPortalProfileAlertsComponent = TeleportDevPortalProfileAlertsComponent;
+export { TeleportDevPortalProfileAlertsComponent };
 //# sourceMappingURL=profile.alerts.component.js.map

@@ -1,16 +1,17 @@
 import { OnInit, OnDestroy } from "@angular/core";
-import { IUser } from "../../../../models/interfaces";
-import { AccountService } from "../../../../services/account.service";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { IUser } from "teleport-module-services/services/v1/models/User";
 import { UserService } from "../../../../services/user.service";
 import { MessageService } from "../../../../services/message.service";
 export declare class TeleportDevPortalUsersComponent implements OnInit, OnDestroy {
-    private account;
     private users;
     private messages;
+    private store$;
     isBusy: boolean;
     private _developer;
     private _users;
-    constructor(account: AccountService, users: UserService, messages: MessageService);
+    constructor(users: UserService, messages: MessageService, store$: Store<TeleportCoreState>);
     ngOnInit(): void;
     ngOnDestroy(): void;
     readonly Users: IUser[];

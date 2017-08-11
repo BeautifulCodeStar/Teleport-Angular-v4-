@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -34,9 +33,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var billing_service_1 = require("../../../services/billing.service");
+import { Component, Inject } from "@angular/core";
+import { BillingService } from "../../../services/billing.service";
 var TeleportDevPortalBillingComponent = (function () {
     function TeleportDevPortalBillingComponent(billing) {
         this.billing = billing;
@@ -118,16 +116,16 @@ var TeleportDevPortalBillingComponent = (function () {
         });
     };
     TeleportDevPortalBillingComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-billing",
                     templateUrl: "billing.html",
                 },] },
     ];
     TeleportDevPortalBillingComponent.ctorParameters = function () { return [
-        { type: billing_service_1.BillingService, decorators: [{ type: core_1.Inject, args: [billing_service_1.BillingService,] },] },
+        { type: BillingService, decorators: [{ type: Inject, args: [BillingService,] },] },
     ]; };
     return TeleportDevPortalBillingComponent;
 }());
-exports.TeleportDevPortalBillingComponent = TeleportDevPortalBillingComponent;
+export { TeleportDevPortalBillingComponent };
 //# sourceMappingURL=billing.component.js.map

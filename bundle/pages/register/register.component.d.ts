@@ -1,9 +1,10 @@
 import { OnInit, OnDestroy } from "@angular/core";
-import { LoginService } from "../../services/login.service";
-import { MessageService } from "../../services/message.service";
 import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/toPromise";
+import { AccountService } from "teleport-module-services/services/v1/services/account/account.service";
+import { MessageService } from "../../services/message.service";
 export declare class TeleportDevPortalRegisterComponent implements OnInit, OnDestroy {
-    private logins;
+    private account;
     private messages;
     form: {
         firstName: string;
@@ -14,6 +15,7 @@ export declare class TeleportDevPortalRegisterComponent implements OnInit, OnDes
         phoneNo: string;
         company: string;
         interests: {};
+        tc_agree: boolean;
         "g-recaptcha-response": string;
     };
     isSubmitted: boolean;
@@ -21,7 +23,7 @@ export declare class TeleportDevPortalRegisterComponent implements OnInit, OnDes
     isCaptchaOk: boolean;
     private _resetCaptchaObservable;
     private _resetCaptchaObserver;
-    constructor(logins: LoginService, messages: MessageService);
+    constructor(account: AccountService, messages: MessageService);
     ngOnInit(): void;
     ngOnDestroy(): void;
     isPasswordValid(pw: string): boolean;

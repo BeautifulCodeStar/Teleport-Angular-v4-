@@ -3,10 +3,17 @@ import { Location }                             from "@angular/common";
 import { Router }                               from "@angular/router";
 
 import { Subscription } from "rxjs/Subscription";
+import "rxjs/add/operator/filter";
 
-import { ILog, IApplication }                       from "../../../models/interfaces";
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+
+import { APIv1State }   from "teleport-module-services/services/v1/ngrx/index";
+import { IApplication } from "teleport-module-services/services/v1/models/Application";
+
+import { ILog }                                     from "../../../models/interfaces";
 import { LogsService, ILogsResponse, ILogsRequest } from "../../../services/logs.service";
-import { ApplicationService }                       from "../../../services/application.service";
 import { MessageService }                           from "../../../services/message.service";
 
 
@@ -17,7 +24,6 @@ const FIND_APPID_IN_URL = /^\/apiv1\/applications\/([a-z0-9\-]+)\/history\/logs/
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-data-logs",
     templateUrl: "data.logs.html",
-    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
 
@@ -58,11 +64,11 @@ export class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
     private _sortOn = "startTimeDesc";
 
     constructor (
-        @Inject(LogsService)        private logs: LogsService,
-        @Inject(ApplicationService) private apps: ApplicationService,
-        @Inject(MessageService)     private messages: MessageService,
-        @Inject(Router)             private router: Router,
-        @Inject(Location)           private location: Location,
+        @Inject(LogsService)    private logs: LogsService,
+        @Inject(MessageService) private messages: MessageService,
+        @Inject(Router)         private router: Router,
+        @Inject(Location)       private location: Location,
+        @Inject(Store)          private store$: Store<TeleportCoreState & APIv1State>,
     ) {}
 
 
@@ -84,9 +90,8 @@ export class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
                     this.filters.endDate = new Date(String(logs.endDate)).toLocaleString();
                 }),
 
-            this.apps.Observable
-                .filter(a => !! a)
-                .subscribe(apps => this._apps = apps),
+                this.store$.select("v1_applications")
+                    .subscribe(apps => this._apps = apps),
         ];
 
         setImmediate(() => this.loadLogs());

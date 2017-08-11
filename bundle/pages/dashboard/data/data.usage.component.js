@@ -1,19 +1,18 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var common_1 = require("@angular/common");
-var router_1 = require("@angular/router");
-var application_service_1 = require("../../../services/application.service");
-var message_service_1 = require("../../../services/message.service");
-var usage_service_1 = require("../../../services/usage.service");
+import { Component, Inject } from "@angular/core";
+import { Location } from "@angular/common";
+import { Router } from "@angular/router";
+import "rxjs/add/operator/filter";
+import { Store } from "@ngrx/store";
+import { MessageService } from "../../../services/message.service";
+import { UsageService } from "../../../services/usage.service";
 var FIND_APPID_IN_URL = /^\/apiv1\/applications\/([a-z0-9\-]+)\/history\/usage/;
 var TeleportDevPortalDataUsageComponent = (function () {
-    function TeleportDevPortalDataUsageComponent(usage, apps, messages, router, location) {
+    function TeleportDevPortalDataUsageComponent(usage, messages, router, location, store$) {
         this.usage = usage;
-        this.apps = apps;
         this.messages = messages;
         this.router = router;
         this.location = location;
+        this.store$ = store$;
         this._isBusy = false;
     }
     TeleportDevPortalDataUsageComponent.prototype.getQueryFromUrl = function () {
@@ -33,9 +32,7 @@ var TeleportDevPortalDataUsageComponent = (function () {
         var _this = this;
         this.filters = this.getQueryFromUrl()[0];
         this._isBusy = true;
-        this._subscription = this.apps.Observable
-            .filter(function (a) { return !!a; })
-            .subscribe(function (apps) { return _this._apps = apps; });
+        this._subscription = this.store$.select("v1_applications").subscribe(function (apps) { return _this._apps = apps; });
         setImmediate(function () { return _this.loadUsage(); });
     };
     TeleportDevPortalDataUsageComponent.prototype.ngOnDestroy = function () {
@@ -158,20 +155,20 @@ var TeleportDevPortalDataUsageComponent = (function () {
         return [now, first];
     };
     TeleportDevPortalDataUsageComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-data-usage",
                     templateUrl: "data.usage.html",
                 },] },
     ];
     TeleportDevPortalDataUsageComponent.ctorParameters = function () { return [
-        { type: usage_service_1.UsageService, decorators: [{ type: core_1.Inject, args: [usage_service_1.UsageService,] },] },
-        { type: application_service_1.ApplicationService, decorators: [{ type: core_1.Inject, args: [application_service_1.ApplicationService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
-        { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
-        { type: common_1.Location, decorators: [{ type: core_1.Inject, args: [common_1.Location,] },] },
+        { type: UsageService, decorators: [{ type: Inject, args: [UsageService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
+        { type: Location, decorators: [{ type: Inject, args: [Location,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return TeleportDevPortalDataUsageComponent;
 }());
-exports.TeleportDevPortalDataUsageComponent = TeleportDevPortalDataUsageComponent;
+export { TeleportDevPortalDataUsageComponent };
 //# sourceMappingURL=data.usage.component.js.map

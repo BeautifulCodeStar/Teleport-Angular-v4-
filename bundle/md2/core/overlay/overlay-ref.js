@@ -1,13 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var Subject_1 = require("rxjs/Subject");
+import { Subject } from 'rxjs/Subject';
 var OverlayRef = (function () {
     function OverlayRef(_portalHost, _pane, _state) {
         this._portalHost = _portalHost;
         this._pane = _pane;
         this._state = _state;
         this._backdropElement = null;
-        this._backdropClick = new Subject_1.Subject();
+        this._backdropClick = new Subject();
     }
     OverlayRef.prototype.attach = function (portal) {
         if (this._state.hasBackdrop) {
@@ -66,5 +64,5 @@ var OverlayRef = (function () {
     };
     return OverlayRef;
 }());
-exports.OverlayRef = OverlayRef;
+export { OverlayRef };
 //# sourceMappingURL=overlay-ref.js.map

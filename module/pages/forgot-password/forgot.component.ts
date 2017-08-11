@@ -3,8 +3,11 @@ import { Router }            from "@angular/router";
 
 import { Observable } from "rxjs/Observable";
 import { Observer }   from "rxjs/Observer";
+import "rxjs/add/operator/toPromise";
 
-import { LoginService }    from "../../services/login.service";
+import { LoginService } from "teleport-module-services/services/services/login/login.service";
+import * as i from "teleport-module-services/services/services/login/login.service.interface";
+
 import { MessageService }  from "../../services/message.service";
 
 import { EmailValidator } from "../../utils/EmailValidator";
@@ -15,7 +18,6 @@ import { EmailValidator } from "../../utils/EmailValidator";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-forgot-password",
     templateUrl: "forgot.html",
-    // styleUrls  : [ "../css/bootswatch.min.css", "../css/main.min.css" ],
 })
 export class TeleportDevPortalForgotPasswordComponent {
     
@@ -58,7 +60,9 @@ export class TeleportDevPortalForgotPasswordComponent {
     public onRecoverPassword () {
         
         this.isBusy = true;
-        this.logins.recoverPassword(this.userName.toLowerCase(), this.reCaptchaResponse)
+
+        this.logins.recoverPassword({ email: this.userName, reCaptchaResponse: this.reCaptchaResponse })
+            .toPromise()
             .then(resp => {
                 console.log("Password Recovery Success", resp);
                 this.messages.info("Password Recovery Success", `An email will be sent with recovery instructions.`);

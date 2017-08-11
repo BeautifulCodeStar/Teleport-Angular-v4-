@@ -1,26 +1,26 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var account_service_1 = require("../../../services/account.service");
-var account_credentials_service_1 = require("../../../services/account.credentials.service");
-var message_service_1 = require("../../../services/message.service");
-var modal_service_1 = require("../../../services/modal.service");
+import { Component, Inject } from "@angular/core";
+import "rxjs/add/operator/first";
+import { Store, ReducerManagerDispatcher } from "@ngrx/store";
+import { MessageService } from "../../../services/message.service";
+import { ModalService } from "../../../services/modal.service";
+import { AccountCredentialsService } from "../../../services/account.credentials.service";
 var TeleportDevPortalProfileBasicAuthComponent = (function () {
-    function TeleportDevPortalProfileBasicAuthComponent(account, creds, modal, messages) {
-        this.account = account;
-        this.creds = creds;
+    function TeleportDevPortalProfileBasicAuthComponent(modal, messages, creds, store$, dispatcher) {
         this.modal = modal;
         this.messages = messages;
+        this.creds = creds;
+        this.store$ = store$;
+        this.dispatcher = dispatcher;
         this.isBusy = false;
         this.Credentials = [];
-        console.log("new UIProfileBasicAuth ()", this._userId);
         this.isBusy = true;
     }
     TeleportDevPortalProfileBasicAuthComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
         this.isBusy = true;
-        this.account.Observable
-            .first(function (acct) { return !!acct; })
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just().userData; })
             .subscribe(function (dev) {
             _this._userId = dev.portalUser ? dev.portalUser.developerId : dev.id;
             _this.creds.list(_this._userId)
@@ -92,19 +92,20 @@ var TeleportDevPortalProfileBasicAuthComponent = (function () {
         event.target.type = "password";
     };
     TeleportDevPortalProfileBasicAuthComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-dashboard-profile-basic-auth",
                     templateUrl: "profile.basic-auth.html",
                 },] },
     ];
     TeleportDevPortalProfileBasicAuthComponent.ctorParameters = function () { return [
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
-        { type: account_credentials_service_1.AccountCredentialsService, decorators: [{ type: core_1.Inject, args: [account_credentials_service_1.AccountCredentialsService,] },] },
-        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: AccountCredentialsService, decorators: [{ type: Inject, args: [AccountCredentialsService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
+        { type: ReducerManagerDispatcher, decorators: [{ type: Inject, args: [ReducerManagerDispatcher,] },] },
     ]; };
     return TeleportDevPortalProfileBasicAuthComponent;
 }());
-exports.TeleportDevPortalProfileBasicAuthComponent = TeleportDevPortalProfileBasicAuthComponent;
+export { TeleportDevPortalProfileBasicAuthComponent };
 //# sourceMappingURL=profile.basic-auth.component.js.map

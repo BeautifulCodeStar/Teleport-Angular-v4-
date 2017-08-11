@@ -1,16 +1,20 @@
-import { IUser } from "../../../models/interfaces";
-import { AccountService } from "../../../services/account.service";
+import { EventEmitter } from "@angular/core";
+import "rxjs/add/operator/first";
+import { Store, ReducerManagerDispatcher } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { IUser } from "teleport-module-services/services/v1/models/User";
 import { UserService } from "../../../services/user.service";
 import { MessageService } from "../../../services/message.service";
 export declare class TeleportDevPortalProfilePasswordComponent {
-    private account;
+    private store$;
+    private dispatcher;
     private messages;
+    onComplete: EventEmitter<void>;
     isBusy: boolean;
     password: string;
     newPassword: string;
     newPasswordVerify: string;
-    private onComplete;
-    constructor(account: AccountService, messages: MessageService);
+    constructor(store$: Store<TeleportCoreState>, dispatcher: ReducerManagerDispatcher, messages: MessageService);
     isPasswordValid(pw: string): boolean;
     passwordsMatch(): boolean;
     onSubmit(): void;

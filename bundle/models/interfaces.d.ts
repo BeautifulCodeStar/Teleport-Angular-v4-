@@ -1,28 +1,3 @@
-export interface IDeveloper {
-    readonly id: string;
-    readonly status: string;
-    readonly createdAt: Date | string;
-    readonly numApps: number;
-    readonly maxApps: number;
-    readonly maxSubAccountsPerApp: number;
-    readonly permissions: IUserPermissions;
-    readonly portalUser?: IUser;
-    firstName: string;
-    lastName: string;
-    email: string;
-    company?: string;
-    phone?: string;
-}
-export interface IUserBasicAuth {
-    readonly userName: string;
-    readonly password: string;
-    readonly authorization?: string;
-}
-export interface ISession {
-    loginAt: Date;
-    refreshAt: Date;
-    developer: IDeveloper;
-}
 export interface IAlert {
     id: number;
     firstname: string;
@@ -39,26 +14,6 @@ export interface IAlertAccountBalance {
 }
 export interface ISipDomains {
     callflows: string;
-}
-export interface IApplication {
-    readonly id: string;
-    readonly createdAt: Date | string;
-    readonly lastModifiedAt: Date | string;
-    readonly status: "approved" | "revoked";
-    readonly isActive: boolean;
-    name: string;
-    friendlyName: string;
-    notes: string;
-    credentials: IAppCredentials[];
-    sipDomains: ISipDomains;
-}
-export interface IAppCredentials {
-    readonly products: string[];
-    readonly apiKey: string;
-    readonly issuedAt: Date;
-    readonly scopes: string[];
-    readonly secretKey: string;
-    readonly status: "approved" | "revoked" | "pending";
 }
 export interface IPayment {
     readonly id: number;
@@ -86,85 +41,6 @@ export interface ITopUp {
     balanceThreshold: number;
     maxAmountPerDay: number;
     maxAmountPerDayLimit: number;
-}
-export interface IUser {
-    readonly id: number;
-    readonly developerId: string;
-    readonly createdOn: Date;
-    readonly status: "unverified" | "active";
-    readonly password: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    permissions: IUserPermissions;
-    phoneNo?: string;
-    position?: string;
-    notes?: string;
-}
-export interface IUserPermissions {
-    [key: string]: boolean | undefined;
-    "account.create"?: boolean;
-    "account.read"?: boolean;
-    "account.update"?: boolean;
-    "account.delete"?: boolean;
-    "account.me.create"?: boolean;
-    "account.me.read"?: boolean;
-    "account.me.update"?: boolean;
-    "account.me.delete"?: boolean;
-    "account.alerts.create"?: boolean;
-    "account.alerts.read"?: boolean;
-    "account.alerts.delete"?: boolean;
-    "account.applications.create"?: boolean;
-    "account.applications.read"?: boolean;
-    "account.applications.update"?: boolean;
-    "account.applications.delete"?: boolean;
-    "account.applications.app.create"?: boolean;
-    "account.applications.app.read"?: boolean;
-    "account.applications.app.update"?: boolean;
-    "account.applications.app.delete"?: boolean;
-    "account.applications.callFlows.create"?: boolean;
-    "account.applications.callFlows.read"?: boolean;
-    "account.applications.callFlows.update"?: boolean;
-    "account.applications.callFlows.delete"?: boolean;
-    "account.applications.credentials.create"?: boolean;
-    "account.applications.credentials.read"?: boolean;
-    "account.applications.credentials.delete"?: boolean;
-    "account.applications.phoneNumbers.create"?: boolean;
-    "account.applications.phoneNumbers.read"?: boolean;
-    "account.applications.phoneNumbers.update"?: boolean;
-    "account.applications.phoneNumbers.delete"?: boolean;
-    "account.billing.create"?: boolean;
-    "account.billing.read"?: boolean;
-    "account.billing.update"?: boolean;
-    "account.billing.delete"?: boolean;
-    "account.billing.payments.create"?: boolean;
-    "account.billing.payments.read"?: boolean;
-    "account.billing.payments.update"?: boolean;
-    "account.billing.payments.delete"?: boolean;
-    "account.credentials.create"?: boolean;
-    "account.credentials.read"?: boolean;
-    "account.credentials.update"?: boolean;
-    "account.credentials.delete"?: boolean;
-    "account.logs.read"?: boolean;
-    "account.recordings.read"?: boolean;
-    "account.recordings.delete"?: boolean;
-    "account.usage.read"?: boolean;
-    "account.users.create"?: boolean;
-    "account.users.read"?: boolean;
-    "account.users.update"?: boolean;
-    "account.users.delete"?: boolean;
-}
-export interface IUserPermissionsTree {
-    node: string;
-    actions: string[];
-    subTree: {
-        [key: string]: IUserPermissionsTree;
-    };
-}
-export interface IUserRole {
-    readonly id: string;
-    readonly role: string;
-    readonly permissions: string[];
 }
 export interface ILog {
     readonly id: string;

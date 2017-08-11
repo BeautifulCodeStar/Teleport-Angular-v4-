@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var OverlayContainer = (function () {
     function OverlayContainer() {
     }
@@ -17,5 +15,5 @@ var OverlayContainer = (function () {
     };
     return OverlayContainer;
 }());
-exports.OverlayContainer = OverlayContainer;
+export { OverlayContainer };
 //# sourceMappingURL=overlay-container.js.map

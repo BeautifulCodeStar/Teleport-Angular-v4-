@@ -1,4 +1,3 @@
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9,17 +8,16 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
-var portal_errors_1 = require("./portal-errors");
+import { MdNullPortalHostError, MdPortalAlreadyAttachedError, MdNoPortalAttachedError, MdNullPortalError, MdPortalHostAlreadyDisposedError, MdUnknownPortalTypeError } from './portal-errors';
 var Portal = (function () {
     function Portal() {
     }
     Portal.prototype.attach = function (host) {
         if (host == null) {
-            throw new portal_errors_1.MdNullPortalHostError();
+            throw new MdNullPortalHostError();
         }
         if (host.hasAttached()) {
-            throw new portal_errors_1.MdPortalAlreadyAttachedError();
+            throw new MdPortalAlreadyAttachedError();
         }
         this._attachedHost = host;
         return host.attach(this);
@@ -27,7 +25,7 @@ var Portal = (function () {
     Portal.prototype.detach = function () {
         var host = this._attachedHost;
         if (host == null) {
-            throw new portal_errors_1.MdNoPortalAttachedError();
+            throw new MdNoPortalAttachedError();
         }
         this._attachedHost = null;
         return host.detach();
@@ -44,7 +42,7 @@ var Portal = (function () {
     };
     return Portal;
 }());
-exports.Portal = Portal;
+export { Portal };
 var ComponentPortal = (function (_super) {
     __extends(ComponentPortal, _super);
     function ComponentPortal(component, viewContainerRef, injector) {
@@ -58,7 +56,7 @@ var ComponentPortal = (function (_super) {
     }
     return ComponentPortal;
 }(Portal));
-exports.ComponentPortal = ComponentPortal;
+export { ComponentPortal };
 var TemplatePortal = (function (_super) {
     __extends(TemplatePortal, _super);
     function TemplatePortal(template, viewContainerRef) {
@@ -85,7 +83,7 @@ var TemplatePortal = (function (_super) {
     };
     return TemplatePortal;
 }(Portal));
-exports.TemplatePortal = TemplatePortal;
+export { TemplatePortal };
 var BasePortalHost = (function () {
     function BasePortalHost() {
         this._isDisposed = false;
@@ -95,13 +93,13 @@ var BasePortalHost = (function () {
     };
     BasePortalHost.prototype.attach = function (portal) {
         if (portal == null) {
-            throw new portal_errors_1.MdNullPortalError();
+            throw new MdNullPortalError();
         }
         if (this.hasAttached()) {
-            throw new portal_errors_1.MdPortalAlreadyAttachedError();
+            throw new MdPortalAlreadyAttachedError();
         }
         if (this._isDisposed) {
-            throw new portal_errors_1.MdPortalHostAlreadyDisposedError();
+            throw new MdPortalHostAlreadyDisposedError();
         }
         if (portal instanceof ComponentPortal) {
             this._attachedPortal = portal;
@@ -111,7 +109,7 @@ var BasePortalHost = (function () {
             this._attachedPortal = portal;
             return this.attachTemplatePortal(portal);
         }
-        throw new portal_errors_1.MdUnknownPortalTypeError();
+        throw new MdUnknownPortalTypeError();
     };
     BasePortalHost.prototype.detach = function () {
         if (this._attachedPortal) {
@@ -134,5 +132,5 @@ var BasePortalHost = (function () {
     };
     return BasePortalHost;
 }());
-exports.BasePortalHost = BasePortalHost;
+export { BasePortalHost };
 //# sourceMappingURL=portal.js.map

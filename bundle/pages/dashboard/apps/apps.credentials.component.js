@@ -1,15 +1,35 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var application_service_1 = require("../../../services/application.service");
-var modal_service_1 = require("../../../services/modal.service");
+import { Component, Inject, Input } from "@angular/core";
+import { Store, ReducerManagerDispatcher } from "@ngrx/store";
+import * as actions from "teleport-module-services/services/v1/ngrx/applications/applications.actions";
+import { ModalService } from "../../../services/modal.service";
 var TeleportDevPortalAppCredentialsComponent = (function () {
-    function TeleportDevPortalAppCredentialsComponent(applications, modal) {
-        this.applications = applications;
+    function TeleportDevPortalAppCredentialsComponent(store$, dispatcher, modal) {
+        var _this = this;
+        this.store$ = store$;
+        this.dispatcher = dispatcher;
         this.modal = modal;
         this.isBusy = false;
         this.Credentials = [];
-        console.log("new UIAppCredentials ()", this._app, arguments);
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just(); })
+            .subscribe(function (s) { return _this._developer = s.userData; });
+        var OK_ACTIONS = [
+            actions.CREATE_CREDS, actions.CREATE_CREDS_SUCCESS, actions.CREATE_CREDS_FAILURE,
+            actions.REMOVE_CREDS, actions.REMOVE_CREDS_SUCCESS, actions.REMOVE_CREDS_FAILURE,
+        ];
+        this._subscription = this.dispatcher
+            .filter(function (action) { return OK_ACTIONS.indexOf(action.type) !== -1; })
+            .subscribe(function (action) {
+            switch (action.type) {
+                case actions.CREATE_CREDS:
+                case actions.REMOVE_CREDS:
+                    _this.isBusy = true;
+                    break;
+                default:
+                    _this.isBusy = false;
+            }
+        });
     }
     Object.defineProperty(TeleportDevPortalAppCredentialsComponent.prototype, "app", {
         set: function (a) {
@@ -20,31 +40,19 @@ var TeleportDevPortalAppCredentialsComponent = (function () {
         configurable: true
     });
     TeleportDevPortalAppCredentialsComponent.prototype.ngOnDestroy = function () {
+        this._subscription.unsubscribe();
         delete this._app;
         this.Credentials = [];
     };
     TeleportDevPortalAppCredentialsComponent.prototype.createCred = function () {
-        var _this = this;
-        this.isBusy = true;
-        this.applications.createAppCredentials(this._app)
-            .then(function (app) {
-            _this.isBusy = false;
-            _this.app = app;
-        })
-            .catch(function () { return _this.isBusy = false; });
+        this.store$.dispatch(new actions.CreateCreds({ dev: this._developer, app: this._app }));
     };
-    TeleportDevPortalAppCredentialsComponent.prototype.deleteCred = function (cred) {
+    TeleportDevPortalAppCredentialsComponent.prototype.deleteCred = function (creds) {
         var _this = this;
-        this.modal.show("Delete Credential", "<p>Clicking OK will delete the \"" + cred.apiKey + "\" credential.</p><p>Are you sure?</p>", { type: "confirm" })
+        this.modal.show("Delete Credential", "<p>Clicking OK will delete the \"" + creds.apiKey + "\" credential.</p><p>Are you sure?</p>", { type: "confirm" })
             .then(function (result) {
             if (result) {
-                _this.isBusy = true;
-                _this.applications.deleteAppCredentials(_this._app, cred)
-                    .then(function () {
-                    _this.isBusy = false;
-                    _this.Credentials = _this.Credentials.filter(function (c) { return c.apiKey !== cred.apiKey; });
-                })
-                    .catch(function () { return _this.isBusy = false; });
+                _this.store$.dispatch(new actions.RemoveCreds({ dev: _this._developer, app: _this._app, creds: creds }));
             }
         });
     };
@@ -56,20 +64,21 @@ var TeleportDevPortalAppCredentialsComponent = (function () {
         event.target.type = "password";
     };
     TeleportDevPortalAppCredentialsComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-app-credentials",
                     templateUrl: "apps.credentials.html",
                 },] },
     ];
     TeleportDevPortalAppCredentialsComponent.ctorParameters = function () { return [
-        { type: application_service_1.ApplicationService, decorators: [{ type: core_1.Inject, args: [application_service_1.ApplicationService,] },] },
-        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
+        { type: ReducerManagerDispatcher, decorators: [{ type: Inject, args: [ReducerManagerDispatcher,] },] },
+        { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
     ]; };
     TeleportDevPortalAppCredentialsComponent.propDecorators = {
-        'app': [{ type: core_1.Input },],
+        'app': [{ type: Input },],
     };
     return TeleportDevPortalAppCredentialsComponent;
 }());
-exports.TeleportDevPortalAppCredentialsComponent = TeleportDevPortalAppCredentialsComponent;
+export { TeleportDevPortalAppCredentialsComponent };
 //# sourceMappingURL=apps.credentials.component.js.map

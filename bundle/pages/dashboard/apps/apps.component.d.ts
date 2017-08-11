@@ -1,18 +1,20 @@
 import { OnInit, OnDestroy } from "@angular/core";
-import { ApplicationService } from "../../../services/application.service";
-import { IApplication, IDeveloper } from "../../../models/interfaces";
-import { SessionService } from "../../../services/session.service";
+import "rxjs/add/operator/filter";
+import "rxjs/add/operator/map";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { APIv1State } from "teleport-module-services/services/v1/ngrx/index";
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { IApplication } from "teleport-module-services/services/v1/models/Application";
 export declare class TeleportDevPortalAppsComponent implements OnInit, OnDestroy {
-    private session;
-    private applications;
+    private store$;
     Developer: IDeveloper;
     sortBy: ((a: IApplication, b: IApplication) => number)[];
     filterOn: string;
     showNum: number;
     private _applications;
-    private _subscription;
     private _isBusy;
-    constructor(session: SessionService, applications: ApplicationService);
+    constructor(store$: Store<TeleportCoreState & APIv1State>);
     ngOnInit(): void;
     ngOnDestroy(): void;
     readonly isBusy: boolean;

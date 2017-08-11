@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,17 +7,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var forms_1 = require("@angular/forms");
-var common_1 = require("@angular/common");
-var dateUtil_1 = require("./dateUtil");
-var core_2 = require("../core/core");
+import { Component, ElementRef, HostListener, Input, Output, EventEmitter, forwardRef, ViewEncapsulation, NgModule } from '@angular/core';
+import { NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Md2DateUtil } from './dateUtil';
+import { BooleanFieldValue, KeyCodes } from '../core/core';
 var noop = function () { };
 var nextId = 0;
-exports.MD2_DATEPICKER_CONTROL_VALUE_ACCESSOR = {
-    provide: forms_1.NG_VALUE_ACCESSOR,
-    useExisting: core_1.forwardRef(function () { return Md2Datepicker; }),
+export var MD2_DATEPICKER_CONTROL_VALUE_ACCESSOR = {
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(function () { return Md2Datepicker; }),
     multi: true
 };
 var Md2Datepicker = (function () {
@@ -54,7 +52,7 @@ var Md2Datepicker = (function () {
             dx: 0, dy: 0,
             moved: false
         };
-        this.change = new core_1.EventEmitter();
+        this.change = new EventEmitter();
         this.type = 'date';
         this.disabled = false;
         this.name = '';
@@ -169,25 +167,25 @@ var Md2Datepicker = (function () {
             event.preventDefault();
             event.stopPropagation();
             switch (event.keyCode) {
-                case core_2.KeyCodes.TAB:
-                case core_2.KeyCodes.ESCAPE:
+                case KeyCodes.TAB:
+                case KeyCodes.ESCAPE:
                     this.onBlur();
                     break;
             }
             var displayDate = this.displayDate;
             if (this.isYearsVisible) {
                 switch (event.keyCode) {
-                    case core_2.KeyCodes.ENTER:
-                    case core_2.KeyCodes.SPACE:
+                    case KeyCodes.ENTER:
+                    case KeyCodes.SPACE:
                         this.onClickOk();
                         break;
-                    case core_2.KeyCodes.DOWN_ARROW:
+                    case KeyCodes.DOWN_ARROW:
                         if (this.displayDate.getFullYear() === (this.today.getFullYear() + 100))
                             break;
                         this.displayDate = this.dateUtil.incrementYears(displayDate, 1);
                         this._scrollToSelectedYear();
                         break;
-                    case core_2.KeyCodes.UP_ARROW:
+                    case KeyCodes.UP_ARROW:
                         if (this.displayDate.getFullYear() === 1900)
                             break;
                         this.displayDate = this.dateUtil.incrementYears(displayDate, -1);
@@ -197,32 +195,32 @@ var Md2Datepicker = (function () {
             }
             else if (this.isCalendarVisible) {
                 switch (event.keyCode) {
-                    case core_2.KeyCodes.ENTER:
-                    case core_2.KeyCodes.SPACE:
+                    case KeyCodes.ENTER:
+                    case KeyCodes.SPACE:
                         this.setDate(this.displayDate);
                         break;
-                    case core_2.KeyCodes.RIGHT_ARROW:
+                    case KeyCodes.RIGHT_ARROW:
                         this.displayDate = this.dateUtil.incrementDays(displayDate, 1);
                         break;
-                    case core_2.KeyCodes.LEFT_ARROW:
+                    case KeyCodes.LEFT_ARROW:
                         this.displayDate = this.dateUtil.incrementDays(displayDate, -1);
                         break;
-                    case core_2.KeyCodes.PAGE_DOWN:
+                    case KeyCodes.PAGE_DOWN:
                         this.displayDate = this.dateUtil.incrementMonths(displayDate, 1);
                         break;
-                    case core_2.KeyCodes.PAGE_UP:
+                    case KeyCodes.PAGE_UP:
                         this.displayDate = this.dateUtil.incrementMonths(displayDate, -1);
                         break;
-                    case core_2.KeyCodes.DOWN_ARROW:
+                    case KeyCodes.DOWN_ARROW:
                         this.displayDate = this.dateUtil.incrementDays(displayDate, 7);
                         break;
-                    case core_2.KeyCodes.UP_ARROW:
+                    case KeyCodes.UP_ARROW:
                         this.displayDate = this.dateUtil.incrementDays(displayDate, -7);
                         break;
-                    case core_2.KeyCodes.HOME:
+                    case KeyCodes.HOME:
                         this.displayDate = this.dateUtil.getFirstDateOfMonth(displayDate);
                         break;
-                    case core_2.KeyCodes.END:
+                    case KeyCodes.END:
                         this.displayDate = this.dateUtil.getLastDateOfMonth(displayDate);
                         break;
                 }
@@ -232,15 +230,15 @@ var Md2Datepicker = (function () {
             }
             else if (this.isHoursVisible) {
                 switch (event.keyCode) {
-                    case core_2.KeyCodes.ENTER:
-                    case core_2.KeyCodes.SPACE:
+                    case KeyCodes.ENTER:
+                    case KeyCodes.SPACE:
                         this.setHour(this.displayDate.getHours());
                         break;
-                    case core_2.KeyCodes.UP_ARROW:
+                    case KeyCodes.UP_ARROW:
                         this.displayDate = this.dateUtil.incrementHours(displayDate, 1);
                         this._resetClock();
                         break;
-                    case core_2.KeyCodes.DOWN_ARROW:
+                    case KeyCodes.DOWN_ARROW:
                         this.displayDate = this.dateUtil.incrementHours(displayDate, -1);
                         this._resetClock();
                         break;
@@ -248,15 +246,15 @@ var Md2Datepicker = (function () {
             }
             else {
                 switch (event.keyCode) {
-                    case core_2.KeyCodes.ENTER:
-                    case core_2.KeyCodes.SPACE:
+                    case KeyCodes.ENTER:
+                    case KeyCodes.SPACE:
                         this.setMinute(this.displayDate.getMinutes());
                         break;
-                    case core_2.KeyCodes.UP_ARROW:
+                    case KeyCodes.UP_ARROW:
                         this.displayDate = this.dateUtil.incrementMinutes(displayDate, 1);
                         this._resetClock();
                         break;
-                    case core_2.KeyCodes.DOWN_ARROW:
+                    case KeyCodes.DOWN_ARROW:
                         this.displayDate = this.dateUtil.incrementMinutes(displayDate, -1);
                         this._resetClock();
                         break;
@@ -265,8 +263,8 @@ var Md2Datepicker = (function () {
         }
         else {
             switch (event.keyCode) {
-                case core_2.KeyCodes.ENTER:
-                case core_2.KeyCodes.SPACE:
+                case KeyCodes.ENTER:
+                case KeyCodes.SPACE:
                     event.preventDefault();
                     event.stopPropagation();
                     this.showDatepicker();
@@ -583,12 +581,12 @@ var Md2Datepicker = (function () {
     Md2Datepicker.prototype.registerOnChange = function (fn) { this._onChangeCallback = fn; };
     Md2Datepicker.prototype.registerOnTouched = function (fn) { this._onTouchedCallback = fn; };
     Md2Datepicker.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: 'md2-datepicker',
                     templateUrl: 'datepicker.html',
                     styleUrls: ['datepicker.css'],
-                    providers: [exports.MD2_DATEPICKER_CONTROL_VALUE_ACCESSOR],
+                    providers: [MD2_DATEPICKER_CONTROL_VALUE_ACCESSOR],
                     host: {
                         'role': 'datepicker',
                         '[id]': 'id',
@@ -597,56 +595,56 @@ var Md2Datepicker = (function () {
                         '[tabindex]': 'disabled ? -1 : tabindex',
                         '[attr.aria-disabled]': 'disabled'
                     },
-                    encapsulation: core_1.ViewEncapsulation.None
+                    encapsulation: ViewEncapsulation.None
                 },] },
     ];
     Md2Datepicker.ctorParameters = function () { return [
-        { type: dateUtil_1.Md2DateUtil, },
-        { type: core_1.ElementRef, },
+        { type: Md2DateUtil, },
+        { type: ElementRef, },
     ]; };
     Md2Datepicker.propDecorators = {
-        'change': [{ type: core_1.Output },],
-        'type': [{ type: core_1.Input },],
-        'disabled': [{ type: core_1.Input },],
-        'name': [{ type: core_1.Input },],
-        'id': [{ type: core_1.Input },],
-        'class': [{ type: core_1.Input },],
-        'placeholder': [{ type: core_1.Input },],
-        'format': [{ type: core_1.Input },],
-        'tabindex': [{ type: core_1.Input },],
-        'min': [{ type: core_1.Input },],
-        'max': [{ type: core_1.Input },],
-        'value': [{ type: core_1.Input },],
-        'onClick': [{ type: core_1.HostListener, args: ['click', ['$event'],] },],
-        'onKeyDown': [{ type: core_1.HostListener, args: ['keydown', ['$event'],] },],
-        'onBlur': [{ type: core_1.HostListener, args: ['blur',] },],
+        'change': [{ type: Output },],
+        'type': [{ type: Input },],
+        'disabled': [{ type: Input },],
+        'name': [{ type: Input },],
+        'id': [{ type: Input },],
+        'class': [{ type: Input },],
+        'placeholder': [{ type: Input },],
+        'format': [{ type: Input },],
+        'tabindex': [{ type: Input },],
+        'min': [{ type: Input },],
+        'max': [{ type: Input },],
+        'value': [{ type: Input },],
+        'onClick': [{ type: HostListener, args: ['click', ['$event'],] },],
+        'onKeyDown': [{ type: HostListener, args: ['keydown', ['$event'],] },],
+        'onBlur': [{ type: HostListener, args: ['blur',] },],
     };
     __decorate([
-        core_2.BooleanFieldValue(),
+        BooleanFieldValue(),
         __metadata("design:type", Boolean)
     ], Md2Datepicker.prototype, "disabled", void 0);
     return Md2Datepicker;
 }());
-exports.Md2Datepicker = Md2Datepicker;
-exports.MD2_DATEPICKER_DIRECTIVES = [Md2Datepicker];
+export { Md2Datepicker };
+export var MD2_DATEPICKER_DIRECTIVES = [Md2Datepicker];
 var Md2DatepickerModule = (function () {
     function Md2DatepickerModule() {
     }
     Md2DatepickerModule.forRoot = function () {
         return {
             ngModule: Md2DatepickerModule,
-            providers: [dateUtil_1.Md2DateUtil]
+            providers: [Md2DateUtil]
         };
     };
     Md2DatepickerModule.decorators = [
-        { type: core_1.NgModule, args: [{
-                    declarations: exports.MD2_DATEPICKER_DIRECTIVES,
-                    imports: [common_1.CommonModule, forms_1.FormsModule],
-                    exports: exports.MD2_DATEPICKER_DIRECTIVES,
+        { type: NgModule, args: [{
+                    declarations: MD2_DATEPICKER_DIRECTIVES,
+                    imports: [CommonModule, FormsModule],
+                    exports: MD2_DATEPICKER_DIRECTIVES,
                 },] },
     ];
     Md2DatepickerModule.ctorParameters = function () { return []; };
     return Md2DatepickerModule;
 }());
-exports.Md2DatepickerModule = Md2DatepickerModule;
+export { Md2DatepickerModule };
 //# sourceMappingURL=datepicker.js.map

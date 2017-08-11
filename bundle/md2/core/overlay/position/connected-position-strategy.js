@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var apply_transform_1 = require("../../style/apply-transform");
-var connected_position_1 = require("./connected-position");
+import { applyCssTransform } from '../../style/apply-transform';
+import { ConnectionPositionPair } from './connected-position';
 var ConnectedPositionStrategy = (function () {
     function ConnectedPositionStrategy(_connectedTo, _originPos, _overlayPos, _viewportRuler) {
         this._connectedTo = _connectedTo;
@@ -39,7 +37,7 @@ var ConnectedPositionStrategy = (function () {
         return Promise.resolve(null);
     };
     ConnectedPositionStrategy.prototype.withFallbackPosition = function (originPos, overlayPos) {
-        this._preferredPositions.push(new connected_position_1.ConnectionPositionPair(originPos, overlayPos));
+        this._preferredPositions.push(new ConnectionPositionPair(originPos, overlayPos));
         return this;
     };
     ConnectedPositionStrategy.prototype._getStartX = function (rect) {
@@ -97,9 +95,9 @@ var ConnectedPositionStrategy = (function () {
         var scrollPos = this._viewportRuler.getViewportScrollPosition();
         var x = overlayPoint.x + scrollPos.left;
         var y = overlayPoint.y + scrollPos.top;
-        apply_transform_1.applyCssTransform(element, "translateX(" + x + "px) translateY(" + y + "px)");
+        applyCssTransform(element, "translateX(" + x + "px) translateY(" + y + "px)");
     };
     return ConnectedPositionStrategy;
 }());
-exports.ConnectedPositionStrategy = ConnectedPositionStrategy;
+export { ConnectedPositionStrategy };
 //# sourceMappingURL=connected-position-strategy.js.map

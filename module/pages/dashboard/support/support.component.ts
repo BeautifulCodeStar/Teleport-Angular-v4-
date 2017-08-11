@@ -2,11 +2,19 @@ import { Component, Inject, OnInit }     from "@angular/core";
 import { Http, RequestOptions, Headers } from "@angular/http";
 
 import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/first";
+import "rxjs/add/operator/map";
 
-import { AccountService }     from "../../../services/account.service";
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { APIv1State }   from "teleport-module-services/services/v1/ngrx/index";
+import { IApplication } from "teleport-module-services/services/v1/models/Application";
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+
 import { MessageService }     from "../../../services/message.service";
-import { ApplicationService } from "../../../services/application.service";
-import { IApplication }       from "../../../models/interfaces";
 
 import { EmailValidator } from "../../../utils/EmailValidator";
 
@@ -17,7 +25,6 @@ declare const API_BASE_URL: string;
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-support-form",
     templateUrl: "support.html",
-    // styleUrls  : [ "../../css/bootswatch.min.css", "../../css/main.min.css" ],
 })
 export class TeleportDevPortalSupportFormComponent implements OnInit {
 
@@ -39,10 +46,9 @@ export class TeleportDevPortalSupportFormComponent implements OnInit {
 
     
     constructor (
-        @Inject(Http)               private http: Http,
-        @Inject(AccountService)     public account: AccountService,
-        @Inject(ApplicationService) private apps: ApplicationService,
-        @Inject(MessageService)     private messages: MessageService,
+        @Inject(Http)           private http: Http,
+        @Inject(MessageService) private messages: MessageService,
+        @Inject(Store)          private store$: Store<TeleportCoreState & APIv1State>,
     ) {}
 
     public ngOnInit () {
@@ -50,20 +56,19 @@ export class TeleportDevPortalSupportFormComponent implements OnInit {
         this.isSubmitted = false;
         this.isSuccess = false;
 
-        this.account.Observable
-            .first(a => !!a)
-            .subscribe(a => {
-                this.form.account = a.id;
-                this.form.name = `${a.firstName} ${a.lastName}`;
-                this.form.email = a.email;
-                this.form.phone = a.phone || "";
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just())
+            .subscribe((s: ILoginAsResponse<IDeveloper>) => {
+                this.form.account = s.userData.id;
+                this.form.name = `${s.userData.firstName} ${s.userData.lastName}`;
+                this.form.email = s.userData.email;
+                this.form.phone = s.userData.phone || "";
             });
 
-        this.apps.Observable
-            .first(a => !!a)
-            .subscribe(a => {
-                this.Applications = a;
-            });
+        this.store$.select("v1_applications")
+            .first()
+            .subscribe(a => this.Applications = a);
     }
 
     public isEmailValid (email: string): boolean {

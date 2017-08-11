@@ -1,48 +1,46 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var platform_browser_1 = require("@angular/platform-browser");
-var animations_1 = require("@angular/platform-browser/animations");
-var common_1 = require("@angular/common");
-var forms_1 = require("@angular/forms");
-var http_1 = require("@angular/http");
-var router_1 = require("@angular/router");
-var dashboard_module_1 = require("./dashboard/dashboard.module");
-var forgot_component_1 = require("./forgot-password/forgot.component");
-var login_component_1 = require("./login/login.component");
-var recover_component_1 = require("./recover-password/recover.component");
-var register_component_1 = require("./register/register.component");
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { HttpModule } from "@angular/http";
+import { RouterModule } from "@angular/router";
+import { DevPortalDashboardModule } from "./dashboard/dashboard.module";
+import { TeleportDevPortalForgotPasswordComponent } from "./forgot-password/forgot.component";
+import { TeleportDevPortalLoginComponent } from "./login/login.component";
+import { TeleportDevPortalRecoverPasswordComponent } from "./recover-password/recover.component";
+import { TeleportDevPortalRegisterComponent } from "./register/register.component";
 var DevPortalPagesModule = (function () {
     function DevPortalPagesModule() {
     }
     DevPortalPagesModule.decorators = [
-        { type: core_1.NgModule, args: [{
+        { type: NgModule, args: [{
                     imports: [
-                        platform_browser_1.BrowserModule,
-                        animations_1.BrowserAnimationsModule,
-                        common_1.CommonModule,
-                        forms_1.FormsModule,
-                        http_1.HttpModule,
-                        router_1.RouterModule,
-                        dashboard_module_1.DevPortalDashboardModule,
+                        BrowserModule,
+                        BrowserAnimationsModule,
+                        CommonModule,
+                        FormsModule,
+                        HttpModule,
+                        RouterModule,
+                        DevPortalDashboardModule,
                     ],
                     declarations: [
-                        forgot_component_1.TeleportDevPortalForgotPasswordComponent,
-                        login_component_1.TeleportDevPortalLoginComponent,
-                        recover_component_1.TeleportDevPortalRecoverPasswordComponent,
-                        register_component_1.TeleportDevPortalRegisterComponent,
+                        TeleportDevPortalForgotPasswordComponent,
+                        TeleportDevPortalLoginComponent,
+                        TeleportDevPortalRecoverPasswordComponent,
+                        TeleportDevPortalRegisterComponent,
                     ],
                     exports: [
-                        dashboard_module_1.DevPortalDashboardModule,
-                        forgot_component_1.TeleportDevPortalForgotPasswordComponent,
-                        login_component_1.TeleportDevPortalLoginComponent,
-                        recover_component_1.TeleportDevPortalRecoverPasswordComponent,
-                        register_component_1.TeleportDevPortalRegisterComponent,
+                        DevPortalDashboardModule,
+                        TeleportDevPortalForgotPasswordComponent,
+                        TeleportDevPortalLoginComponent,
+                        TeleportDevPortalRecoverPasswordComponent,
+                        TeleportDevPortalRegisterComponent,
                     ],
                 },] },
     ];
     DevPortalPagesModule.ctorParameters = function () { return []; };
     return DevPortalPagesModule;
 }());
-exports.DevPortalPagesModule = DevPortalPagesModule;
+export { DevPortalPagesModule };
 //# sourceMappingURL=pages.module.js.map

@@ -1,10 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var billing_service_1 = require("../../../services/billing.service");
-var message_service_1 = require("../../../services/message.service");
-var modal_service_1 = require("../../../services/modal.service");
+import { Component, Inject, NgZone } from "@angular/core";
+import { Router } from "@angular/router";
+import { BillingService } from "../../../services/billing.service";
+import { MessageService } from "../../../services/message.service";
+import { ModalService } from "../../../services/modal.service";
 var TeleportDevPortalBillingPaymentComponent = (function () {
     function TeleportDevPortalBillingPaymentComponent(router, billing, messages, modal, zone) {
         this.router = router;
@@ -77,20 +75,20 @@ var TeleportDevPortalBillingPaymentComponent = (function () {
         });
     };
     TeleportDevPortalBillingPaymentComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-billing-payment",
-                    templateUrl: "/billing.payment.html",
+                    templateUrl: "billing.payment.html",
                 },] },
     ];
     TeleportDevPortalBillingPaymentComponent.ctorParameters = function () { return [
-        { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
-        { type: billing_service_1.BillingService, decorators: [{ type: core_1.Inject, args: [billing_service_1.BillingService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
-        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
-        { type: core_1.NgZone, decorators: [{ type: core_1.Inject, args: [core_1.NgZone,] },] },
+        { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
+        { type: BillingService, decorators: [{ type: Inject, args: [BillingService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
+        { type: NgZone, decorators: [{ type: Inject, args: [NgZone,] },] },
     ]; };
     return TeleportDevPortalBillingPaymentComponent;
 }());
-exports.TeleportDevPortalBillingPaymentComponent = TeleportDevPortalBillingPaymentComponent;
+export { TeleportDevPortalBillingPaymentComponent };
 //# sourceMappingURL=billing.payment.component.js.map

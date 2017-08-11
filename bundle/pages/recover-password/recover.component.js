@@ -1,12 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var Observable_1 = require("rxjs/Observable");
-var login_service_1 = require("../../services/login.service");
-var message_service_1 = require("../../services/message.service");
-var PasswordUtil_1 = require("../../utils/PasswordUtil");
-var EmailValidator_1 = require("../../utils/EmailValidator");
+import { Component, Inject } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/toPromise";
+import { LoginService } from "teleport-module-services/services/services/login/login.service";
+import { MessageService } from "../../services/message.service";
+import PasswordUtil from "../../utils/PasswordUtil";
+import { EmailValidator } from "../../utils/EmailValidator";
 var TeleportDevPortalRecoverPasswordComponent = (function () {
     function TeleportDevPortalRecoverPasswordComponent(route, logins, messages) {
         this.route = route;
@@ -22,7 +21,7 @@ var TeleportDevPortalRecoverPasswordComponent = (function () {
     }
     TeleportDevPortalRecoverPasswordComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this._resetCaptchaObservable = Observable_1.Observable.create(function (observer) { return _this._resetCaptchaObserver = observer; });
+        this._resetCaptchaObservable = Observable.create(function (observer) { return _this._resetCaptchaObserver = observer; });
     };
     TeleportDevPortalRecoverPasswordComponent.prototype.ngOnDestroy = function () {
         if (this._resetCaptchaObserver) {
@@ -30,10 +29,10 @@ var TeleportDevPortalRecoverPasswordComponent = (function () {
         }
     };
     TeleportDevPortalRecoverPasswordComponent.prototype.isPasswordValid = function (pw) {
-        return PasswordUtil_1.default.satisfies(pw);
+        return PasswordUtil.satisfies(pw);
     };
     TeleportDevPortalRecoverPasswordComponent.prototype.isEmailValid = function (email) {
-        return EmailValidator_1.EmailValidator.isValid(email);
+        return EmailValidator.isValid(email);
     };
     TeleportDevPortalRecoverPasswordComponent.prototype.passwordsMatch = function () {
         return this.newPassword === this.newPasswordVerify;
@@ -55,13 +54,14 @@ var TeleportDevPortalRecoverPasswordComponent = (function () {
             this.messages.warning("Invalid Passwords", "The passwords do not match.");
             return;
         }
-        if (!PasswordUtil_1.default.satisfies(this.newPassword)) {
+        if (!PasswordUtil.satisfies(this.newPassword)) {
             this.messages.warning("Invalid Password", "Your password must be at least 8 characters and contain caps, lowercase, numbers and special characters.");
             return;
         }
         this.isBusy = true;
         var authKey = this.route.snapshot.params.key;
-        this.logins.resetPassword(this.email, this.newPassword, authKey, this.reCaptchaResponse)
+        this.logins.resetPassword({ email: this.email, password: this.newPassword, authKey: authKey, reCaptchaResponse: this.reCaptchaResponse })
+            .toPromise()
             .then(function () {
             _this.isSuccess = true;
             _this.isBusy = false;
@@ -75,18 +75,18 @@ var TeleportDevPortalRecoverPasswordComponent = (function () {
         });
     };
     TeleportDevPortalRecoverPasswordComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-recover-password",
                     templateUrl: "recover.html",
                 },] },
     ];
     TeleportDevPortalRecoverPasswordComponent.ctorParameters = function () { return [
-        { type: router_1.ActivatedRoute, decorators: [{ type: core_1.Inject, args: [router_1.ActivatedRoute,] },] },
-        { type: login_service_1.LoginService, decorators: [{ type: core_1.Inject, args: [login_service_1.LoginService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: ActivatedRoute, decorators: [{ type: Inject, args: [ActivatedRoute,] },] },
+        { type: LoginService, decorators: [{ type: Inject, args: [LoginService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
     ]; };
     return TeleportDevPortalRecoverPasswordComponent;
 }());
-exports.TeleportDevPortalRecoverPasswordComponent = TeleportDevPortalRecoverPasswordComponent;
+export { TeleportDevPortalRecoverPasswordComponent };
 //# sourceMappingURL=recover.component.js.map

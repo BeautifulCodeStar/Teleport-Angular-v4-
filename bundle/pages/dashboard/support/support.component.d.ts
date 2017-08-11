@@ -1,14 +1,16 @@
 import { OnInit } from "@angular/core";
 import { Http } from "@angular/http";
-import { AccountService } from "../../../services/account.service";
+import "rxjs/add/operator/first";
+import "rxjs/add/operator/map";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { APIv1State } from "teleport-module-services/services/v1/ngrx/index";
+import { IApplication } from "teleport-module-services/services/v1/models/Application";
 import { MessageService } from "../../../services/message.service";
-import { ApplicationService } from "../../../services/application.service";
-import { IApplication } from "../../../models/interfaces";
 export declare class TeleportDevPortalSupportFormComponent implements OnInit {
     private http;
-    account: AccountService;
-    private apps;
     private messages;
+    private store$;
     form: {
         account: string;
         app: string;
@@ -22,7 +24,7 @@ export declare class TeleportDevPortalSupportFormComponent implements OnInit {
     Applications: IApplication[];
     isSubmitted: boolean;
     isSuccess: boolean;
-    constructor(http: Http, account: AccountService, apps: ApplicationService, messages: MessageService);
+    constructor(http: Http, messages: MessageService, store$: Store<TeleportCoreState & APIv1State>);
     ngOnInit(): void;
     isEmailValid(email: string): boolean;
     onSubmit(): void;

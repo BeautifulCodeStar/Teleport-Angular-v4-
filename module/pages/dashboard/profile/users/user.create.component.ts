@@ -1,9 +1,14 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { Router }                               from "@angular/router";
 
-import { IUser, IDeveloper } from "../../../../models/interfaces";
+import { Store } from "@ngrx/store";
 
-import { AccountService } from "../../../../services/account.service";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { IUser } from "teleport-module-services/services/v1/models/User";
+
 import { UserService }    from "../../../../services/user.service";
 import { MessageService } from "../../../../services/message.service";
 
@@ -15,7 +20,6 @@ import * as Permissions   from "../../../../utils/Permissions";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-user-create",
     templateUrl: "user.create.html",
-    // styleUrls  : [ "../../../css/bootswatch.min.css", "../../../css/main.min.css" ],
 })
 export class TeleportDevPortalUserCreateComponent implements OnInit, OnDestroy {
 
@@ -27,17 +31,19 @@ export class TeleportDevPortalUserCreateComponent implements OnInit, OnDestroy {
 
     constructor (
         @Inject(Router)         private router: Router,
-        @Inject(AccountService) private account: AccountService,
         @Inject(UserService)    private users: UserService,
         @Inject(MessageService) private messages: MessageService,
+        @Inject(Store)          private store$: Store<TeleportCoreState>,
     ) {}
 
 
     public ngOnInit () {
 
-        this.account.Observable
-            .first(d => !! d)
-            .subscribe (dev => {
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just().userData)
+            .subscribe((dev: IDeveloper) => {
+
 
                 this._developer = dev;
 
@@ -61,7 +67,7 @@ export class TeleportDevPortalUserCreateComponent implements OnInit, OnDestroy {
                     this.isBusy = false;
 
                 } else {
-                    return this.router.navigate(["/apiv1/access-denied"], { queryParams: { perms: "account.users.create" }});
+                    return this.router.navigate(["/v1/access-denied"], { queryParams: { perms: "account.users.create" }});
                 }
             });
     }
@@ -100,7 +106,7 @@ export class TeleportDevPortalUserCreateComponent implements OnInit, OnDestroy {
                     this.users.sendInvite(user);
                     this.messages.info("Email Invite Sent", "An email invitation has been sent to the user.");
                 }
-                this.router.navigateByUrl("/apiv1/account/users").catch(err => console.error(err));
+                this.router.navigateByUrl("/v1/account/users").catch(err => console.error(err));
             })
             .catch(err => {
                 this.isBusy = false;

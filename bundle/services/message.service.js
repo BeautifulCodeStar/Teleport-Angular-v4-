@@ -1,11 +1,14 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var platform_browser_1 = require("@angular/platform-browser");
-var Observable_1 = require("rxjs/Observable");
+import { Injectable, Inject } from "@angular/core";
+import { DOCUMENT } from "@angular/platform-browser";
+import { Observable } from "rxjs/Observable";
+import { Store, ReducerManagerDispatcher } from "@ngrx/store";
+import * as actions from "teleport-module-services/services/ngrx/messages/messages.actions";
 var MessageService = (function () {
-    function MessageService(doc) {
+    function MessageService(doc, store$, dispatcher$) {
+        var _this = this;
         this.doc = doc;
+        this.store$ = store$;
+        this.dispatcher$ = dispatcher$;
         var div = doc.getElementById("message-container-ber2z79jspqlg14i");
         if (div !== null) {
             this.containerDiv = div;
@@ -16,20 +19,25 @@ var MessageService = (function () {
             this.containerDiv.className = "messages-container";
             doc.body.appendChild(this.containerDiv);
         }
+        var LevelMap = { "info": "success", "warn": "warning", "error": "danger" };
+        this.dispatcher$
+            .filter(function (action) { return action.type === actions.ADD; })
+            .subscribe(function (action) {
+            var msg = action.payload;
+            _this.initAlert(msg.title, msg.message, LevelMap[msg.level]);
+            _this.store$.dispatch(new actions.Remove(msg));
+        });
     }
     MessageService.prototype.info = function (title, message) {
-        console.log("Info Message", title, message);
         this.initAlert(title, message, "success");
     };
     MessageService.prototype.warning = function (title, message, err) {
-        console.log("Warning Message", title, message, err);
         this.initAlert(title, message, "warning");
-        return Observable_1.Observable.throw(err || new Error(message));
+        return Observable.throw(err || new Error(message));
     };
     MessageService.prototype.error = function (title, message, err) {
-        console.error("Error Message", title, message, err);
         this.initAlert(title, message, "danger");
-        return Observable_1.Observable.throw(err || new Error(message));
+        return Observable.throw(err || new Error(message));
     };
     MessageService.prototype.initAlert = function (title, message, type) {
         var _this = this;
@@ -70,12 +78,14 @@ var MessageService = (function () {
         this.containerDiv.appendChild(alert);
     };
     MessageService.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
     MessageService.ctorParameters = function () { return [
-        { type: HTMLDocument, decorators: [{ type: core_1.Inject, args: [platform_browser_1.DOCUMENT,] },] },
+        { type: HTMLDocument, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
+        { type: ReducerManagerDispatcher, decorators: [{ type: Inject, args: [ReducerManagerDispatcher,] },] },
     ]; };
     return MessageService;
 }());
-exports.MessageService = MessageService;
+export { MessageService };
 //# sourceMappingURL=message.service.js.map

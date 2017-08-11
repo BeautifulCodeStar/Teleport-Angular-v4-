@@ -1,14 +1,15 @@
 import { Router } from "@angular/router";
-import { ApplicationService } from "../../../services/application.service";
+import "rxjs/add/operator/first";
+import { Store, ReducerManagerDispatcher } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 export declare class TeleportDevPortalAppsCreateComponent {
     private router;
-    private applications;
+    private store$;
+    private dispatcher;
     isBusy: boolean;
     appName: string;
     appNotes: string;
-    isCaptchaOk: boolean;
-    reCaptchaResponse: string;
-    constructor(router: Router, applications: ApplicationService);
-    onCaptcha(resp: string, isOk: boolean): void;
+    private _developer;
+    constructor(router: Router, store$: Store<TeleportCoreState>, dispatcher: ReducerManagerDispatcher);
     onSubmitCreateApp(): void;
 }

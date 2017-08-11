@@ -1,18 +1,26 @@
 import { Component, Inject, OnDestroy } from "@angular/core";
 import { ActivatedRoute }               from "@angular/router";
 
-import { ApplicationService }                           from "../../../../services/application.service";
+import "rxjs/add/operator/first";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/toPromise";
+
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { APIv1State }   from "teleport-module-services/services/v1/ngrx/index";
+import { IApplication } from "teleport-module-services/services/v1/models/Application";
+
 import { IWatsonPutRequest, IntegrationsWatsonService } from "../../../../services/integrations.watson.service";
-import { IApplication, IWatson }                        from "../../../../models/interfaces";
-import { ModalService }                                 from "../../../../services/modal.service";
-import { MessageService }                               from "../../../../services/message.service";
+import { IWatson } from "../../../../models/interfaces";
+import { ModalService } from "../../../../services/modal.service";
+import { MessageService } from "../../../../services/message.service";
 
 
 @Component({
     moduleId   : String(module.id),
     selector    : "teleport-dev-portal-app-integrations-watson",
     templateUrl : "apps.integrations.watson.html",
-    // styleUrls  : [ "../../../css/bootswatch.min.css", "../../../css/main.min.css" ],
 })
 export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy {
 
@@ -28,10 +36,10 @@ export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy
 
     constructor (
         @Inject(ActivatedRoute)            private route: ActivatedRoute,
-        @Inject(ApplicationService)        private apps: ApplicationService,
         @Inject(IntegrationsWatsonService) private watson: IntegrationsWatsonService,
-        @Inject(ModalService)             private modal: ModalService,
+        @Inject(ModalService)              private modal: ModalService,
         @Inject(MessageService)            private message: MessageService,
+        @Inject(Store)                     private store$: Store<TeleportCoreState & APIv1State>,
     ) {
         this.isBusy = true;
 
@@ -40,7 +48,7 @@ export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy
             .forEach((param: any) => {
 
                 Promise.all([
-                    this.apps.getAppByName(param.appId),
+                    this.store$.select("v1_applications").first().map(apps => apps.find(app => app.id === param.appId)).toPromise(),
                     this.watson.getTextToSpeech(param.appId),
                 ])
                     .then((r: [IApplication, IWatson]) => {

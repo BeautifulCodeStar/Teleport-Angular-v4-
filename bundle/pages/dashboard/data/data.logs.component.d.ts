@@ -1,16 +1,20 @@
 import { OnInit, OnDestroy } from "@angular/core";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
-import { ILog, IApplication } from "../../../models/interfaces";
+import "rxjs/add/operator/filter";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+import { APIv1State } from "teleport-module-services/services/v1/ngrx/index";
+import { IApplication } from "teleport-module-services/services/v1/models/Application";
+import { ILog } from "../../../models/interfaces";
 import { LogsService, ILogsRequest } from "../../../services/logs.service";
-import { ApplicationService } from "../../../services/application.service";
 import { MessageService } from "../../../services/message.service";
 export declare class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
     private logs;
-    private apps;
     private messages;
     private router;
     private location;
+    private store$;
     filters: ILogsRequest;
     private _logs;
     private _apps;
@@ -18,7 +22,7 @@ export declare class TeleportDevPortalDataLogsComponent implements OnInit, OnDes
     private _isBusy;
     private _sortFuncs;
     private _sortOn;
-    constructor(logs: LogsService, apps: ApplicationService, messages: MessageService, router: Router, location: Location);
+    constructor(logs: LogsService, messages: MessageService, router: Router, location: Location, store$: Store<TeleportCoreState & APIv1State>);
     ngOnInit(): void;
     ngOnDestroy(): void;
     readonly isBusy: boolean;

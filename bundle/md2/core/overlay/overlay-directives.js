@@ -1,14 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var overlay_1 = require("./overlay");
-var portal_1 = require("../portal/portal");
-var overlay_state_1 = require("./overlay-state");
-var connected_position_1 = require("./position/connected-position");
-var portal_directives_1 = require("../portal/portal-directives");
+import { NgModule, Directive, TemplateRef, ViewContainerRef, Input, ElementRef } from '@angular/core';
+import { Overlay, OVERLAY_PROVIDERS } from './overlay';
+import { TemplatePortal } from '../portal/portal';
+import { OverlayState } from './overlay-state';
+import { ConnectionPositionPair } from './position/connected-position';
+import { PortalModule } from '../portal/portal-directives';
 var defaultPositionList = [
-    new connected_position_1.ConnectionPositionPair({ originX: 'start', originY: 'bottom' }, { overlayX: 'start', overlayY: 'top' }),
-    new connected_position_1.ConnectionPositionPair({ originX: 'start', originY: 'top' }, { overlayX: 'start', overlayY: 'bottom' }),
+    new ConnectionPositionPair({ originX: 'start', originY: 'bottom' }, { overlayX: 'start', overlayY: 'top' }),
+    new ConnectionPositionPair({ originX: 'start', originY: 'top' }, { overlayX: 'start', overlayY: 'bottom' }),
 ];
 var OverlayOrigin = (function () {
     function OverlayOrigin(_elementRef) {
@@ -22,21 +20,21 @@ var OverlayOrigin = (function () {
         configurable: true
     });
     OverlayOrigin.decorators = [
-        { type: core_1.Directive, args: [{
+        { type: Directive, args: [{
                     selector: '[overlay-origin]',
                     exportAs: 'overlayOrigin',
                 },] },
     ];
     OverlayOrigin.ctorParameters = function () { return [
-        { type: core_1.ElementRef, },
+        { type: ElementRef, },
     ]; };
     return OverlayOrigin;
 }());
-exports.OverlayOrigin = OverlayOrigin;
+export { OverlayOrigin };
 var ConnectedOverlayDirective = (function () {
     function ConnectedOverlayDirective(_overlay, templateRef, viewContainerRef) {
         this._overlay = _overlay;
-        this._templatePortal = new portal_1.TemplatePortal(templateRef, viewContainerRef);
+        this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
     }
     Object.defineProperty(ConnectedOverlayDirective.prototype, "overlayRef", {
         get: function () {
@@ -55,7 +53,7 @@ var ConnectedOverlayDirective = (function () {
         if (!this.positions || !this.positions.length) {
             this.positions = defaultPositionList;
         }
-        var overlayConfig = new overlay_state_1.OverlayState();
+        var overlayConfig = new OverlayState();
         overlayConfig.positionStrategy =
             this._overlay.position().connectedTo(this.origin.elementRef, { originX: this.positions[0].overlayX, originY: this.positions[0].originY }, { overlayX: this.positions[0].overlayX, overlayY: this.positions[0].overlayY });
         this._overlayRef = this._overlay.create(overlayConfig);
@@ -65,34 +63,34 @@ var ConnectedOverlayDirective = (function () {
         this._overlayRef.dispose();
     };
     ConnectedOverlayDirective.decorators = [
-        { type: core_1.Directive, args: [{
+        { type: Directive, args: [{
                     selector: '[connected-overlay]'
                 },] },
     ];
     ConnectedOverlayDirective.ctorParameters = function () { return [
-        { type: overlay_1.Overlay, },
-        { type: core_1.TemplateRef, },
-        { type: core_1.ViewContainerRef, },
+        { type: Overlay, },
+        { type: TemplateRef, },
+        { type: ViewContainerRef, },
     ]; };
     ConnectedOverlayDirective.propDecorators = {
-        'origin': [{ type: core_1.Input },],
-        'positions': [{ type: core_1.Input },],
+        'origin': [{ type: Input },],
+        'positions': [{ type: Input },],
     };
     return ConnectedOverlayDirective;
 }());
-exports.ConnectedOverlayDirective = ConnectedOverlayDirective;
+export { ConnectedOverlayDirective };
 var OverlayModule = (function () {
     function OverlayModule() {
     }
     OverlayModule.forRoot = function () {
         return {
             ngModule: OverlayModule,
-            providers: overlay_1.OVERLAY_PROVIDERS,
+            providers: OVERLAY_PROVIDERS,
         };
     };
     OverlayModule.decorators = [
-        { type: core_1.NgModule, args: [{
-                    imports: [portal_directives_1.PortalModule],
+        { type: NgModule, args: [{
+                    imports: [PortalModule],
                     exports: [ConnectedOverlayDirective, OverlayOrigin],
                     declarations: [ConnectedOverlayDirective, OverlayOrigin],
                 },] },
@@ -100,5 +98,5 @@ var OverlayModule = (function () {
     OverlayModule.ctorParameters = function () { return []; };
     return OverlayModule;
 }());
-exports.OverlayModule = OverlayModule;
+export { OverlayModule };
 //# sourceMappingURL=overlay-directives.js.map

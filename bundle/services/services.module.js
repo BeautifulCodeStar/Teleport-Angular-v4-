@@ -1,53 +1,39 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var login_service_1 = require("./login.service");
-var message_service_1 = require("./message.service");
-var modal_service_1 = require("./modal.service");
-var account_credentials_service_1 = require("./account.credentials.service");
-var account_service_1 = require("./account.service");
-var alerts_service_1 = require("./alerts.service");
-var application_service_1 = require("./application.service");
-var billing_service_1 = require("./billing.service");
-var integrations_aws_service_1 = require("./integrations.aws.service");
-var integrations_watson_service_1 = require("./integrations.watson.service");
-var logs_service_1 = require("./logs.service");
-var perms_guard_service_1 = require("./perms-guard.service");
-var session_service_1 = require("./session.service");
-var top_up_service_1 = require("./top-up.service");
-var usage_service_1 = require("./usage.service");
-var user_service_1 = require("./user.service");
+import { NgModule } from "@angular/core";
+import { MessageService } from "./message.service";
+import { ModalService } from "./modal.service";
+import { AccountCredentialsService } from "./account.credentials.service";
+import { AlertsService } from "./alerts.service";
+import { BillingService } from "./billing.service";
+import { IntegrationsAWSService } from "./integrations.aws.service";
+import { IntegrationsWatsonService } from "./integrations.watson.service";
+import { LogsService } from "./logs.service";
+import { PermsGuardCanActivate } from "./perms-guard.service";
+import { TopUpService } from "./top-up.service";
+import { UsageService } from "./usage.service";
+import { UserService } from "./user.service";
 var DevPortalServicesModule = (function () {
     function DevPortalServicesModule() {
     }
-    DevPortalServicesModule.forRoot = function () {
-        return {
-            ngModule: DevPortalServicesModule,
-            providers: [
-                account_credentials_service_1.AccountCredentialsService,
-                account_service_1.AccountService,
-                alerts_service_1.AlertsService,
-                application_service_1.ApplicationService,
-                billing_service_1.BillingService,
-                integrations_aws_service_1.IntegrationsAWSService,
-                integrations_watson_service_1.IntegrationsWatsonService,
-                login_service_1.LoginService,
-                logs_service_1.LogsService,
-                message_service_1.MessageService,
-                modal_service_1.ModalService,
-                perms_guard_service_1.PermsGuardCanActivate,
-                session_service_1.SessionService,
-                top_up_service_1.TopUpService,
-                usage_service_1.UsageService,
-                user_service_1.UserService,
-            ],
-        };
-    };
     DevPortalServicesModule.decorators = [
-        { type: core_1.NgModule, args: [{},] },
+        { type: NgModule, args: [{
+                    providers: [
+                        AccountCredentialsService,
+                        AlertsService,
+                        BillingService,
+                        IntegrationsAWSService,
+                        IntegrationsWatsonService,
+                        LogsService,
+                        MessageService,
+                        ModalService,
+                        PermsGuardCanActivate,
+                        TopUpService,
+                        UsageService,
+                        UserService,
+                    ],
+                },] },
     ];
     DevPortalServicesModule.ctorParameters = function () { return []; };
     return DevPortalServicesModule;
 }());
-exports.DevPortalServicesModule = DevPortalServicesModule;
+export { DevPortalServicesModule };
 //# sourceMappingURL=services.module.js.map

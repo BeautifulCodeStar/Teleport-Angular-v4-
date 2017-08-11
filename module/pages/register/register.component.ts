@@ -1,20 +1,23 @@
+
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 
-import { LoginService }    from "../../services/login.service";
+import { Observable } from "rxjs/Observable";
+import { Observer }   from "rxjs/Observer";
+import "rxjs/add/operator/toPromise";
+
+import { AccountService } from "teleport-module-services/services/v1/services/account/account.service";
+import * as i from "teleport-module-services/services/v1/services/account/account.service.interface";
+
 import { MessageService }  from "../../services/message.service";
 
 import PasswordUtil       from "../../utils/PasswordUtil";
 import { EmailValidator } from "../../utils/EmailValidator";
-
-import { Observable } from "rxjs/Observable";
-import { Observer }   from "rxjs/Observer";
 
 
 @Component({
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-register",
     templateUrl: "register.html",
-    // styleUrls  : [ "../css/bootswatch.min.css", "../css/main.min.css" ],
 })
 export class TeleportDevPortalRegisterComponent implements OnInit, OnDestroy {
 
@@ -27,6 +30,7 @@ export class TeleportDevPortalRegisterComponent implements OnInit, OnDestroy {
         phoneNo: "",
         company: "",
         interests: {},
+        tc_agree: false,
         "g-recaptcha-response": "",
     };
 
@@ -39,7 +43,7 @@ export class TeleportDevPortalRegisterComponent implements OnInit, OnDestroy {
 
 
     constructor (
-        @Inject(LoginService)   private logins: LoginService,
+        @Inject(AccountService) private account: AccountService,
         @Inject(MessageService) private messages: MessageService,
     ) {}
 
@@ -94,7 +98,8 @@ export class TeleportDevPortalRegisterComponent implements OnInit, OnDestroy {
 
         this.isSubmitted = true;
 
-        this.logins.register(this.form)
+        this.account.create(this.form)
+            .toPromise()
             .then(dev => {
                 console.log("Registration Success", dev);
                 this.isSuccess = true;

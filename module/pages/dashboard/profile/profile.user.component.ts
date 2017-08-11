@@ -2,14 +2,19 @@ import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { Router }                               from "@angular/router";
 
 import { Subscription } from "rxjs/Subscription";
+import "rxjs/add/operator/filter";
+import "rxjs/add/operator/map";
 
-import { AccountService } from "../../../services/account.service";
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+
+import { Developer } from "teleport-module-services/services/v1/models/Developer";
+import { IUser } from "teleport-module-services/services/v1/models/User";
+
 import { UserService }    from "../../../services/user.service";
 import { MessageService } from "../../../services/message.service";
 import { ModalService }   from "../../../services/modal.service";
-
-import { IUser }          from "../../../models/interfaces";
-import { Developer }      from "../../../models/Developer";
 
 import { EmailValidator } from "../../../utils/EmailValidator";
 
@@ -33,16 +38,17 @@ export class TeleportDevPortalUserProfileComponent implements OnInit, OnDestroy 
 
     constructor (
         @Inject(Router)         private router: Router,
-        @Inject(AccountService) private account: AccountService,
         @Inject(UserService)    private users: UserService,
-        @Inject(ModalService)  private modal: ModalService,
+        @Inject(ModalService)   private modal: ModalService,
         @Inject(MessageService) private messages: MessageService,
+        @Inject(Store)          private store$: Store<TeleportCoreState>,
     ) {}
 
     public ngOnInit () {
 
-        this._subscription = this.account.Observable
-            .filter(d => !! d)
+        this.store$.select("session")
+            .filter(s => s.isJust())
+            .map(s => s.just().userData)
             .subscribe(dev => {
                 const user = new Developer(dev).toJSON().portalUser;
                 if (user === undefined) {

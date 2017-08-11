@@ -1,16 +1,21 @@
 import { Http } from "@angular/http";
 import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/do";
+import "rxjs/add/operator/first";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/share";
+import "rxjs/add/operator/toPromise";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 import { IAlert } from "../models/interfaces";
-import { AccountService } from "./account.service";
 export declare class AlertsService {
     private http;
-    private account;
-    private _developer;
+    private store$;
+    private _developerId;
+    private subject$;
     private _observable;
-    private _observer;
-    private _alerts;
     private _lastRefresh;
-    constructor(http: Http, account: AccountService);
+    constructor(http: Http, store$: Store<TeleportCoreState>);
     cleanup(): void;
     readonly Observable: Observable<IAlert[]>;
     refresh(): Promise<IAlert[]>;

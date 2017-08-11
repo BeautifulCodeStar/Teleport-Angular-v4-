@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var Alert = (function () {
     function Alert(alert) {
         this._id = alert.id;
@@ -81,7 +79,7 @@ var Alert = (function () {
     };
     return Alert;
 }());
-exports.Alert = Alert;
+export { Alert };
 var AlertAccountBalance = (function () {
     function AlertAccountBalance(balance) {
         if (balance !== undefined) {
@@ -111,5 +109,5 @@ var AlertAccountBalance = (function () {
     };
     return AlertAccountBalance;
 }());
-exports.AlertAccountBalance = AlertAccountBalance;
+export { AlertAccountBalance };
 //# sourceMappingURL=Alert.js.map

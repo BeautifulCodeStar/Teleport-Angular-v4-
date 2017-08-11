@@ -1,4 +1,3 @@
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9,27 +8,26 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var portal_1 = require("./portal");
+import { NgModule, Directive, TemplateRef, ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
+import { TemplatePortal, BasePortalHost } from './portal';
 var TemplatePortalDirective = (function (_super) {
     __extends(TemplatePortalDirective, _super);
     function TemplatePortalDirective(templateRef, viewContainerRef) {
         return _super.call(this, templateRef, viewContainerRef) || this;
     }
     TemplatePortalDirective.decorators = [
-        { type: core_1.Directive, args: [{
+        { type: Directive, args: [{
                     selector: '[portal]',
                     exportAs: 'portal',
                 },] },
     ];
     TemplatePortalDirective.ctorParameters = function () { return [
-        { type: core_1.TemplateRef, },
-        { type: core_1.ViewContainerRef, },
+        { type: TemplateRef, },
+        { type: ViewContainerRef, },
     ]; };
     return TemplatePortalDirective;
-}(portal_1.TemplatePortal));
-exports.TemplatePortalDirective = TemplatePortalDirective;
+}(TemplatePortal));
+export { TemplatePortalDirective };
 var PortalHostDirective = (function (_super) {
     __extends(PortalHostDirective, _super);
     function PortalHostDirective(_componentFactoryResolver, _viewContainerRef) {
@@ -75,18 +73,18 @@ var PortalHostDirective = (function (_super) {
         }
     };
     PortalHostDirective.decorators = [
-        { type: core_1.Directive, args: [{
+        { type: Directive, args: [{
                     selector: '[portalHost]',
                     inputs: ['portal: portalHost']
                 },] },
     ];
     PortalHostDirective.ctorParameters = function () { return [
-        { type: core_1.ComponentFactoryResolver, },
-        { type: core_1.ViewContainerRef, },
+        { type: ComponentFactoryResolver, },
+        { type: ViewContainerRef, },
     ]; };
     return PortalHostDirective;
-}(portal_1.BasePortalHost));
-exports.PortalHostDirective = PortalHostDirective;
+}(BasePortalHost));
+export { PortalHostDirective };
 var PortalModule = (function () {
     function PortalModule() {
     }
@@ -97,7 +95,7 @@ var PortalModule = (function () {
         };
     };
     PortalModule.decorators = [
-        { type: core_1.NgModule, args: [{
+        { type: NgModule, args: [{
                     exports: [TemplatePortalDirective, PortalHostDirective],
                     declarations: [TemplatePortalDirective, PortalHostDirective],
                 },] },
@@ -105,5 +103,5 @@ var PortalModule = (function () {
     PortalModule.ctorParameters = function () { return []; };
     return PortalModule;
 }());
-exports.PortalModule = PortalModule;
+export { PortalModule };
 //# sourceMappingURL=portal-directives.js.map

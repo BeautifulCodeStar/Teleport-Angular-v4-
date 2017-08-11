@@ -1,22 +1,20 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var recaptcha_component_1 = require("./recaptcha/recaptcha.component");
+import { NgModule } from "@angular/core";
+import { TeleportReCaptchaComponent } from "./recaptcha/recaptcha.component";
 var DevPortalComponentsModule = (function () {
     function DevPortalComponentsModule() {
     }
     DevPortalComponentsModule.decorators = [
-        { type: core_1.NgModule, args: [{
+        { type: NgModule, args: [{
                     declarations: [
-                        recaptcha_component_1.TeleportReCaptchaComponent,
+                        TeleportReCaptchaComponent,
                     ],
                     exports: [
-                        recaptcha_component_1.TeleportReCaptchaComponent,
+                        TeleportReCaptchaComponent,
                     ],
                 },] },
     ];
     DevPortalComponentsModule.ctorParameters = function () { return []; };
     return DevPortalComponentsModule;
 }());
-exports.DevPortalComponentsModule = DevPortalComponentsModule;
+export { DevPortalComponentsModule };
 //# sourceMappingURL=components.module.js.map

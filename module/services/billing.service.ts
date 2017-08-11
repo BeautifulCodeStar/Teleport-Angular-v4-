@@ -6,10 +6,17 @@ import { Observable }      from "rxjs/Observable";
 import { Observer }        from "rxjs/Observer";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-import { IPayment, IDeveloper } from "../models/interfaces";
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { IPayment } from "../models/interfaces";
 
 import { MessageService } from "./message.service";
-import { AccountService } from "./account.service";
+
 
 declare const API_BASE_URL: string;
 
@@ -41,12 +48,13 @@ export class BillingService {
     constructor(
         @Inject(Http)           private http: Http,
         @Inject(MessageService) private message: MessageService,
-        @Inject(AccountService) private account: AccountService,
+        @Inject(Store) private store$: Store<TeleportCoreState>,
     ) {
 
-        this.account.Observable
-            .first(d => !! d)
-            .subscribe (d => this._developer = d);
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just())
+            .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
     }
 
     public cleanup () {

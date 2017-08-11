@@ -1,4 +1,5 @@
 import { OnInit, OnDestroy } from "@angular/core";
+import "rxjs/add/operator/skipWhile";
 import { TopUpService } from "../../../services/top-up.service";
 import { MessageService } from "../../../services/message.service";
 import { ITopUp } from "../../../models/interfaces";

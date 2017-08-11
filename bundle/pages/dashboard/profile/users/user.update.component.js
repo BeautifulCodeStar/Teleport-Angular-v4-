@@ -1,21 +1,19 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var account_service_1 = require("../../../../services/account.service");
-var user_service_1 = require("../../../../services/user.service");
-var message_service_1 = require("../../../../services/message.service");
-var modal_service_1 = require("../../../../services/modal.service");
-var EmailValidator_1 = require("../../../../utils/EmailValidator");
-var Permissions = require("../../../../utils/Permissions");
+import { Component, Inject } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { UserService } from "../../../../services/user.service";
+import { MessageService } from "../../../../services/message.service";
+import { ModalService } from "../../../../services/modal.service";
+import { EmailValidator } from "../../../../utils/EmailValidator";
+import * as Permissions from "../../../../utils/Permissions";
 var TeleportDevPortalUserUpdateComponent = (function () {
-    function TeleportDevPortalUserUpdateComponent(router, route, account, users, messages, modal) {
+    function TeleportDevPortalUserUpdateComponent(router, route, users, messages, modal, store$) {
         this.router = router;
         this.route = route;
-        this.account = account;
         this.users = users;
         this.messages = messages;
         this.modal = modal;
+        this.store$ = store$;
         this.isBusy = false;
         this.isEditing = false;
     }
@@ -24,13 +22,14 @@ var TeleportDevPortalUserUpdateComponent = (function () {
         this.isBusy = true;
         var userId = parseInt(this.route.snapshot.params.userId, 10);
         console.log("UIUserUpdate Init", userId);
-        this.account.Observable
-            .first(function (d) { return !!d; })
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just().userData; })
             .subscribe(function (dev) {
             _this._developer = dev;
             if (_this._developer.portalUser && _this._developer.portalUser.id === userId) {
                 _this.messages.warning("That way madness lies!", "You cannot edit your own user here.");
-                return _this.router.navigateByUrl("/apiv1/account/users");
+                return _this.router.navigateByUrl("/v1/account/users");
             }
             if (["account.users.delete", "account.users.update"].some(function (p) {
                 return Permissions.validate(dev.permissions, (_a = {}, _a[p] = true, _a));
@@ -40,7 +39,7 @@ var TeleportDevPortalUserUpdateComponent = (function () {
                     .then(function (user) {
                     if (!Permissions.validate(dev.permissions, user.permissions)) {
                         _this.messages.warning("Your Permission Kung-Fu is Weak", "You do not have all the permissions required to edit this user.");
-                        _this.router.navigateByUrl("/apiv1/account/users");
+                        _this.router.navigateByUrl("/v1/account/users");
                         return;
                     }
                     _this._origUser = user;
@@ -50,11 +49,11 @@ var TeleportDevPortalUserUpdateComponent = (function () {
                 })
                     .catch(function (err) {
                     _this.messages.error("Failed to Load User", err.message, err);
-                    return _this.router.navigateByUrl("/apiv1/account/users");
+                    return _this.router.navigateByUrl("/v1/account/users");
                 });
             }
             else {
-                return _this.router.navigate(["/apiv1/access-denied"], { queryParams: { perms: "account.users.update account.users.delete" } });
+                return _this.router.navigate(["/v1/access-denied"], { queryParams: { perms: "account.users.update account.users.delete" } });
             }
         });
     };
@@ -80,7 +79,7 @@ var TeleportDevPortalUserUpdateComponent = (function () {
                 _this.users.remove(_this._user)
                     .then(function () {
                     _this.messages.warning("User Deleted", "Alas, poor " + _this._user.firstName + "! I knew him, " + _this._developer.firstName + ".");
-                    return _this.router.navigate(["/apiv1/account/users"]);
+                    return _this.router.navigate(["/v1/account/users"]);
                 })
                     .catch(function (err) {
                     _this.isBusy = false;
@@ -90,7 +89,7 @@ var TeleportDevPortalUserUpdateComponent = (function () {
         });
     };
     TeleportDevPortalUserUpdateComponent.prototype.isEmailValid = function () {
-        return EmailValidator_1.EmailValidator.isValid(this.User.email);
+        return EmailValidator.isValid(this.User.email);
     };
     TeleportDevPortalUserUpdateComponent.prototype.isUserValid = function () {
         return this.isEmailValid() && Permissions.validate(this._developer.permissions, this.User.permissions);
@@ -122,21 +121,21 @@ var TeleportDevPortalUserUpdateComponent = (function () {
         this._user.permissions = Object.assign({}, this._origUser.permissions);
     };
     TeleportDevPortalUserUpdateComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-user-update",
                     templateUrl: "user.update.html",
                 },] },
     ];
     TeleportDevPortalUserUpdateComponent.ctorParameters = function () { return [
-        { type: router_1.Router, decorators: [{ type: core_1.Inject, args: [router_1.Router,] },] },
-        { type: router_1.ActivatedRoute, decorators: [{ type: core_1.Inject, args: [router_1.ActivatedRoute,] },] },
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
-        { type: user_service_1.UserService, decorators: [{ type: core_1.Inject, args: [user_service_1.UserService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
-        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
+        { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
+        { type: ActivatedRoute, decorators: [{ type: Inject, args: [ActivatedRoute,] },] },
+        { type: UserService, decorators: [{ type: Inject, args: [UserService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return TeleportDevPortalUserUpdateComponent;
 }());
-exports.TeleportDevPortalUserUpdateComponent = TeleportDevPortalUserUpdateComponent;
+export { TeleportDevPortalUserUpdateComponent };
 //# sourceMappingURL=user.update.component.js.map

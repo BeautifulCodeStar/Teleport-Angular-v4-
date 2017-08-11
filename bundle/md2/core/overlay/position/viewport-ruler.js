@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
+import { Injectable } from '@angular/core';
 var ViewportRuler = (function () {
     function ViewportRuler() {
     }
@@ -29,10 +27,10 @@ var ViewportRuler = (function () {
         return { top: top, left: left };
     };
     ViewportRuler.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
     ViewportRuler.ctorParameters = function () { return []; };
     return ViewportRuler;
 }());
-exports.ViewportRuler = ViewportRuler;
+export { ViewportRuler };
 //# sourceMappingURL=viewport-ruler.js.map

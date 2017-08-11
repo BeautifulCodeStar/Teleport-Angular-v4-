@@ -1,22 +1,23 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var account_service_1 = require("../../../services/account.service");
-var user_service_1 = require("../../../services/user.service");
-var message_service_1 = require("../../../services/message.service");
-var PasswordUtil_1 = require("../../../utils/PasswordUtil");
+import { Component, Inject, Output, EventEmitter, Input } from "@angular/core";
+import "rxjs/add/operator/first";
+import { Store, ReducerManagerDispatcher } from "@ngrx/store";
+import * as actions from "teleport-module-services/services/v1/ngrx/account/account.actions";
+import { UserService } from "../../../services/user.service";
+import { MessageService } from "../../../services/message.service";
+import PasswordUtil from "../../../utils/PasswordUtil";
 var TeleportDevPortalProfilePasswordComponent = (function () {
-    function TeleportDevPortalProfilePasswordComponent(account, messages) {
-        this.account = account;
+    function TeleportDevPortalProfilePasswordComponent(store$, dispatcher, messages) {
+        this.store$ = store$;
+        this.dispatcher = dispatcher;
         this.messages = messages;
+        this.onComplete = new EventEmitter();
         this.isBusy = false;
         this.password = "";
         this.newPassword = "";
         this.newPasswordVerify = "";
-        this.onComplete = new core_1.EventEmitter();
     }
     TeleportDevPortalProfilePasswordComponent.prototype.isPasswordValid = function (pw) {
-        return PasswordUtil_1.default.satisfies(pw);
+        return PasswordUtil.satisfies(pw);
     };
     TeleportDevPortalProfilePasswordComponent.prototype.passwordsMatch = function () {
         return this.newPassword === this.newPasswordVerify;
@@ -35,19 +36,24 @@ var TeleportDevPortalProfilePasswordComponent = (function () {
             this.messages.warning("Invalid Passwords", "The new password is the same as your current password.");
             return;
         }
-        if (!PasswordUtil_1.default.satisfies(this.newPassword)) {
+        if (!PasswordUtil.satisfies(this.newPassword)) {
             this.messages.warning("Invalid Password", "The password that is at least 8 characters of caps, lowercase, numbers and special characters.");
             return;
         }
         this.isBusy = true;
-        this.account.updatePassword(this.password, this.newPassword)
-            .then(function () {
-            _this.messages.info("Password Change Success", "Your password has been updated.");
-            _this.onComplete.emit();
-        })
-            .catch(function (err) {
-            _this.messages.error("Password Change Failure", err.message, err);
-            _this.isBusy = false;
+        this.store$.dispatch(new actions.UpdatePassword({ dev: null, password: this.password, newPassword: this.newPassword }));
+        this.dispatcher
+            .first(function (action) { return action.type === actions.UPDATE_PASSWORD_SUCCESS || action.type === actions.UPDATE_PASSWORD_FAILURE; })
+            .subscribe(function (action) {
+            switch (action.type) {
+                case actions.UPDATE_PASSWORD_SUCCESS:
+                    _this.messages.info("Password Change Success", "Your password has been updated.");
+                    _this.onComplete.emit();
+                    break;
+                default:
+                    _this.messages.error("Password Change Failure", "Your password could not be updated.");
+                    _this.isBusy = false;
+            }
         });
     };
     TeleportDevPortalProfilePasswordComponent.prototype.onCancel = function () {
@@ -55,22 +61,23 @@ var TeleportDevPortalProfilePasswordComponent = (function () {
         this.onComplete.emit();
     };
     TeleportDevPortalProfilePasswordComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-profile-password",
                     templateUrl: "profile.password.html",
                 },] },
     ];
     TeleportDevPortalProfilePasswordComponent.ctorParameters = function () { return [
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
+        { type: ReducerManagerDispatcher, decorators: [{ type: Inject, args: [ReducerManagerDispatcher,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
     ]; };
     TeleportDevPortalProfilePasswordComponent.propDecorators = {
-        'onComplete': [{ type: core_1.Output },],
+        'onComplete': [{ type: Output },],
     };
     return TeleportDevPortalProfilePasswordComponent;
 }());
-exports.TeleportDevPortalProfilePasswordComponent = TeleportDevPortalProfilePasswordComponent;
+export { TeleportDevPortalProfilePasswordComponent };
 var TeleportDevPortalUserProfilePasswordComponent = (function () {
     function TeleportDevPortalUserProfilePasswordComponent(users, messages) {
         this.users = users;
@@ -79,10 +86,10 @@ var TeleportDevPortalUserProfilePasswordComponent = (function () {
         this.password = "";
         this.newPassword = "";
         this.newPasswordVerify = "";
-        this.onComplete = new core_1.EventEmitter();
+        this.onComplete = new EventEmitter();
     }
     TeleportDevPortalUserProfilePasswordComponent.prototype.isPasswordValid = function (pw) {
-        return PasswordUtil_1.default.satisfies(pw);
+        return PasswordUtil.satisfies(pw);
     };
     TeleportDevPortalUserProfilePasswordComponent.prototype.passwordsMatch = function () {
         return this.newPassword === this.newPasswordVerify;
@@ -101,7 +108,7 @@ var TeleportDevPortalUserProfilePasswordComponent = (function () {
             this.messages.warning("Invalid Passwords", "The new password is the same as your current password.");
             return;
         }
-        if (!PasswordUtil_1.default.satisfies(this.newPassword)) {
+        if (!PasswordUtil.satisfies(this.newPassword)) {
             this.messages.warning("Invalid Password", "The password that is at least 8 characters of caps, lowercase, numbers and special characters.");
             return;
         }
@@ -121,21 +128,21 @@ var TeleportDevPortalUserProfilePasswordComponent = (function () {
         this.onComplete.emit();
     };
     TeleportDevPortalUserProfilePasswordComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-user-profile-password",
                     templateUrl: "profile.password.html",
                 },] },
     ];
     TeleportDevPortalUserProfilePasswordComponent.ctorParameters = function () { return [
-        { type: user_service_1.UserService, decorators: [{ type: core_1.Inject, args: [user_service_1.UserService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: UserService, decorators: [{ type: Inject, args: [UserService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
     ]; };
     TeleportDevPortalUserProfilePasswordComponent.propDecorators = {
-        'user': [{ type: core_1.Input, args: ["user",] },],
-        'onComplete': [{ type: core_1.Output },],
+        'user': [{ type: Input, args: ["user",] },],
+        'onComplete': [{ type: Output },],
     };
     return TeleportDevPortalUserProfilePasswordComponent;
 }());
-exports.TeleportDevPortalUserProfilePasswordComponent = TeleportDevPortalUserProfilePasswordComponent;
+export { TeleportDevPortalUserProfilePasswordComponent };
 //# sourceMappingURL=profile.password.component.js.map

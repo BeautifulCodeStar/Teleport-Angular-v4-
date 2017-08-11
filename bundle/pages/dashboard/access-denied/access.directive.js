@@ -1,22 +1,23 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var Permissions_1 = require("../../../utils/Permissions");
-var session_service_1 = require("../../../services/session.service");
+import { Directive, ElementRef, Input, Renderer2, Inject } from "@angular/core";
+import "rxjs/add/operator/first";
+import "rxjs/add/operator/map";
+import { Store } from "@ngrx/store";
+import { validate } from "../../../utils/Permissions";
 var AllowAccessDirective = (function () {
-    function AllowAccessDirective(el, renderer, session) {
+    function AllowAccessDirective(el, renderer, store$) {
         this.el = el;
         this.renderer = renderer;
-        this.session = session;
+        this.store$ = store$;
         renderer.addClass(el.nativeElement, "block-access");
     }
     AllowAccessDirective.prototype.ngAfterViewInit = function () {
         var _this = this;
-        this.session.Observable
-            .first(function (s) { return !!s && !!s.developer; })
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just(); })
             .subscribe(function (s) {
             if (_this.allowAccess.split(" ").some(function (p) {
-                return s !== null && Permissions_1.validate(s.developer.permissions, (_a = {}, _a[p] = true, _a));
+                return s !== null && validate(s.userData.permissions, (_a = {}, _a[p] = true, _a));
                 var _a;
             })) {
                 _this.renderer.removeClass(_this.el.nativeElement, "block-access");
@@ -24,19 +25,19 @@ var AllowAccessDirective = (function () {
         });
     };
     AllowAccessDirective.decorators = [
-        { type: core_1.Directive, args: [{
+        { type: Directive, args: [{
                     selector: "[allowAccess]",
                 },] },
     ];
     AllowAccessDirective.ctorParameters = function () { return [
-        { type: core_1.ElementRef, decorators: [{ type: core_1.Inject, args: [core_1.ElementRef,] },] },
-        { type: core_1.Renderer2, decorators: [{ type: core_1.Inject, args: [core_1.Renderer2,] },] },
-        { type: session_service_1.SessionService, decorators: [{ type: core_1.Inject, args: [session_service_1.SessionService,] },] },
+        { type: ElementRef, decorators: [{ type: Inject, args: [ElementRef,] },] },
+        { type: Renderer2, decorators: [{ type: Inject, args: [Renderer2,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     AllowAccessDirective.propDecorators = {
-        'allowAccess': [{ type: core_1.Input, args: ["allowAccess",] },],
+        'allowAccess': [{ type: Input, args: ["allowAccess",] },],
     };
     return AllowAccessDirective;
 }());
-exports.AllowAccessDirective = AllowAccessDirective;
+export { AllowAccessDirective };
 //# sourceMappingURL=access.directive.js.map

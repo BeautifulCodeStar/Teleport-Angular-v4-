@@ -1,12 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var account_service_1 = require("../../../../services/account.service");
-var modal_service_1 = require("../../../../services/modal.service");
-var Permissions = require("../../../../utils/Permissions");
+import { Component, Input, Inject, } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { ModalService } from "../../../../services/modal.service";
+import * as Permissions from "../../../../utils/Permissions";
 var TeleportDevPortalRolePickerComponent = (function () {
-    function TeleportDevPortalRolePickerComponent(account) {
-        this.account = account;
+    function TeleportDevPortalRolePickerComponent(store$) {
+        this.store$ = store$;
         this.isRolesSelectorOpen = false;
         this.Roles = [];
         this.Template = Permissions.Template;
@@ -14,8 +12,9 @@ var TeleportDevPortalRolePickerComponent = (function () {
     }
     TeleportDevPortalRolePickerComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.account.Observable
-            .first(function (d) { return !!d; })
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just().userData; })
             .subscribe(function (d) {
             _this._developer = d;
             _this.Roles = Permissions.Roles.filter(function (r) {
@@ -52,21 +51,21 @@ var TeleportDevPortalRolePickerComponent = (function () {
         this.role = role;
     };
     TeleportDevPortalRolePickerComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-role-picker",
                     templateUrl: "role-picker.html",
                 },] },
     ];
     TeleportDevPortalRolePickerComponent.ctorParameters = function () { return [
-        { type: account_service_1.AccountService, decorators: [{ type: core_1.Inject, args: [account_service_1.AccountService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     TeleportDevPortalRolePickerComponent.propDecorators = {
-        'user': [{ type: core_1.Input, args: ["user",] },],
+        'user': [{ type: Input, args: ["user",] },],
     };
     return TeleportDevPortalRolePickerComponent;
 }());
-exports.TeleportDevPortalRolePickerComponent = TeleportDevPortalRolePickerComponent;
+export { TeleportDevPortalRolePickerComponent };
 var TeleportDevPortalRolePickerRowComponent = (function () {
     function TeleportDevPortalRolePickerRowComponent(modal) {
         this.modal = modal;
@@ -133,22 +132,22 @@ var TeleportDevPortalRolePickerRowComponent = (function () {
         var _a;
     };
     TeleportDevPortalRolePickerRowComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-role-picker-row",
                     template: "\n        <ul>\n            <li *ngFor=\"let node of Nodes\" [ngClass]=\"{ collapsed: isCollapsed(node) }\">\n                <a *ngIf=\"hasChildren(node)\" (click)=\"toggleOpen(node)\"><span class=\"glyphicon glyphicon-triangle-right\"></span></a>\n                <b *ngIf=\"! hasChildren(node)\"><span class=\"glyphicon glyphicon-option-horizontal\"></span></b>\n                {{ node[0].toUpperCase() + node.slice(1) }}\n                <span>\n                    <span *ngFor=\"let a of ['create','read','update','delete']\" class=\"glyphicon\"\n                        (click)=\"onPermClick(node, a)\"\n                        [ngClass]=\"{ 'glyphicon-unchecked': ! hasPerm(node, a) && isPermAvailable(node, a), 'glyphicon-ok-sign': hasPerm(node, a), 'glyphicon-minus disabled': ! isPermAvailable(node, a), exact: hasExactPerm(node, a) }\"\n                    ></span>\n                </span>\n                <teleport-dev-portal-role-picker-row [dev]=\"dev\" [user]=\"user\" [tree]=\"tree[node].subTree\" [readOnly]=\"readOnly\"></teleport-dev-portal-role-picker-row>\n            </li>\n        </ul>\n    ",
                 },] },
     ];
     TeleportDevPortalRolePickerRowComponent.ctorParameters = function () { return [
-        { type: modal_service_1.ModalService, decorators: [{ type: core_1.Inject, args: [modal_service_1.ModalService,] },] },
+        { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
     ]; };
     TeleportDevPortalRolePickerRowComponent.propDecorators = {
-        'dev': [{ type: core_1.Input, args: ["dev",] },],
-        'user': [{ type: core_1.Input, args: ["user",] },],
-        'tree': [{ type: core_1.Input, args: ["tree",] },],
-        'readOnly': [{ type: core_1.Input, args: ["readOnly",] },],
+        'dev': [{ type: Input, args: ["dev",] },],
+        'user': [{ type: Input, args: ["user",] },],
+        'tree': [{ type: Input, args: ["tree",] },],
+        'readOnly': [{ type: Input, args: ["readOnly",] },],
     };
     return TeleportDevPortalRolePickerRowComponent;
 }());
-exports.TeleportDevPortalRolePickerRowComponent = TeleportDevPortalRolePickerRowComponent;
+export { TeleportDevPortalRolePickerRowComponent };
 //# sourceMappingURL=role-picker.component.js.map

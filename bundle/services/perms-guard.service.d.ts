@@ -1,8 +1,9 @@
 import { ActivatedRouteSnapshot, CanActivateChild, Router } from "@angular/router";
-import { AccountService } from "./account.service";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 export declare class PermsGuardCanActivate implements CanActivateChild {
-    private account;
     private router;
-    constructor(account: AccountService, router: Router);
+    private store$;
+    constructor(router: Router, store$: Store<TeleportCoreState>);
     canActivateChild(route: ActivatedRouteSnapshot): Promise<boolean>;
 }

@@ -1,14 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var login_service_1 = require("../../services/login.service");
-var message_service_1 = require("../../services/message.service");
-var PasswordUtil_1 = require("../../utils/PasswordUtil");
-var EmailValidator_1 = require("../../utils/EmailValidator");
-var Observable_1 = require("rxjs/Observable");
+import { Component, Inject } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/toPromise";
+import { AccountService } from "teleport-module-services/services/v1/services/account/account.service";
+import { MessageService } from "../../services/message.service";
+import PasswordUtil from "../../utils/PasswordUtil";
+import { EmailValidator } from "../../utils/EmailValidator";
 var TeleportDevPortalRegisterComponent = (function () {
-    function TeleportDevPortalRegisterComponent(logins, messages) {
-        this.logins = logins;
+    function TeleportDevPortalRegisterComponent(account, messages) {
+        this.account = account;
         this.messages = messages;
         this.form = {
             firstName: "",
@@ -19,6 +18,7 @@ var TeleportDevPortalRegisterComponent = (function () {
             phoneNo: "",
             company: "",
             interests: {},
+            tc_agree: false,
             "g-recaptcha-response": "",
         };
         this.isSubmitted = false;
@@ -27,7 +27,7 @@ var TeleportDevPortalRegisterComponent = (function () {
     }
     TeleportDevPortalRegisterComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this._resetCaptchaObservable = Observable_1.Observable.create(function (observer) { return _this._resetCaptchaObserver = observer; });
+        this._resetCaptchaObservable = Observable.create(function (observer) { return _this._resetCaptchaObserver = observer; });
     };
     TeleportDevPortalRegisterComponent.prototype.ngOnDestroy = function () {
         if (this._resetCaptchaObserver) {
@@ -35,10 +35,10 @@ var TeleportDevPortalRegisterComponent = (function () {
         }
     };
     TeleportDevPortalRegisterComponent.prototype.isPasswordValid = function (pw) {
-        return PasswordUtil_1.default.satisfies(pw);
+        return PasswordUtil.satisfies(pw);
     };
     TeleportDevPortalRegisterComponent.prototype.isEmailValid = function (email) {
-        return EmailValidator_1.EmailValidator.isValid(email);
+        return EmailValidator.isValid(email);
     };
     TeleportDevPortalRegisterComponent.prototype.passwordsMatch = function () {
         return this.form.password.length > 0 && this.form.password === this.form.passwordVerify;
@@ -60,12 +60,13 @@ var TeleportDevPortalRegisterComponent = (function () {
             this.messages.warning("Invalid Passwords", "The passwords do not match.");
             return;
         }
-        if (!PasswordUtil_1.default.satisfies(this.form.password)) {
+        if (!PasswordUtil.satisfies(this.form.password)) {
             this.messages.warning("Invalid Password", "Your password must be at least 8 characters and contain caps, lowercase, numbers and special characters.");
             return;
         }
         this.isSubmitted = true;
-        this.logins.register(this.form)
+        this.account.create(this.form)
+            .toPromise()
             .then(function (dev) {
             console.log("Registration Success", dev);
             _this.isSuccess = true;
@@ -80,17 +81,17 @@ var TeleportDevPortalRegisterComponent = (function () {
         });
     };
     TeleportDevPortalRegisterComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-register",
                     templateUrl: "register.html",
                 },] },
     ];
     TeleportDevPortalRegisterComponent.ctorParameters = function () { return [
-        { type: login_service_1.LoginService, decorators: [{ type: core_1.Inject, args: [login_service_1.LoginService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: AccountService, decorators: [{ type: Inject, args: [AccountService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
     ]; };
     return TeleportDevPortalRegisterComponent;
 }());
-exports.TeleportDevPortalRegisterComponent = TeleportDevPortalRegisterComponent;
+export { TeleportDevPortalRegisterComponent };
 //# sourceMappingURL=register.component.js.map

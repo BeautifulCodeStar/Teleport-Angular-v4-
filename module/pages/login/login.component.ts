@@ -1,43 +1,53 @@
-import { Component, Inject } from "@angular/core";
+
+import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 
 import { Observable } from "rxjs/Observable";
 import { Observer }   from "rxjs/Observer";
+import "rxjs/add/operator/toPromise";
 
-import { LoginService }    from "../../services/login.service";
+import { LoginService } from "teleport-module-services/services/services/login/login.service";
+import * as i from "teleport-module-services/services/services/login/login.service.interface";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+
 import { MessageService }  from "../../services/message.service";
 
 import PasswordUtil       from "../../utils/PasswordUtil";
 import { EmailValidator } from "../../utils/EmailValidator";
-import { IDeveloper }     from "../../models/interfaces";
 
 
 @Component({
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-login",
     templateUrl: "login.html",
-    // styleUrls  : [ "../css/bootswatch.min.css", "../css/main.min.css" ],
 })
-export class TeleportDevPortalLoginComponent {
+export class TeleportDevPortalLoginComponent implements OnInit, OnDestroy {
     
     public userName = "";
     public passWord = "";
     
     public isBusy = false;
-    public isCaptchaOk = false;
 
-    public showMultiLogin = false;
-    public devLogin: IDeveloper & { authCode: string } | undefined;
-    public userLogins: (IDeveloper & { authCode: string })[];
-    
-    private reCaptchaResponse = "";
-    private _resetCaptchaObservable: Observable<boolean>;
-    private _resetCaptchaObserver: Observer<boolean>;
+    public userLogins: i.ILoginAsRequest[];
 
     constructor (
         @Inject(LoginService)   private logins: LoginService,
         @Inject(MessageService) private messages: MessageService,
-    ) {
-        this._resetCaptchaObservable = Observable.create((observer: Observer<boolean>) => this._resetCaptchaObserver = observer);
+    ) {}
+
+    
+    public ngOnInit () {
+        this.userLogins = undefined;
+        this.userName = "";
+        this.passWord = "";
+        this.isBusy = false;
+    }
+
+    public ngOnDestroy () {
+        this.userLogins = undefined;
+        this.userName = "";
+        this.passWord = "";
+        this.isBusy = false;
     }
 
 
@@ -51,69 +61,48 @@ export class TeleportDevPortalLoginComponent {
     }
 
 
-    public onCaptcha (resp: string, isOk: boolean) {
-
-        this.reCaptchaResponse = resp;
-        this.isCaptchaOk = isOk;
-    }
-
-
-    public resetCaptchaObservable (): Observable<boolean> {
-        return this._resetCaptchaObservable;
-    }
-
-
     public onSubmit () {
 
         this.isBusy = true;
-        this.logins.login(this.userName, this.passWord, this.reCaptchaResponse)
+        this.logins.login({ userName: this.userName, password: this.passWord })
+            .toPromise()
             .then(res => {
-                console.log("LOGIN =>", res);
-                if (res.developer) {
-                    console.log("Login Success", res.developer);
-                    this.messages.info(`Welcome, ${res.developer.firstName}.`, "You are now logged in to your account.");
-                } else if (res.possibleLogins) {
-                    this._resetCaptchaObserver.next(true);
-                    this.isCaptchaOk = false;
-                    this.isBusy = false;
-                    this.showMultiLogin = true;
-                    this.devLogin = res.possibleLogins.find(d => d.id === d.developerId);
-                    this.userLogins = res.possibleLogins.filter(d => d.id !== d.developerId);
+
+                if (res.v1.length === 1) {
+                    this.loginAs(res.v1[0]);
+                    return;
                 }
+
+                this.userLogins = res.v1;
+                this.isBusy = false;
             })
             .catch(err => {
-                console.error("Login Failure", err);
-                this._resetCaptchaObserver.next(true);
-                this.isCaptchaOk = false;
                 this.isBusy = false;
-                this.messages.error("Login Failure", err.message, err);
+                this.messages.error("Login Failure", "The username/password combination was not provided.", err);
             });
     }
 
 
-    public loginAs (dev: IDeveloper & { authCode: string }) {
+    public loginAs (req: i.ILoginAsRequest) {
 
         this.isBusy = true;
 
-        this.logins.loginAs(this.userName, this.passWord, dev.id, dev.authCode)
-            .then(d => {
-                console.log("Login Success", d);
-                this.messages.info(`Welcome, ${d.firstName}.`, "You are now logged in to your account.");
+        this.logins.loginAs(req)
+            .toPromise()
+            .then(res => {
+                console.log("Login Success", res);
+                this.messages.info(`Welcome, ${res.userData.firstName}.`, "You are now logged in to your account.");
             })
             .catch(err => {
                 console.error("Login Failure", err);
-                this._resetCaptchaObserver.next(true);
-                this.isCaptchaOk = false;
                 this.isBusy = false;
                 this.closeMultiLogin();
-                this.messages.error("Login Failure", err.message, err);
+                this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
             });
     }
 
 
     public closeMultiLogin () {
-        this.showMultiLogin = false;
-        delete this.devLogin;
-        delete this.userLogins;
+        this.userLogins = undefined;
     }
 }

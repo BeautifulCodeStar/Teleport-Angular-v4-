@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Template = Object.freeze({
+export var Template = Object.freeze({
     "account.create": false,
     "account.read": false,
     "account.update": false,
@@ -52,7 +50,7 @@ exports.Template = Object.freeze({
     "account.users.update": false,
     "account.users.delete": false,
 });
-exports.Roles = Object.freeze([
+export var Roles = Object.freeze([
     {
         id: "power_admin",
         role: "Power Admin",
@@ -141,8 +139,8 @@ exports.Roles = Object.freeze([
         ],
     },
 ]);
-exports.Tree = Object.freeze(copyTree());
-function copyTree() {
+export var Tree = Object.freeze(copyTree());
+export function copyTree() {
     return (function (perms) {
         function buildNode(permArr, depth, treeNode) {
             if (permArr.length === 0) {
@@ -168,14 +166,13 @@ function copyTree() {
             subTree: {},
         };
         return perms.map(function (p) { return p.split("."); }).reduce(function (p, c) { return buildNode(c, 0, p); }, buildNode([], 0, root));
-    }(Object.keys(exports.Template)));
+    }(Object.keys(Template)));
 }
-exports.copyTree = copyTree;
-function validate(grantor, target) {
+export function validate(grantor, target) {
     if (!grantor || !target) {
         return false;
     }
-    if (!Object.keys(grantor).every(function (k) { return k in exports.Template; })) {
+    if (!Object.keys(grantor).every(function (k) { return k in Template; })) {
         return false;
     }
     if (Object.keys(target).every(function (k) { return target[k] === grantor[k]; })) {
@@ -189,5 +186,4 @@ function validate(grantor, target) {
         return ns.reduce(function (p, n) { return p === true || grantor["" + p + n + "." + action] === true || "" + p + n + "."; }, "") === true;
     });
 }
-exports.validate = validate;
 //# sourceMappingURL=Permissions.js.map

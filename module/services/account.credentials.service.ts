@@ -3,8 +3,14 @@ import { Http, Headers }      from "@angular/http";
 
 import { Observable } from "rxjs/Observable";
 
-import { AccountService }             from "./account.service";
-import { IDeveloper, IUserBasicAuth } from "../models/interfaces";
+import { Store } from "@ngrx/store";
+
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
+
+import { IDeveloper } from "teleport-module-services/services/v1/models/Developer";
+import { ILoginAsResponse } from "teleport-module-services/services/services/login/login.service.interface";
+
+import { IUserBasicAuth } from "teleport-module-services/services/v1/models/User";
 
 declare const API_BASE_URL: string;
 
@@ -16,11 +22,13 @@ export class AccountCredentialsService {
 
     constructor (
         @Inject(Http)           private http: Http,
-        @Inject(AccountService) private account: AccountService,
+        @Inject(Store)  private store$: Store<TeleportCoreState>,
     ) {
-        this.account.Observable
-            .first(d => !! d)
-            .subscribe (d => this._developer = d);
+
+        this.store$.select("session")
+            .first(s => s.isJust())
+            .map(s => s.just())
+            .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
     }
 
     public cleanup () {

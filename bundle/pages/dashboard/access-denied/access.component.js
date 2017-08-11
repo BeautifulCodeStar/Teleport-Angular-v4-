@@ -1,12 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var router_1 = require("@angular/router");
-var session_service_1 = require("../../../services/session.service");
-var Permissions_1 = require("../../../utils/Permissions");
+import { Component, Inject } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import "rxjs/add/operator/first";
+import "rxjs/add/operator/map";
+import { Store } from "@ngrx/store";
+import { validate } from "../../../utils/Permissions";
 var TeleportDevPortalAccessDeniedComponent = (function () {
-    function TeleportDevPortalAccessDeniedComponent(session, route) {
-        this.session = session;
+    function TeleportDevPortalAccessDeniedComponent(store$, route) {
+        this.store$ = store$;
         this.route = route;
         this._reqPerms = [];
         this._devPerms = {};
@@ -14,12 +14,10 @@ var TeleportDevPortalAccessDeniedComponent = (function () {
     TeleportDevPortalAccessDeniedComponent.prototype.ngOnInit = function () {
         var _this = this;
         this._reqPerms = (this.route.snapshot.queryParams.perms || "").split("|");
-        this.session.Observable
-            .skipWhile(function (s) { return !s; })
-            .take(1)
-            .subscribe(function (s) { if (s !== null) {
-            _this._devPerms = s.developer.permissions;
-        } });
+        this.store$.select("session")
+            .first(function (s) { return s.isJust(); })
+            .map(function (s) { return s.just(); })
+            .subscribe(function (s) { return _this._devPerms = s.userData.permissions; });
     };
     TeleportDevPortalAccessDeniedComponent.prototype.ngOnDestroy = function () {
         this._reqPerms = [];
@@ -33,21 +31,21 @@ var TeleportDevPortalAccessDeniedComponent = (function () {
         configurable: true
     });
     TeleportDevPortalAccessDeniedComponent.prototype.hasPermission = function (perm) {
-        return Permissions_1.validate(this._devPerms, (_a = {}, _a[perm] = true, _a));
+        return validate(this._devPerms, (_a = {}, _a[perm] = true, _a));
         var _a;
     };
     TeleportDevPortalAccessDeniedComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-access-denied",
                     templateUrl: "access.html",
                 },] },
     ];
     TeleportDevPortalAccessDeniedComponent.ctorParameters = function () { return [
-        { type: session_service_1.SessionService, decorators: [{ type: core_1.Inject, args: [session_service_1.SessionService,] },] },
-        { type: router_1.ActivatedRoute, decorators: [{ type: core_1.Inject, args: [router_1.ActivatedRoute,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
+        { type: ActivatedRoute, decorators: [{ type: Inject, args: [ActivatedRoute,] },] },
     ]; };
     return TeleportDevPortalAccessDeniedComponent;
 }());
-exports.TeleportDevPortalAccessDeniedComponent = TeleportDevPortalAccessDeniedComponent;
+export { TeleportDevPortalAccessDeniedComponent };
 //# sourceMappingURL=access.component.js.map

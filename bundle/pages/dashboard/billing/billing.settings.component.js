@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var billing_service_1 = require("../../../services/billing.service");
+import { Component, Inject } from "@angular/core";
+import { BillingService } from "../../../services/billing.service";
 var TeleportDevPortalBillingSettingsComponent = (function () {
     function TeleportDevPortalBillingSettingsComponent(billing) {
         this.billing = billing;
@@ -16,16 +14,16 @@ var TeleportDevPortalBillingSettingsComponent = (function () {
             .catch(function (err) { return console.log(err); });
     };
     TeleportDevPortalBillingSettingsComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-billing-settings",
                     templateUrl: "billing.settings.html",
                 },] },
     ];
     TeleportDevPortalBillingSettingsComponent.ctorParameters = function () { return [
-        { type: billing_service_1.BillingService, decorators: [{ type: core_1.Inject, args: [billing_service_1.BillingService,] },] },
+        { type: BillingService, decorators: [{ type: Inject, args: [BillingService,] },] },
     ]; };
     return TeleportDevPortalBillingSettingsComponent;
 }());
-exports.TeleportDevPortalBillingSettingsComponent = TeleportDevPortalBillingSettingsComponent;
+export { TeleportDevPortalBillingSettingsComponent };
 //# sourceMappingURL=billing.settings.component.js.map

@@ -1,6 +1,7 @@
 import { Http } from "@angular/http";
+import { Store } from "@ngrx/store";
+import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 import { IUsageAggregateData } from "../models/interfaces";
-import { AccountService } from "./account.service";
 export interface IUsageRequest {
     beginDate: Date;
     endDate: Date;
@@ -13,8 +14,8 @@ export interface IUsageResponse {
 }
 export declare class UsageService {
     private http;
-    private account;
+    private store$;
     private _developer;
-    constructor(http: Http, account: AccountService);
+    constructor(http: Http, store$: Store<TeleportCoreState>);
     pullUsage(req: IUsageRequest): Promise<IUsageResponse>;
 }

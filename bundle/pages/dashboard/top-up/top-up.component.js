@@ -1,8 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var top_up_service_1 = require("../../../services/top-up.service");
-var message_service_1 = require("../../../services/message.service");
+import { Component, Inject } from "@angular/core";
+import "rxjs/add/operator/skipWhile";
+import { TopUpService } from "../../../services/top-up.service";
+import { MessageService } from "../../../services/message.service";
 var TeleportDevPortalTopUpComponent = (function () {
     function TeleportDevPortalTopUpComponent(topUp, messages) {
         this.topUp = topUp;
@@ -87,17 +86,17 @@ var TeleportDevPortalTopUpComponent = (function () {
         }
     };
     TeleportDevPortalTopUpComponent.decorators = [
-        { type: core_1.Component, args: [{
+        { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-top-up",
                     templateUrl: "top-up.html",
                 },] },
     ];
     TeleportDevPortalTopUpComponent.ctorParameters = function () { return [
-        { type: top_up_service_1.TopUpService, decorators: [{ type: core_1.Inject, args: [top_up_service_1.TopUpService,] },] },
-        { type: message_service_1.MessageService, decorators: [{ type: core_1.Inject, args: [message_service_1.MessageService,] },] },
+        { type: TopUpService, decorators: [{ type: Inject, args: [TopUpService,] },] },
+        { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
     ]; };
     return TeleportDevPortalTopUpComponent;
 }());
-exports.TeleportDevPortalTopUpComponent = TeleportDevPortalTopUpComponent;
+export { TeleportDevPortalTopUpComponent };
 //# sourceMappingURL=top-up.component.js.map
