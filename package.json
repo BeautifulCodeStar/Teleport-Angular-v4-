@@ -1,8 +1,8 @@
 {
   "name": "teleport-module-dev-portal",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Dev Portal module for Shoutpoint's TelePort web app.",
-  "main": "./bundle/module.umd.js",
+  "main": "./bundle/index.js",
   "types": "./bundle/index.d.ts",
   "scripts": {
     "fresh-start": "./node_modules/.bin/gulp 'fresh-project'",
@@ -40,7 +40,7 @@
     "@ngrx/store": "4.0.2",
     "date-fns": "1.28.5",
     "monet": "0.8.10",
-    "rxjs": "5.4.2"
+    "rxjs": "5.4.3"
   },
   "dependencies": {
     "md2": "0.0.26"
@@ -100,13 +100,13 @@
     "reflect-metadata": "^0.1.10",
     "remap-istanbul": "^0.9.5",
     "rimraf": "^2.6.1",
-    "rxjs": "^5.4.2",
+    "rxjs": "^5.4.3",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "stylelint": "^8.0.0",
     "stylelint-scss": "^2.0.1",
     "systemjs": "^0.20.17",
-    "teleport-module-services": "git+http://gitlab.teramesh.net/patrick.martin/teleport-module-services.git#v2.0.9",
+    "teleport-module-services": "git+http://gitlab.teramesh.net/patrick.martin/teleport-module-services.git#v2.0.10",
     "tslint": "^5.6.0",
     "typescript": "^2.4.2",
     "url-loader": "^0.5.9",
