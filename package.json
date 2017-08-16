@@ -106,7 +106,7 @@
     "stylelint": "^8.0.0",
     "stylelint-scss": "^2.0.1",
     "systemjs": "^0.20.17",
-    "teleport-module-services": "git+http://gitlab.teramesh.net/patrick.martin/teleport-module-services.git#v2.0.11",
+    "teleport-module-services": "git+http://gitlab.teramesh.net/patrick.martin/teleport-module-services.git#v2.0.12",
     "tslint": "^5.6.0",
     "typescript": "^2.4.2",
     "url-loader": "^0.5.9",
