@@ -17,7 +17,7 @@ import { LogsService, ILogsResponse, ILogsRequest } from "../../../services/logs
 import { MessageService }                           from "../../../services/message.service";
 
 
-const FIND_APPID_IN_URL = /^\/apiv1\/applications\/([a-z0-9\-]+)\/history\/logs/;
+const FIND_APPID_IN_URL = /^\/v1\/applications\/([a-z0-9\-]+)\/history\/logs/;
 
 
 @Component({

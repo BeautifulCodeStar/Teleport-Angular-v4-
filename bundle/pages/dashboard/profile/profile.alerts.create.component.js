@@ -70,7 +70,7 @@ var TeleportDevPortalProfileAlertsCreateComponent = (function () {
             this.is.Threshold3 ? this.Alert.account_balance.threshold3 : undefined,
         ].filter(function (t) { return !!+t; });
         this.alerts.add(this.Alert)
-            .then(function () { return _this.router.navigate(["/apiv1/account/alerts"]); })
+            .then(function () { return _this.router.navigate(["/v1/account/alerts"]); })
             .catch(function () { return _this._isBusy = false; });
     };
     TeleportDevPortalProfileAlertsCreateComponent.decorators = [

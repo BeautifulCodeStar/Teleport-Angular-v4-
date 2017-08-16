@@ -16,7 +16,7 @@ var PermsGuardCanActivate = (function () {
                 .subscribe(function (dev) {
                 var routeData = route.data;
                 if (routeData.perms && !validate(dev.permissions, routeData.perms.reduce(function (p, c) { return (p[c] = true) && p; }, {}))) {
-                    _this.router.navigate(["/apiv1/access-denied"], { queryParams: { perms: routeData.perms.join("|") } })
+                    _this.router.navigate(["/v1/access-denied"], { queryParams: { perms: routeData.perms.join("|") } })
                         .then(function () { return resolve(false); })
                         .catch(function (err) { return reject(err); });
                 }

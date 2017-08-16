@@ -5,7 +5,7 @@
     <p>
         Add, modify and delete portal users.
         Users have login and admin-defined limited access to an account.
-        <button class="btn btn-link pull-right" [routerLink]="['/apiv1/account/users/create']">
+        <button class="btn btn-link pull-right" [routerLink]="['/v1/account/users/create']">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             Create New User
         </button>
@@ -41,7 +41,7 @@
                             <button class="btn btn-link" title="Edit the User"
                                     [disabled]="! isEditable(user)"
                                     [allowAccess]="'account.users.read account.users.update account.users.delete'"
-                                    [routerLink]="['/apiv1/account/users', user.id]"
+                                    [routerLink]="['/v1/account/users', user.id]"
                             >
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </button>

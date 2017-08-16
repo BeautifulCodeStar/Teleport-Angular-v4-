@@ -54,7 +54,7 @@ var TeleportDevPortalBillingPaymentComponent = (function () {
         }
     };
     TeleportDevPortalBillingPaymentComponent.prototype.onCancel = function () {
-        this.router.navigate(["/apiv1/account/payments"]).catch(function (err) { return console.error(err); });
+        this.router.navigate(["/v1/account/payments"]).catch(function (err) { return console.error(err); });
     };
     TeleportDevPortalBillingPaymentComponent.prototype.onSubmit = function (nonce, method, type, lastFour) {
         var _this = this;
@@ -67,7 +67,7 @@ var TeleportDevPortalBillingPaymentComponent = (function () {
             .then(function () {
             _this.messages.info("Payment Accepted!", "A payment of $" + _this.amount + " was credited to your account.");
             _this.isBusy = false;
-            return _this.router.navigate(["/apiv1/account/payments"]);
+            return _this.router.navigate(["/v1/account/payments"]);
         })
             .catch(function (err) {
             _this.messages.warning("Payment Failure", err.message, err);
