@@ -5,7 +5,7 @@ import "rxjs/add/operator/filter";
 import { Store } from "@ngrx/store";
 import { LogsService } from "../../../services/logs.service";
 import { MessageService } from "../../../services/message.service";
-var FIND_APPID_IN_URL = /^\/apiv1\/applications\/([a-z0-9\-]+)\/history\/logs/;
+var FIND_APPID_IN_URL = /^\/v1\/applications\/([a-z0-9\-]+)\/history\/logs/;
 var TeleportDevPortalDataLogsComponent = (function () {
     function TeleportDevPortalDataLogsComponent(logs, messages, router, location, store$) {
         this.logs = logs;

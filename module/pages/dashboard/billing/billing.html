@@ -11,8 +11,8 @@
                 Account Balance:
                 <strong *ngIf="balance + 1">${{ balance | number:'1.2-4' }}</strong>
                 <strong *ngIf="! (balance + 1)"><span class="glyphicon glyphicon-refresh ani-spin" aria-hidden="true"></span></strong>
-                <a class="btn btn-link" [routerLink]="['/apiv1/account/payments/submit']" [allowAccess]="'account.billing.payments.create'">Make a Payment</a>
-                <a class="btn btn-link" [routerLink]="['/apiv1/account/payments/settings']" [allowAccess]="'account.billing.payments.read'">Payment Settings</a>
+                <a class="btn btn-link" [routerLink]="['/v1/account/payments/submit']" [allowAccess]="'account.billing.payments.create'">Make a Payment</a>
+                <a class="btn btn-link" [routerLink]="['/v1/account/payments/settings']" [allowAccess]="'account.billing.payments.read'">Payment Settings</a>
             </h5>
         </div>
     </div>

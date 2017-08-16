@@ -34,7 +34,7 @@ export interface IUsageView {
 }
 
 
-const FIND_APPID_IN_URL = /^\/apiv1\/applications\/([a-z0-9\-]+)\/history\/usage/;
+const FIND_APPID_IN_URL = /^\/v1\/applications\/([a-z0-9\-]+)\/history\/usage/;
 
 
 @Component({

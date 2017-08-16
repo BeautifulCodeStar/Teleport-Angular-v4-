@@ -91,7 +91,7 @@ export class TeleportDevPortalProfileAlertsCreateComponent implements OnInit {
         ].filter(t => !! +t);
 
         this.alerts.add(this.Alert)
-            .then(() => this.router.navigate(["/apiv1/account/alerts"]))
+            .then(() => this.router.navigate(["/v1/account/alerts"]))
             .catch(() => this._isBusy = false);
     }
 }
