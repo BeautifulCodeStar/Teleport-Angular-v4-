@@ -1,13 +1,16 @@
 import { Component, Inject } from "@angular/core";
 import "rxjs/add/operator/toPromise";
+import { Store } from "@ngrx/store";
+import { session } from "teleport-module-services/services/ngrx";
 import { LoginService } from "teleport-module-services/services/services/login/login.service";
 import { MessageService } from "../../services/message.service";
 import PasswordUtil from "../../utils/PasswordUtil";
 import { EmailValidator } from "../../utils/EmailValidator";
 var TeleportDevPortalLoginComponent = (function () {
-    function TeleportDevPortalLoginComponent(logins, messages) {
+    function TeleportDevPortalLoginComponent(logins, messages, store$) {
         this.logins = logins;
         this.messages = messages;
+        this.store$ = store$;
         this.userName = "";
         this.passWord = "";
         this.isBusy = false;
@@ -49,20 +52,8 @@ var TeleportDevPortalLoginComponent = (function () {
         });
     };
     TeleportDevPortalLoginComponent.prototype.loginAs = function (req) {
-        var _this = this;
         this.isBusy = true;
-        this.logins.loginAs(req)
-            .toPromise()
-            .then(function (res) {
-            console.log("Login Success", res);
-            _this.messages.info("Welcome, " + res.userData.firstName + ".", "You are now logged in to your account.");
-        })
-            .catch(function (err) {
-            console.error("Login Failure", err);
-            _this.isBusy = false;
-            _this.closeMultiLogin();
-            _this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
-        });
+        this.store$.dispatch(new session.actions.LoginAs(req));
     };
     TeleportDevPortalLoginComponent.prototype.closeMultiLogin = function () {
         this.userLogins = undefined;
@@ -77,6 +68,7 @@ var TeleportDevPortalLoginComponent = (function () {
     TeleportDevPortalLoginComponent.ctorParameters = function () { return [
         { type: LoginService, decorators: [{ type: Inject, args: [LoginService,] },] },
         { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
     ]; };
     return TeleportDevPortalLoginComponent;
 }());

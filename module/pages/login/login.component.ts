@@ -5,6 +5,10 @@ import { Observable } from "rxjs/Observable";
 import { Observer }   from "rxjs/Observer";
 import "rxjs/add/operator/toPromise";
 
+import { Store } from "@ngrx/store";
+
+import { session } from "teleport-module-services/services/ngrx";
+
 import { LoginService } from "teleport-module-services/services/services/login/login.service";
 import * as i from "teleport-module-services/services/services/login/login.service.interface";
 
@@ -33,6 +37,7 @@ export class TeleportDevPortalLoginComponent implements OnInit, OnDestroy {
     constructor (
         @Inject(LoginService)   private logins: LoginService,
         @Inject(MessageService) private messages: MessageService,
+        @Inject(Store)          private store$: Store<any>,
     ) {}
 
     
@@ -87,18 +92,20 @@ export class TeleportDevPortalLoginComponent implements OnInit, OnDestroy {
 
         this.isBusy = true;
 
-        this.logins.loginAs(req)
-            .toPromise()
-            .then(res => {
-                console.log("Login Success", res);
-                this.messages.info(`Welcome, ${res.userData.firstName}.`, "You are now logged in to your account.");
-            })
-            .catch(err => {
-                console.error("Login Failure", err);
-                this.isBusy = false;
-                this.closeMultiLogin();
-                this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
-            });
+        this.store$.dispatch(new session.actions.LoginAs(req));
+
+        // this.logins.loginAs(req)
+        //     .toPromise()
+        //     .then(res => {
+        //         console.log("Login Success", res);
+        //         this.messages.info(`Welcome, ${res.userData.firstName}.`, "You are now logged in to your account.");
+        //     })
+        //     .catch(err => {
+        //         console.error("Login Failure", err);
+        //         this.isBusy = false;
+        //         this.closeMultiLogin();
+        //         this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
+        //     });
     }
 
 
