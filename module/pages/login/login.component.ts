@@ -92,20 +92,19 @@ export class TeleportDevPortalLoginComponent implements OnInit, OnDestroy {
 
         this.isBusy = true;
 
-        this.store$.dispatch(new session.actions.LoginAs(req));
-
-        // this.logins.loginAs(req)
-        //     .toPromise()
-        //     .then(res => {
-        //         console.log("Login Success", res);
-        //         this.messages.info(`Welcome, ${res.userData.firstName}.`, "You are now logged in to your account.");
-        //     })
-        //     .catch(err => {
-        //         console.error("Login Failure", err);
-        //         this.isBusy = false;
-        //         this.closeMultiLogin();
-        //         this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
-        //     });
+        this.logins.loginAs(req)
+            .toPromise()
+            .then(res => {
+                console.log("Login Success", res);
+                this.messages.info(`Welcome, ${res.userData.firstName}.`, "You are now logged in to your account.");
+                this.store$.dispatch(new session.actions.LoginAsSuccess(res));
+            })
+            .catch(err => {
+                console.error("Login Failure", err);
+                this.isBusy = false;
+                this.closeMultiLogin();
+                this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
+            });
     }
 
 
