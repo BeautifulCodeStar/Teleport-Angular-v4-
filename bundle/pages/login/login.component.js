@@ -52,8 +52,21 @@ var TeleportDevPortalLoginComponent = (function () {
         });
     };
     TeleportDevPortalLoginComponent.prototype.loginAs = function (req) {
+        var _this = this;
         this.isBusy = true;
-        this.store$.dispatch(new session.actions.LoginAs(req));
+        this.logins.loginAs(req)
+            .toPromise()
+            .then(function (res) {
+            console.log("Login Success", res);
+            _this.messages.info("Welcome, " + res.userData.firstName + ".", "You are now logged in to your account.");
+            _this.store$.dispatch(new session.actions.LoginAsSuccess(res));
+        })
+            .catch(function (err) {
+            console.error("Login Failure", err);
+            _this.isBusy = false;
+            _this.closeMultiLogin();
+            _this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
+        });
     };
     TeleportDevPortalLoginComponent.prototype.closeMultiLogin = function () {
         this.userLogins = undefined;
