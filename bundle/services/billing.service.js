@@ -90,7 +90,10 @@ var BillingService = (function () {
                 to: new Date(_this._paymentsTo),
             },
         }); })
-            .catch(function (err) { return _this.message.error("Payments Load Failure", err.message, err); })
+            .catch(function (err) {
+            _this.message.error("Payments Load Failure", err.message, err);
+            return Observable.throw(err);
+        })
             .toPromise();
     };
     BillingService.prototype.refreshBalance = function () {
@@ -105,7 +108,10 @@ var BillingService = (function () {
             .catch(function (err) { return Observable.throw(new Error(err.json().user_message)); })
             .map(function (resp) { return resp.json().balance; })
             .do(function (balance) { return _this._observer.next({ balance: balance }); })
-            .catch(function (err) { return _this.message.error("Account Balance Load Failure", err.message, err); })
+            .catch(function (err) {
+            _this.message.error("Account Balance Load Failure", err.message, err);
+            return Observable.throw(err);
+        })
             .toPromise();
     };
     BillingService.prototype.getBraintreeClientToken = function () {
@@ -119,7 +125,10 @@ var BillingService = (function () {
         return this.http.get(url, { withCredentials: true })
             .catch(function (err) { return Observable.throw(new Error(err.json().user_message)); })
             .map(function (resp) { return resp.json().clientToken; })
-            .catch(function (err) { return _this.message.error("Payment Setup Failure", err.message, err); })
+            .catch(function (err) {
+            _this.message.error("Payment Setup Failure", err.message, err);
+            return Observable.throw(err);
+        })
             .toPromise();
     };
     BillingService.prototype.makePayment = function (amount, nonce, method, card_type, last_four) {
@@ -133,7 +142,7 @@ var BillingService = (function () {
         var headers = new Headers({ "Content-Type": "application/json" });
         var options = new RequestOptions({ headers: headers, withCredentials: true });
         return this.http.post(url, JSON.stringify({ amount: amount, payment_method: payment_method }), options)
-            .catch(function (err) { return Observable.throw(new Error(err.json().help)); })
+            .catch(function (err) { return Observable.throw(new Error(err.json().user_message)); })
             .map(function (resp) { return resp.json().transaction; })
             .toPromise();
     };

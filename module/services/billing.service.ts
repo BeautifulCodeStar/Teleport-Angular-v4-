@@ -118,8 +118,8 @@ export class BillingService {
         ].join("/");
 
         return this.http.get(url, {search: `begin_date=${new Date(from).toISOString()}&end_date=${new Date(to).toISOString()}`, withCredentials: true })
-            .catch(err      => Observable.throw(new Error(err.json().user_message)))
-            .map  (resp     => resp.json().payments)
+            .catch(err => Observable.throw(new Error(err.json().user_message)))
+            .map  (resp => resp.json().payments)
             .map  ((payments: IPayment[]) => payments.map((p: IPayment) => Object.assign({}, p, {submitted_on: new Date(String(p.submitted_on))})))
             .do   ((payments: IPayment[]) => payments.sort((a: any, b: any) => b.submitted_on - a.submitted_on))
             .do   ((payments: IPayment[]) => this._observer.next({
@@ -129,7 +129,10 @@ export class BillingService {
                     to: new Date(this._paymentsTo),
                 },
             }))
-            .catch(err      => this.message.error("Payments Load Failure", err.message, err))
+            .catch(err => {
+                this.message.error("Payments Load Failure", err.message, err);
+                return Observable.throw(err);
+            })
             .toPromise();
     }
 
@@ -147,7 +150,10 @@ export class BillingService {
             .catch(err     => Observable.throw(new Error(err.json().user_message)))
             .map  (resp    => resp.json().balance)
             .do   ((balance: number) => this._observer.next({balance}))
-            .catch(err     => this.message.error("Account Balance Load Failure", err.message, err))
+            .catch(err     => {
+                this.message.error("Account Balance Load Failure", err.message, err);
+                return Observable.throw(err);
+            })
             .toPromise();
     }
 
@@ -164,7 +170,10 @@ export class BillingService {
         return this.http.get(url, { withCredentials: true })
             .catch (err  => Observable.throw(new Error(err.json().user_message)))
             .map   (resp => resp.json().clientToken)
-            .catch (err  => this.message.error("Payment Setup Failure", err.message, err))
+            .catch (err  => {
+                this.message.error("Payment Setup Failure", err.message, err);
+                return Observable.throw(err);
+            })
             .toPromise();
     }
     
@@ -183,7 +192,7 @@ export class BillingService {
         let options = new RequestOptions({ headers, withCredentials: true });
 
         return this.http.post(url, JSON.stringify({amount, payment_method}), options)
-            .catch(err     => Observable.throw(new Error(err.json().help)))
+            .catch(err     => Observable.throw(new Error(err.json().user_message)))
             .map  (resp    => resp.json().transaction)
             .toPromise();
     }

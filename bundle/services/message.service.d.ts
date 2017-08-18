@@ -1,4 +1,3 @@
-import { ErrorObservable } from "rxjs/observable/ErrorObservable";
 import { Store, ReducerManagerDispatcher } from "@ngrx/store";
 import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 export declare class MessageService {
@@ -8,7 +7,7 @@ export declare class MessageService {
     private containerDiv;
     constructor(doc: HTMLDocument, store$: Store<TeleportCoreState>, dispatcher$: ReducerManagerDispatcher);
     info(title: string, message: string): void;
-    warning(title: string, message: string, err?: Error): ErrorObservable;
-    error(title: string, message: string, err?: Error): ErrorObservable;
+    warning(title: string, message: string, err?: Error): void;
+    error(title: string, message: string, err?: Error): void;
     private initAlert(title, message, type);
 }

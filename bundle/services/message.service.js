@@ -1,6 +1,5 @@
 import { Injectable, Inject } from "@angular/core";
 import { DOCUMENT } from "@angular/platform-browser";
-import { Observable } from "rxjs/Observable";
 import { Store, ReducerManagerDispatcher } from "@ngrx/store";
 import * as actions from "teleport-module-services/services/ngrx/messages/messages.actions";
 var MessageService = (function () {
@@ -33,11 +32,9 @@ var MessageService = (function () {
     };
     MessageService.prototype.warning = function (title, message, err) {
         this.initAlert(title, message, "warning");
-        return Observable.throw(err || new Error(message));
     };
     MessageService.prototype.error = function (title, message, err) {
         this.initAlert(title, message, "danger");
-        return Observable.throw(err || new Error(message));
     };
     MessageService.prototype.initAlert = function (title, message, type) {
         var _this = this;

@@ -99,7 +99,7 @@ export declare class Md2Datepicker implements AfterContentInit, ControlValueAcce
     registerOnChange(fn: any): void;
     registerOnTouched(fn: any): void;
 }
-export declare const MD2_DATEPICKER_DIRECTIVES: typeof Md2Datepicker[];
+export declare const MD2_DATEPICKER_DIRECTIVES: (typeof Md2Datepicker)[];
 export declare class Md2DatepickerModule {
     static forRoot(): ModuleWithProviders;
 }

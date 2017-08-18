@@ -1,8 +1,7 @@
 import { Injectable, Inject } from "@angular/core";
 import { DOCUMENT }           from "@angular/platform-browser";
 
-import { Observable }      from "rxjs/Observable";
-import { ErrorObservable } from "rxjs/observable/ErrorObservable";
+import { Observable } from "rxjs/Observable";
 
 import { Store, ReducerManagerDispatcher } from "@ngrx/store";
 
@@ -41,20 +40,18 @@ export class MessageService {
             });
     }
 
-    public info (title: string, message: string) {
+    public info (title: string, message: string): void {
         this.initAlert(title, message, "success");
     }
 
 
-    public warning (title: string, message: string, err?: Error): ErrorObservable {
+    public warning (title: string, message: string, err?: Error): void {
         this.initAlert(title, message, "warning");
-        return Observable.throw(err || new Error(message));
     }
 
 
-    public error (title: string, message: string, err?: Error): ErrorObservable {
+    public error (title: string, message: string, err?: Error): void {
         this.initAlert(title, message, "danger");
-        return Observable.throw(err || new Error(message));
     }
 
     private initAlert (title: string, message: string, type: "success" | "warning" | "danger") {
