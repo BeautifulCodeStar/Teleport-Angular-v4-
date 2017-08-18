@@ -2,6 +2,7 @@ import { Injectable, Inject } from "@angular/core";
 import { Http, RequestOptions, Headers } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import "rxjs/add/observable/throw";
 import { Store } from "@ngrx/store";
 import { MessageService } from "./message.service";
 var BillingService = (function () {

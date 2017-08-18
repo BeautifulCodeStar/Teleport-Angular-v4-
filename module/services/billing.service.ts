@@ -5,6 +5,7 @@ import { Http, RequestOptions, Headers } from "@angular/http";
 import { Observable }      from "rxjs/Observable";
 import { Observer }        from "rxjs/Observer";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import "rxjs/add/observable/throw";
 
 import { Store } from "@ngrx/store";
 

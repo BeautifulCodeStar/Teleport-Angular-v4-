@@ -1,5 +1,6 @@
 import { Http } from "@angular/http";
 import { Observable } from "rxjs/Observable";
+import "rxjs/add/observable/throw";
 import { Store } from "@ngrx/store";
 import { TeleportCoreState } from "teleport-module-services/services/ngrx/index";
 import { IPayment } from "../models/interfaces";
