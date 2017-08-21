@@ -2,6 +2,7 @@ import { Component, Inject, NgZone } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs/Subject";
 import "rxjs/add/operator/filter";
+import "rxjs/add/operator/first";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/takeUntil";
 import { Store, ReducerManagerDispatcher } from "@ngrx/store";
@@ -27,8 +28,9 @@ var TeleportDevPortalAppByIdComponent = (function () {
         var _this = this;
         console.log("TeleportDevPortalAppByIdComponent OnInit");
         this.route.params
-            .forEach(function (param) { return _this.appId = param.appId; })
-            .then(function () {
+            .first()
+            .subscribe(function (params) {
+            _this.appId = params.appId;
             console.log("ROUTE PARAMS", _this.appId);
             _this.store$.select("session")
                 .takeUntil(_this.unsubscriber)

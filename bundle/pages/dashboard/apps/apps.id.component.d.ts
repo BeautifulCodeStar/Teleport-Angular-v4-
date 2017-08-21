@@ -1,6 +1,7 @@
 import { OnInit, OnDestroy, NgZone } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import "rxjs/add/operator/filter";
+import "rxjs/add/operator/first";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/takeUntil";
 import { Store, ReducerManagerDispatcher } from "@ngrx/store";
