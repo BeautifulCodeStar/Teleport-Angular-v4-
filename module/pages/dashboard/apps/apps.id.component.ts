@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
+import { Component, Inject, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { Router, ActivatedRoute }       from "@angular/router";
 
 import { Subject } from "rxjs/Subject";
@@ -40,10 +40,11 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
     private unsubscriber = new Subject();
 
     constructor (
-        @Inject(Router)         private router: Router,
-        @Inject(ModalService)   private modal: ModalService,
-        @Inject(ActivatedRoute) private route: ActivatedRoute,
-        @Inject(Store)          private store$: Store<TeleportCoreState & APIv1State>,
+        @Inject(Router)                   private router: Router,
+        @Inject(ChangeDetectorRef)        private cd: ChangeDetectorRef,
+        @Inject(ModalService)             private modal: ModalService,
+        @Inject(ActivatedRoute)           private route: ActivatedRoute,
+        @Inject(Store)                    private store$: Store<TeleportCoreState & APIv1State>,
         @Inject(ReducerManagerDispatcher) private dispatcher: ReducerManagerDispatcher,
     ) {}
 
@@ -69,6 +70,7 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
                             this._application = app;
                             this.appName = app.friendlyName;
                             this.appNotes = app.notes;
+                            this.cd.detectChanges();
                         }
                     });
         

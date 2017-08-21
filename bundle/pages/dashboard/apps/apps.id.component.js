@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, ChangeDetectorRef } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs/Subject";
 import "rxjs/add/operator/filter";
@@ -8,8 +8,9 @@ import { Store, ReducerManagerDispatcher } from "@ngrx/store";
 import * as actions from "teleport-module-services/services/v1/ngrx/applications/applications.actions";
 import { ModalService } from "../../../services/modal.service";
 var TeleportDevPortalAppByIdComponent = (function () {
-    function TeleportDevPortalAppByIdComponent(router, modal, route, store$, dispatcher) {
+    function TeleportDevPortalAppByIdComponent(router, cd, modal, route, store$, dispatcher) {
         this.router = router;
+        this.cd = cd;
         this.modal = modal;
         this.route = route;
         this.store$ = store$;
@@ -42,6 +43,7 @@ var TeleportDevPortalAppByIdComponent = (function () {
                     _this._application = app;
                     _this.appName = app.friendlyName;
                     _this.appNotes = app.notes;
+                    _this.cd.detectChanges();
                 }
             });
             var OK_ACTIONS = [
@@ -111,6 +113,7 @@ var TeleportDevPortalAppByIdComponent = (function () {
     ];
     TeleportDevPortalAppByIdComponent.ctorParameters = function () { return [
         { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
+        { type: ChangeDetectorRef, decorators: [{ type: Inject, args: [ChangeDetectorRef,] },] },
         { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
         { type: ActivatedRoute, decorators: [{ type: Inject, args: [ActivatedRoute,] },] },
         { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
