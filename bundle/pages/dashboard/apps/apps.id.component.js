@@ -21,19 +21,21 @@ var TeleportDevPortalAppByIdComponent = (function () {
         this.appName = "";
         this.appNotes = "";
         this.unsubscriber = new Subject();
+        console.log("TeleportDevPortalAppByIdComponent CONSTRUCTOR");
     }
     TeleportDevPortalAppByIdComponent.prototype.ngOnInit = function () {
         var _this = this;
+        console.log("TeleportDevPortalAppByIdComponent OnInit");
         this.route.params
             .forEach(function (param) { return _this.appId = param.appId; })
             .then(function () {
+            console.log("ROUTE PARAMS", _this.appId);
             _this.store$.select("session")
                 .takeUntil(_this.unsubscriber)
                 .filter(function (s) { return s.isJust(); })
                 .map(function (s) { return s.just(); })
                 .subscribe(function (s) { return _this._developer = s.userData; });
             _this.store$.select("v1_applications")
-                .takeUntil(_this.unsubscriber)
                 .map(function (apps) { return apps.find(function (app) { return app.name === _this.appId; }); })
                 .subscribe(function (app) {
                 console.log("XXXXX", app);
