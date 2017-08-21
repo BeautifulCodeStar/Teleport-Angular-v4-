@@ -50,10 +50,14 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
 
     public ngOnInit () {
 
+        console.log("TeleportDevPortalAppByIdComponent OnInit");
+
         this.route.params
             .forEach((param: any) => this.appId = param.appId)
             .then(() => {
                 
+                console.log("ROUTE PARAMS", this.appId);
+
                 this.store$.select("session")
                     .takeUntil(this.unsubscriber)
                     .filter(s => s.isJust())
@@ -61,7 +65,7 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
                     .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
         
                 this.store$.select("v1_applications")
-                    .takeUntil(this.unsubscriber)
+                    // .takeUntil(this.unsubscriber)
                     .map(apps => apps.find(app => app.name === this.appId))
                     .subscribe(app => {
                         console.log("XXXXX", app);
