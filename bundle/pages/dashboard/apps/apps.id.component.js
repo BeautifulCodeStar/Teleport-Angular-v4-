@@ -1,4 +1,4 @@
-import { Component, Inject, NgZone } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs/Subject";
 import "rxjs/add/operator/filter";
@@ -9,9 +9,8 @@ import { Store, ReducerManagerDispatcher } from "@ngrx/store";
 import * as actions from "teleport-module-services/services/v1/ngrx/applications/applications.actions";
 import { ModalService } from "../../../services/modal.service";
 var TeleportDevPortalAppByIdComponent = (function () {
-    function TeleportDevPortalAppByIdComponent(router, zone, modal, route, store$, dispatcher) {
+    function TeleportDevPortalAppByIdComponent(router, modal, route, store$, dispatcher) {
         this.router = router;
-        this.zone = zone;
         this.modal = modal;
         this.route = route;
         this.store$ = store$;
@@ -22,34 +21,29 @@ var TeleportDevPortalAppByIdComponent = (function () {
         this.appName = "";
         this.appNotes = "";
         this.unsubscriber = new Subject();
-        console.log("TeleportDevPortalAppByIdComponent CONSTRUCTOR");
     }
     TeleportDevPortalAppByIdComponent.prototype.ngOnInit = function () {
         var _this = this;
-        console.log("TeleportDevPortalAppByIdComponent OnInit");
         this.route.params
             .first()
             .subscribe(function (params) {
             _this.appId = params.appId;
-            console.log("ROUTE PARAMS", _this.appId);
             _this.store$.select("session")
                 .takeUntil(_this.unsubscriber)
                 .filter(function (s) { return s.isJust(); })
                 .map(function (s) { return s.just(); })
                 .subscribe(function (s) { return _this._developer = s.userData; });
             _this.store$.select("v1_applications")
+                .takeUntil(_this.unsubscriber)
                 .map(function (apps) { return apps.find(function (app) { return app.name === _this.appId; }); })
                 .subscribe(function (app) {
-                console.log("XXXXX", app);
                 if (!app) {
                     _this.router.navigate(["/v1/applications"]);
                 }
                 else {
-                    _this.zone.run(function () {
-                        _this._application = app;
-                        _this.appName = app.friendlyName;
-                        _this.appNotes = app.notes;
-                    });
+                    _this._application = app;
+                    _this.appName = app.friendlyName;
+                    _this.appNotes = app.notes;
                 }
             });
             var OK_ACTIONS = [
@@ -59,7 +53,7 @@ var TeleportDevPortalAppByIdComponent = (function () {
             _this.dispatcher
                 .takeUntil(_this.unsubscriber)
                 .filter(function (action) { return OK_ACTIONS.indexOf(action.type) !== -1; })
-                .subscribe(function (action) { return _this.zone.run(function () {
+                .subscribe(function (action) {
                 switch (action.type) {
                     case actions.UPDATE:
                     case actions.REMOVE:
@@ -68,7 +62,7 @@ var TeleportDevPortalAppByIdComponent = (function () {
                     default:
                         _this.isBusy = false;
                 }
-            }); });
+            });
         });
     };
     TeleportDevPortalAppByIdComponent.prototype.ngOnDestroy = function () {
@@ -119,7 +113,6 @@ var TeleportDevPortalAppByIdComponent = (function () {
     ];
     TeleportDevPortalAppByIdComponent.ctorParameters = function () { return [
         { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
-        { type: NgZone, decorators: [{ type: Inject, args: [NgZone,] },] },
         { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
         { type: ActivatedRoute, decorators: [{ type: Inject, args: [ActivatedRoute,] },] },
         { type: Store, decorators: [{ type: Inject, args: [Store,] },] },

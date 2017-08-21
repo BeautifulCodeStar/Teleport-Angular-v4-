@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy, NgZone } from "@angular/core";
+import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute }       from "@angular/router";
 
 import { Subject } from "rxjs/Subject";
@@ -42,26 +42,19 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
 
     constructor (
         @Inject(Router)                   private router: Router,
-        @Inject(NgZone)                   private zone: NgZone,
         @Inject(ModalService)             private modal: ModalService,
         @Inject(ActivatedRoute)           private route: ActivatedRoute,
         @Inject(Store)                    private store$: Store<TeleportCoreState & APIv1State>,
         @Inject(ReducerManagerDispatcher) private dispatcher: ReducerManagerDispatcher,
-    ) {
-        console.log("TeleportDevPortalAppByIdComponent CONSTRUCTOR");
-    }
+    ) {}
 
     public ngOnInit () {
-
-        console.log("TeleportDevPortalAppByIdComponent OnInit");
 
         this.route.params
             .first()
             .subscribe(params => {
                 
                 this.appId = params.appId;
-
-                console.log("ROUTE PARAMS", this.appId);
 
                 this.store$.select("session")
                     .takeUntil(this.unsubscriber)
@@ -70,18 +63,15 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
                     .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
         
                 this.store$.select("v1_applications")
-                    // .takeUntil(this.unsubscriber)
+                    .takeUntil(this.unsubscriber)
                     .map(apps => apps.find(app => app.name === this.appId))
                     .subscribe(app => {
-                        console.log("XXXXX", app);
                         if (! app) {
                             this.router.navigate(["/v1/applications"]);
                         } else {
-                            this.zone.run(() => {
-                                this._application = app;
-                                this.appName = app.friendlyName;
-                                this.appNotes = app.notes;
-                            });
+                            this._application = app;
+                            this.appName = app.friendlyName;
+                            this.appNotes = app.notes;
                         }
                     });
         
@@ -92,7 +82,7 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
                 this.dispatcher
                     .takeUntil(this.unsubscriber)
                     .filter(action => OK_ACTIONS.indexOf(action.type) !== -1)
-                    .subscribe((action: actions.UpdateSuccess) => this.zone.run(() => {
+                    .subscribe((action: actions.UpdateSuccess) => {
         
                         switch (action.type) {
         
@@ -108,7 +98,7 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
                             default:
                                 this.isBusy = false;
                         }
-                    }));
+                    });
             });
     }
 
