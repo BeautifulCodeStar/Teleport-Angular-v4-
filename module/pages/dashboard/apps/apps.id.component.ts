@@ -3,6 +3,7 @@ import { Router, ActivatedRoute }       from "@angular/router";
 
 import { Subject } from "rxjs/Subject";
 import "rxjs/add/operator/filter";
+import "rxjs/add/operator/first";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/takeUntil";
 
@@ -55,9 +56,11 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
         console.log("TeleportDevPortalAppByIdComponent OnInit");
 
         this.route.params
-            .forEach((param: any) => this.appId = param.appId)
-            .then(() => {
+            .first()
+            .subscribe(params => {
                 
+                this.appId = params.appId;
+
                 console.log("ROUTE PARAMS", this.appId);
 
                 this.store$.select("session")
