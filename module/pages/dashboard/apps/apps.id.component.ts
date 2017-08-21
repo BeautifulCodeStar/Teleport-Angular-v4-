@@ -46,7 +46,9 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
         @Inject(ActivatedRoute)           private route: ActivatedRoute,
         @Inject(Store)                    private store$: Store<TeleportCoreState & APIv1State>,
         @Inject(ReducerManagerDispatcher) private dispatcher: ReducerManagerDispatcher,
-    ) {}
+    ) {
+        console.log("TeleportDevPortalAppByIdComponent CONSTRUCTOR");
+    }
 
     public ngOnInit () {
 
