@@ -386,7 +386,7 @@ export function View_TeleportDevPortalAppByIdComponent_Host_0(_l:any):i0.ɵViewD
   return i0.ɵvid(0,[(_l()(),i0.ɵeld(0,(null as any),(null as any),1,'teleport-dev-portal-app-detail',
       ([] as any[]),(null as any),(null as any),(null as any),View_TeleportDevPortalAppByIdComponent_0,
       RenderType_TeleportDevPortalAppByIdComponent)),i0.ɵdid(245760,(null as any),
-      0,i8.TeleportDevPortalAppByIdComponent,[i9.Router,i0.ChangeDetectorRef,i7.ModalService,
+      0,i8.TeleportDevPortalAppByIdComponent,[i9.Router,i0.NgZone,i7.ModalService,
           i9.ActivatedRoute,i2.Store,i2.ReducerManagerDispatcher],(null as any),(null as any))],
       (_ck,_v) => {
         _ck(_v,1,0);

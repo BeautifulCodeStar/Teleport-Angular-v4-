@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
+import { Component, Inject, OnInit, OnDestroy, NgZone } from "@angular/core";
 import { Router, ActivatedRoute }       from "@angular/router";
 
 import { Subject } from "rxjs/Subject";
@@ -41,7 +41,7 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
 
     constructor (
         @Inject(Router)                   private router: Router,
-        @Inject(ChangeDetectorRef)        private cd: ChangeDetectorRef,
+        @Inject(NgZone)                   private zone: NgZone,
         @Inject(ModalService)             private modal: ModalService,
         @Inject(ActivatedRoute)           private route: ActivatedRoute,
         @Inject(Store)                    private store$: Store<TeleportCoreState & APIv1State>,
@@ -64,13 +64,15 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
                     .takeUntil(this.unsubscriber)
                     .map(apps => apps.find(app => app.name === this.appId))
                     .subscribe(app => {
+                        console.log("XXXXX", app);
                         if (! app) {
                             this.router.navigate(["/v1/applications"]);
                         } else {
-                            this._application = app;
-                            this.appName = app.friendlyName;
-                            this.appNotes = app.notes;
-                            this.cd.detectChanges();
+                            this.zone.run(() => {
+                                this._application = app;
+                                this.appName = app.friendlyName;
+                                this.appNotes = app.notes;
+                            });
                         }
                     });
         
@@ -81,7 +83,7 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
                 this.dispatcher
                     .takeUntil(this.unsubscriber)
                     .filter(action => OK_ACTIONS.indexOf(action.type) !== -1)
-                    .subscribe((action: actions.UpdateSuccess) => {
+                    .subscribe((action: actions.UpdateSuccess) => this.zone.run(() => {
         
                         switch (action.type) {
         
@@ -97,7 +99,7 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
                             default:
                                 this.isBusy = false;
                         }
-                    });
+                    }));
             });
     }
 

@@ -15,4 +15,4 @@ export declare class Overlay {
     private _createPortalHost(pane);
     private _createOverlayRef(pane, state);
 }
-export declare const OVERLAY_PROVIDERS: (typeof ViewportRuler | typeof OverlayPositionBuilder | typeof Overlay | typeof OverlayContainer)[];
+export declare const OVERLAY_PROVIDERS: (typeof Overlay | typeof ViewportRuler | typeof OverlayPositionBuilder | typeof OverlayContainer)[];
