@@ -1,6 +1,6 @@
 {
   "name": "teleport-module-dev-portal",
-  "version": "1.3.13",
+  "version": "1.3.14",
   "description": "Dev Portal module for Shoutpoint's TelePort web app.",
   "main": "./bundle/module.umd.js",
   "types": "./bundle/index.d.ts",
