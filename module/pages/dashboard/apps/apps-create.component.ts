@@ -46,8 +46,6 @@ export class TeleportDevPortalAppsCreateComponent {
         const appName = this.appName;
         const notes = this.appNotes;
 
-        this.store$.dispatch(new actions.Create({ dev, appName, notes }));
-
         this.dispatcher
             .first(action => action.type === actions.CREATE_SUCCESS || action.type === actions.CREATE_FAILURE)
             .subscribe((action: actions.CreateSuccess) => {
@@ -63,5 +61,6 @@ export class TeleportDevPortalAppsCreateComponent {
                 }
             });
 
+        this.store$.dispatch(new actions.Create({ dev, appName, notes }));    
     }
 }

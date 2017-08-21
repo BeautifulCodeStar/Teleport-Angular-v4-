@@ -49,51 +49,54 @@ export class TeleportDevPortalAppByIdComponent implements OnInit, OnDestroy {
 
     public ngOnInit () {
 
-        this.store$.select("session")
-            .takeUntil(this.unsubscriber)
-            .filter(s => s.isJust())
-            .map(s => s.just())
-            .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
-
-        this.store$.select("v1_applications")
-            .takeUntil(this.unsubscriber)
-            .map(apps => apps.find(app => app.id === this.appId))
-            .subscribe(app => {
-                if (! app) {
-                    this.router.navigate(["/v1/applications"]);
-                } else {
-                    this._application = app;
-                    this.appName = app.friendlyName;
-                    this.appNotes = app.notes;
-                }
+        this.route.params
+            .forEach((param: any) => this.appId = param.appId)
+            .then(() => {
+                
+                this.store$.select("session")
+                    .takeUntil(this.unsubscriber)
+                    .filter(s => s.isJust())
+                    .map(s => s.just())
+                    .subscribe((s: ILoginAsResponse<IDeveloper>) => this._developer = s.userData);
+        
+                this.store$.select("v1_applications")
+                    .takeUntil(this.unsubscriber)
+                    .map(apps => apps.find(app => app.name === this.appId))
+                    .subscribe(app => {
+                        if (! app) {
+                            this.router.navigate(["/v1/applications"]);
+                        } else {
+                            this._application = app;
+                            this.appName = app.friendlyName;
+                            this.appNotes = app.notes;
+                        }
+                    });
+        
+                const OK_ACTIONS = [
+                    actions.UPDATE, actions.UPDATE_SUCCESS, actions.UPDATE_FAILURE,
+                    actions.REMOVE, actions.REMOVE_SUCCESS, actions.REMOVE_FAILURE,
+                ];
+                this.dispatcher
+                    .takeUntil(this.unsubscriber)
+                    .filter(action => OK_ACTIONS.indexOf(action.type) !== -1)
+                    .subscribe((action: actions.UpdateSuccess) => {
+        
+                        switch (action.type) {
+        
+                            case actions.UPDATE:
+                            case actions.REMOVE:
+                                this.isBusy = true;
+                                break;
+        
+                            // case actions.REMOVE_SUCCESS:
+                            //     this.router.navigate(["/v1/applications"]);
+                            //     break;
+        
+                            default:
+                                this.isBusy = false;
+                        }
+                    });
             });
-
-        const OK_ACTIONS = [
-            actions.UPDATE, actions.UPDATE_SUCCESS, actions.UPDATE_FAILURE,
-            actions.REMOVE, actions.REMOVE_SUCCESS, actions.REMOVE_FAILURE,
-        ];
-        this.dispatcher
-            .takeUntil(this.unsubscriber)
-            .filter(action => OK_ACTIONS.indexOf(action.type) !== -1)
-            .subscribe((action: actions.UpdateSuccess) => {
-
-                switch (action.type) {
-
-                    case actions.UPDATE:
-                    case actions.REMOVE:
-                        this.isBusy = true;
-                        break;
-
-                    // case actions.REMOVE_SUCCESS:
-                    //     this.router.navigate(["/v1/applications"]);
-                    //     break;
-
-                    default:
-                        this.isBusy = false;
-                }
-            });
-
-        this.route.params.forEach((param: any) => this.appId = param.appId);
     }
 
     public ngOnDestroy () {

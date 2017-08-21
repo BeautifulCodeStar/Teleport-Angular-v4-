@@ -23,42 +23,45 @@ var TeleportDevPortalAppByIdComponent = (function () {
     }
     TeleportDevPortalAppByIdComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.store$.select("session")
-            .takeUntil(this.unsubscriber)
-            .filter(function (s) { return s.isJust(); })
-            .map(function (s) { return s.just(); })
-            .subscribe(function (s) { return _this._developer = s.userData; });
-        this.store$.select("v1_applications")
-            .takeUntil(this.unsubscriber)
-            .map(function (apps) { return apps.find(function (app) { return app.id === _this.appId; }); })
-            .subscribe(function (app) {
-            if (!app) {
-                _this.router.navigate(["/v1/applications"]);
-            }
-            else {
-                _this._application = app;
-                _this.appName = app.friendlyName;
-                _this.appNotes = app.notes;
-            }
+        this.route.params
+            .forEach(function (param) { return _this.appId = param.appId; })
+            .then(function () {
+            _this.store$.select("session")
+                .takeUntil(_this.unsubscriber)
+                .filter(function (s) { return s.isJust(); })
+                .map(function (s) { return s.just(); })
+                .subscribe(function (s) { return _this._developer = s.userData; });
+            _this.store$.select("v1_applications")
+                .takeUntil(_this.unsubscriber)
+                .map(function (apps) { return apps.find(function (app) { return app.name === _this.appId; }); })
+                .subscribe(function (app) {
+                if (!app) {
+                    _this.router.navigate(["/v1/applications"]);
+                }
+                else {
+                    _this._application = app;
+                    _this.appName = app.friendlyName;
+                    _this.appNotes = app.notes;
+                }
+            });
+            var OK_ACTIONS = [
+                actions.UPDATE, actions.UPDATE_SUCCESS, actions.UPDATE_FAILURE,
+                actions.REMOVE, actions.REMOVE_SUCCESS, actions.REMOVE_FAILURE,
+            ];
+            _this.dispatcher
+                .takeUntil(_this.unsubscriber)
+                .filter(function (action) { return OK_ACTIONS.indexOf(action.type) !== -1; })
+                .subscribe(function (action) {
+                switch (action.type) {
+                    case actions.UPDATE:
+                    case actions.REMOVE:
+                        _this.isBusy = true;
+                        break;
+                    default:
+                        _this.isBusy = false;
+                }
+            });
         });
-        var OK_ACTIONS = [
-            actions.UPDATE, actions.UPDATE_SUCCESS, actions.UPDATE_FAILURE,
-            actions.REMOVE, actions.REMOVE_SUCCESS, actions.REMOVE_FAILURE,
-        ];
-        this.dispatcher
-            .takeUntil(this.unsubscriber)
-            .filter(function (action) { return OK_ACTIONS.indexOf(action.type) !== -1; })
-            .subscribe(function (action) {
-            switch (action.type) {
-                case actions.UPDATE:
-                case actions.REMOVE:
-                    _this.isBusy = true;
-                    break;
-                default:
-                    _this.isBusy = false;
-            }
-        });
-        this.route.params.forEach(function (param) { return _this.appId = param.appId; });
     };
     TeleportDevPortalAppByIdComponent.prototype.ngOnDestroy = function () {
         this.unsubscriber.complete();

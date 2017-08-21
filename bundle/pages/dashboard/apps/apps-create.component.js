@@ -23,7 +23,6 @@ var TeleportDevPortalAppsCreateComponent = (function () {
         var dev = this._developer;
         var appName = this.appName;
         var notes = this.appNotes;
-        this.store$.dispatch(new actions.Create({ dev: dev, appName: appName, notes: notes }));
         this.dispatcher
             .first(function (action) { return action.type === actions.CREATE_SUCCESS || action.type === actions.CREATE_FAILURE; })
             .subscribe(function (action) {
@@ -35,6 +34,7 @@ var TeleportDevPortalAppsCreateComponent = (function () {
                     _this.isBusy = false;
             }
         });
+        this.store$.dispatch(new actions.Create({ dev: dev, appName: appName, notes: notes }));
     };
     TeleportDevPortalAppsCreateComponent.decorators = [
         { type: Component, args: [{
