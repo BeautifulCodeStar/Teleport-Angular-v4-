@@ -57,7 +57,7 @@
         <h5 class="text-center">User Accounts</h5>
 
         <a class="list-group-item" *ngFor="let d of userLogins" (click)="loginAs(d)">
-            <h5 class="list-group-item-heading">{{ d.fullName }} ({{ d.userType }}</h5>
+            <h5 class="list-group-item-heading">{{ d.fullName }} <small>({{ d.userType }})</small></h5>
             <div>Acct <strong>{{ d.accountOwner }}</strong> // Position <strong>{{ d.role || '--' }}</strong></div>
         </a>
 
