@@ -1,5 +1,6 @@
-import { Component, Inject } from "@angular/core";
-import "rxjs/add/operator/toPromise";
+import { Component, Inject, ChangeDetectionStrategy } from "@angular/core";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import "rxjs/add/operator/first";
 import { Store } from "@ngrx/store";
 import { session } from "teleport-module-services/services/ngrx";
 import { LoginService } from "teleport-module-services/services/services/login/login.service";
@@ -13,20 +14,9 @@ var TeleportDevPortalLoginComponent = (function () {
         this.store$ = store$;
         this.userName = "";
         this.passWord = "";
-        this.isBusy = false;
+        this.isBusy = new BehaviorSubject(false);
+        this.userLogins = new BehaviorSubject([]);
     }
-    TeleportDevPortalLoginComponent.prototype.ngOnInit = function () {
-        this.userLogins = undefined;
-        this.userName = "";
-        this.passWord = "";
-        this.isBusy = false;
-    };
-    TeleportDevPortalLoginComponent.prototype.ngOnDestroy = function () {
-        this.userLogins = undefined;
-        this.userName = "";
-        this.passWord = "";
-        this.isBusy = false;
-    };
     TeleportDevPortalLoginComponent.prototype.isPasswordValid = function (pw) {
         return PasswordUtil.satisfies(pw);
     };
@@ -35,47 +25,47 @@ var TeleportDevPortalLoginComponent = (function () {
     };
     TeleportDevPortalLoginComponent.prototype.onSubmit = function () {
         var _this = this;
-        this.isBusy = true;
+        this.isBusy.next(true);
         this.logins.login({ userName: this.userName, password: this.passWord })
-            .toPromise()
-            .then(function (res) {
+            .first()
+            .subscribe(function (res) {
             if (res.v1.length === 1) {
                 _this.loginAs(res.v1[0]);
                 return;
             }
-            _this.userLogins = res.v1;
-            _this.isBusy = false;
-        })
-            .catch(function (err) {
-            _this.isBusy = false;
+            _this.userLogins.next(res.v1);
+            _this.isBusy.next(false);
+        }, function (err) {
+            _this.userLogins.next([]);
+            _this.isBusy.next(false);
             _this.messages.error("Login Failure", "The username/password combination was not provided.", err);
         });
     };
     TeleportDevPortalLoginComponent.prototype.loginAs = function (req) {
         var _this = this;
-        this.isBusy = true;
+        this.isBusy.next(true);
         this.logins.loginAs(req)
-            .toPromise()
-            .then(function (res) {
+            .first()
+            .subscribe(function (res) {
             console.log("Login Success", res);
             _this.messages.info("Welcome, " + res.userData.firstName + ".", "You are now logged in to your account.");
             _this.store$.dispatch(new session.actions.LoginAsSuccess(res));
-        })
-            .catch(function (err) {
+        }, function (err) {
             console.error("Login Failure", err);
-            _this.isBusy = false;
+            _this.isBusy.next(false);
             _this.closeMultiLogin();
             _this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
         });
     };
     TeleportDevPortalLoginComponent.prototype.closeMultiLogin = function () {
-        this.userLogins = undefined;
+        this.userLogins.next([]);
     };
     TeleportDevPortalLoginComponent.decorators = [
         { type: Component, args: [{
                     moduleId: String(module.id),
                     selector: "teleport-dev-portal-login",
                     templateUrl: "login.html",
+                    changeDetection: ChangeDetectionStrategy.OnPush,
                 },] },
     ];
     TeleportDevPortalLoginComponent.ctorParameters = function () { return [
