@@ -1,9 +1,10 @@
 
-import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
+import { Component, Inject, ChangeDetectionStrategy } from "@angular/core";
 
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Observable } from "rxjs/Observable";
 import { Observer }   from "rxjs/Observer";
-import "rxjs/add/operator/toPromise";
+import "rxjs/add/operator/first";
 
 import { Store } from "@ngrx/store";
 
@@ -24,36 +25,22 @@ import { EmailValidator } from "../../utils/EmailValidator";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-login",
     templateUrl: "login.html",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TeleportDevPortalLoginComponent implements OnInit, OnDestroy {
+export class TeleportDevPortalLoginComponent {
     
     public userName = "";
     public passWord = "";
     
-    public isBusy = false;
+    public isBusy = new BehaviorSubject<boolean>(false);
 
-    public userLogins: i.ILoginAsRequest[];
+    public userLogins = new BehaviorSubject<i.ILoginAsRequest[]>([]);
 
     constructor (
         @Inject(LoginService)   private logins: LoginService,
         @Inject(MessageService) private messages: MessageService,
         @Inject(Store)          private store$: Store<any>,
     ) {}
-
-    
-    public ngOnInit () {
-        this.userLogins = undefined;
-        this.userName = "";
-        this.passWord = "";
-        this.isBusy = false;
-    }
-
-    public ngOnDestroy () {
-        this.userLogins = undefined;
-        this.userName = "";
-        this.passWord = "";
-        this.isBusy = false;
-    }
 
 
     public isPasswordValid (pw: string): boolean {
@@ -68,47 +55,52 @@ export class TeleportDevPortalLoginComponent implements OnInit, OnDestroy {
 
     public onSubmit () {
 
-        this.isBusy = true;
+        this.isBusy.next(true);
         this.logins.login({ userName: this.userName, password: this.passWord })
-            .toPromise()
-            .then(res => {
+            .first()
+            .subscribe(
+                res => {
 
-                if (res.v1.length === 1) {
-                    this.loginAs(res.v1[0]);
-                    return;
-                }
+                    if (res.v1.length === 1) {
+                        this.loginAs(res.v1[0]);
+                        return;
+                    }
 
-                this.userLogins = res.v1;
-                this.isBusy = false;
-            })
-            .catch(err => {
-                this.isBusy = false;
-                this.messages.error("Login Failure", "The username/password combination was not provided.", err);
-            });
+                    this.userLogins.next(res.v1);
+                    this.isBusy.next(false);
+                },
+                err => {
+                    this.userLogins.next([]);
+                    this.isBusy.next(false);
+                    this.messages.error("Login Failure", "The username/password combination was not provided.", err);
+                },
+            );
     }
 
 
     public loginAs (req: i.ILoginAsRequest) {
 
-        this.isBusy = true;
+        this.isBusy.next(true);
 
         this.logins.loginAs(req)
-            .toPromise()
-            .then(res => {
-                console.log("Login Success", res);
-                this.messages.info(`Welcome, ${res.userData.firstName}.`, "You are now logged in to your account.");
-                this.store$.dispatch(new session.actions.LoginAsSuccess(res));
-            })
-            .catch(err => {
-                console.error("Login Failure", err);
-                this.isBusy = false;
-                this.closeMultiLogin();
-                this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
-            });
+            .first()
+            .subscribe(
+                res => {
+                    console.log("Login Success", res);
+                    this.messages.info(`Welcome, ${res.userData.firstName}.`, "You are now logged in to your account.");
+                    this.store$.dispatch(new session.actions.LoginAsSuccess(res));
+                },
+                err => {
+                    console.error("Login Failure", err);
+                    this.isBusy.next(false);
+                    this.closeMultiLogin();
+                    this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
+                },
+            );
     }
 
 
     public closeMultiLogin () {
-        this.userLogins = undefined;
+        this.userLogins.next([]);
     }
 }
