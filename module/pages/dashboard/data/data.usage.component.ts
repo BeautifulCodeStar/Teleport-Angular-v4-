@@ -18,6 +18,8 @@ import { MessageService }      from "../../../services/message.service";
 
 import { UsageService, IUsageRequest, IUsageResponse } from "../../../services/usage.service";
 
+import { TeleportLoaderService } from "teleport-module-loader";
+
 
 export interface IFilters {
     beginDate: string;
@@ -50,8 +52,6 @@ export class TeleportDevPortalDataUsageComponent implements OnInit, OnDestroy {
     private _apps: IApplication[];
     private _subscription: Subscription;
 
-    private _isBusy = false;
-
 
     constructor (
         @Inject(UsageService)   public usage: UsageService,
@@ -59,6 +59,7 @@ export class TeleportDevPortalDataUsageComponent implements OnInit, OnDestroy {
         @Inject(Router)         private router: Router,
         @Inject(Location)       private location: Location,
         @Inject(Store)          private store$: Store<TeleportCoreState & APIv1State>,
+        @Inject(TeleportLoaderService) private loader: TeleportLoaderService,
     ) {}
 
 
@@ -89,7 +90,7 @@ export class TeleportDevPortalDataUsageComponent implements OnInit, OnDestroy {
 
         [ this.filters ] = this.getQueryFromUrl();
 
-        this._isBusy = true;
+        this.loader.show("Looking up your usage...");
 
         this._subscription = this.store$.select("v1_applications").subscribe(apps => this._apps = apps);
 
@@ -104,11 +105,6 @@ export class TeleportDevPortalDataUsageComponent implements OnInit, OnDestroy {
         }
         delete this._usage;
         delete this._apps;
-    }
-
-
-    public get isBusy () {
-        return this._isBusy;
     }
 
 
@@ -146,23 +142,23 @@ export class TeleportDevPortalDataUsageComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            this._isBusy = true;
+            this.loader.show("Looking up your usage...");
             this.usage.pullUsage(req)
                 .then((u: IUsageResponse) => {
-                    this._isBusy = false;
+                    this.loader.hide();
                     this.filters.beginDate = new Date(u.beginDate).toLocaleString();
                     this.filters.endDate = new Date(u.endDate).toLocaleString();
                     this._usage = this.transformUsage(u.usage);
                     this.setQueryOnUrl();
                 })
                 .catch(err => {
-                    this._isBusy = false;
+                    this.loader.hide();
                     this.messages.error("Usage Failure", err.message, err);
                 });
 
         } catch (err) {
             console.error(err);
-            this._isBusy = false;
+            this.loader.hide();
             this.messages.error("Usage Failure", err.message, err);
         }
     }

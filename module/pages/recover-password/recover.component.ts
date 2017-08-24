@@ -13,6 +13,8 @@ import { MessageService } from "../../services/message.service";
 import PasswordUtil       from "../../utils/PasswordUtil";
 import { EmailValidator } from "../../utils/EmailValidator";
 
+import { TeleportLoaderService } from "teleport-module-loader";
+
 
 @Component({
     moduleId   : String(module.id),
@@ -22,7 +24,6 @@ import { EmailValidator } from "../../utils/EmailValidator";
 })
 export class TeleportDevPortalRecoverPasswordComponent implements OnInit, OnDestroy {
 
-    public isBusy = false;
     public isSuccess = false;
     public email = "";
     public newPassword = "";
@@ -35,9 +36,10 @@ export class TeleportDevPortalRecoverPasswordComponent implements OnInit, OnDest
     private _resetCaptchaObserver: Observer<boolean>;
 
     constructor (
-        @Inject(ActivatedRoute) private route: ActivatedRoute,
-        @Inject(LoginService)   private logins: LoginService,
-        @Inject(MessageService) private messages: MessageService,
+        @Inject(ActivatedRoute)        private route: ActivatedRoute,
+        @Inject(LoginService)          private logins: LoginService,
+        @Inject(MessageService)        private messages: MessageService,
+        @Inject(TeleportLoaderService) private loader: TeleportLoaderService,        
     ) {}
 
     public ngOnInit () {
@@ -91,7 +93,7 @@ export class TeleportDevPortalRecoverPasswordComponent implements OnInit, OnDest
             return;
         }
 
-        this.isBusy = true;
+        this.loader.show("Please wait...");
 
         const authKey = (this.route.snapshot.params as any).key;
 
@@ -99,12 +101,12 @@ export class TeleportDevPortalRecoverPasswordComponent implements OnInit, OnDest
             .toPromise()
             .then(() => {
                 this.isSuccess = true;
-                this.isBusy = false;
+                this.loader.hide();
             })
             .catch(err => {
                 console.error("Recovery failure.", err);
                 this.isSuccess = false;
-                this.isBusy = false;
+                this.loader.hide();
                 this._resetCaptchaObserver.next(true);
                 this.messages.error("Recovery Failed", err.message, err);
             });

@@ -5,7 +5,7 @@
 
     <p>View your account's usage and billing charges.</p>
 
-    <div class="full-block-busy-container" style="margin-bottom:50px;min-height:200px;">
+    <div style="margin-bottom:50px;min-height:200px;">
 
         <form class="logsFilter" (ngSubmit)="loadUsage()" #logsForm="ngForm">
 
@@ -52,11 +52,9 @@
             </tbody>
         </table>
 
-        <h4 *ngIf="Usage?.length === 1 && ! isBusy" class="text-center">
+        <h4 *ngIf="Usage?.length === 1" class="text-center">
             <br><br>No usage was found during the specified time period.
         </h4>
-
-        <div class="full-block-busy" *ngIf="isBusy"></div>
 
     </div>
 

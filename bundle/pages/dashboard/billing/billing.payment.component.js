@@ -3,21 +3,21 @@ import { Router } from "@angular/router";
 import { BillingService } from "../../../services/billing.service";
 import { MessageService } from "../../../services/message.service";
 import { ModalService } from "../../../services/modal.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 var TeleportDevPortalBillingPaymentComponent = (function () {
-    function TeleportDevPortalBillingPaymentComponent(router, billing, messages, modal, zone) {
+    function TeleportDevPortalBillingPaymentComponent(router, billing, messages, modal, zone, loader) {
         this.router = router;
         this.billing = billing;
         this.messages = messages;
         this.modal = modal;
         this.zone = zone;
+        this.loader = loader;
         this.isReady = false;
-        this.isBusy = false;
         this.amount = 10;
     }
     TeleportDevPortalBillingPaymentComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
         this.isReady = false;
-        this.isBusy = false;
         this.amount = 10;
         this.billing.getBraintreeClientToken()
             .then(function (token) {
@@ -62,16 +62,16 @@ var TeleportDevPortalBillingPaymentComponent = (function () {
             this.messages.warning("Payment Failure", "The amount entered must be a valid number.");
             return;
         }
-        this.isBusy = true;
+        this.loader.show("Please wait while your payment is applied...");
         this.billing.makePayment(this.amount, nonce, method, type, lastFour)
             .then(function () {
             _this.messages.info("Payment Accepted!", "A payment of $" + _this.amount + " was credited to your account.");
-            _this.isBusy = false;
+            _this.loader.hide();
             return _this.router.navigate(["/v1/account/payments"]);
         })
             .catch(function (err) {
             _this.messages.warning("Payment Failure", err.message, err);
-            _this.isBusy = false;
+            _this.loader.hide();
         });
     };
     TeleportDevPortalBillingPaymentComponent.decorators = [
@@ -87,6 +87,7 @@ var TeleportDevPortalBillingPaymentComponent = (function () {
         { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
         { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
         { type: NgZone, decorators: [{ type: Inject, args: [NgZone,] },] },
+        { type: TeleportLoaderService, decorators: [{ type: Inject, args: [TeleportLoaderService,] },] },
     ]; };
     return TeleportDevPortalBillingPaymentComponent;
 }());

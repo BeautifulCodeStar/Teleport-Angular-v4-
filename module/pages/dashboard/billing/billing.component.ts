@@ -4,6 +4,7 @@ import { Subscription } from "rxjs/Subscription";
 
 import { IPayment }                        from "../../../models/interfaces";
 import { BillingService, IBillingPayload } from "../../../services/billing.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 
 
 @Component({
@@ -17,7 +18,6 @@ export class TeleportDevPortalBillingComponent implements OnInit, OnDestroy {
     public view = {
         historyFrom: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
         historyTo: new Date(),
-        isBusy: false,
         isPaymentFormOpen: false,
     };
     
@@ -29,14 +29,17 @@ export class TeleportDevPortalBillingComponent implements OnInit, OnDestroy {
 
     constructor (
         @Inject(BillingService) private billing: BillingService,
+        @Inject(TeleportLoaderService) private loader: TeleportLoaderService,
     ) {}
 
 
     public ngOnInit () {
 
+        this.loader.show("Loading payment history...");
+        
         this._subscription = this.billing.Observable
             .subscribe((b: IBillingPayload) => {
-                this.view.isBusy = false;
+                this.loader.hide();
                 this._balance = b.balance !== undefined ? b.balance : this._balance;
                 this._payments = b.payments || this._payments;
                 if (b.dateRange) {
@@ -88,8 +91,7 @@ export class TeleportDevPortalBillingComponent implements OnInit, OnDestroy {
 
 
     public async reloadPaymentHistory () {
-        this.view.isBusy = true;
+        this.loader.show("Reloading payment history...");
         await this.billing.refreshPayments(this.view.historyFrom.getTime(), this.view.historyTo.getTime());
-        this.view.isBusy = false;
     }
 }

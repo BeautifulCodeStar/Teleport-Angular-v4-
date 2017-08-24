@@ -5,7 +5,7 @@
 
     <p>View your account's call logs. Searches are based on Start Times. Max results: 1000.</p>
 
-    <div class="full-block-busy-container" style="margin-bottom:50px;min-height:200px;">
+    <div style="margin-bottom:50px;min-height:200px;">
 
         <form class="logsFilter" (ngSubmit)="loadLogs()" #logsForm="ngForm">
 
@@ -172,11 +172,9 @@
             </tbody>
         </table>
 
-        <h4 class="text-center" *ngIf="Logs.length === 0 && ! isBusy">No Logs Found</h4>
+        <h4 class="text-center" *ngIf="Logs.length === 0">No Logs Found</h4>
 
         <h5 class="text-center" *ngIf="isTruncated">More logs are available. Adjust the date/times to narrow the results.</h5>
-
-        <div class="full-block-busy" *ngIf="isBusy"></div>
 
     </div>
 

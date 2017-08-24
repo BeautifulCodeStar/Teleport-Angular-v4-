@@ -9,23 +9,23 @@ import { IApplication } from "teleport-module-services/services/v1/models/Applic
 import { ILog } from "../../../models/interfaces";
 import { LogsService, ILogsRequest } from "../../../services/logs.service";
 import { MessageService } from "../../../services/message.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 export declare class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
     private logs;
     private messages;
     private router;
     private location;
     private store$;
+    private loader;
     filters: ILogsRequest;
     private _logs;
     private _apps;
     private _subscriptions;
-    private _isBusy;
     private _sortFuncs;
     private _sortOn;
-    constructor(logs: LogsService, messages: MessageService, router: Router, location: Location, store$: Store<TeleportCoreState & APIv1State>);
+    constructor(logs: LogsService, messages: MessageService, router: Router, location: Location, store$: Store<TeleportCoreState & APIv1State>, loader: TeleportLoaderService);
     ngOnInit(): void;
     ngOnDestroy(): void;
-    readonly isBusy: boolean;
     readonly Logs: ILog[];
     readonly isTruncated: boolean;
     readonly Apps: IApplication[];

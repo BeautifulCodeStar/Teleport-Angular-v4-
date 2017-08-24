@@ -16,6 +16,7 @@ import { ILog }                                     from "../../../models/interf
 import { LogsService, ILogsResponse, ILogsRequest } from "../../../services/logs.service";
 import { MessageService }                           from "../../../services/message.service";
 
+import { TeleportLoaderService } from "teleport-module-loader";
 
 const FIND_APPID_IN_URL = /^\/v1\/applications\/([a-z0-9\-]+)\/history\/logs/;
 
@@ -32,8 +33,6 @@ export class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
     private _logs: ILogsResponse;
     private _apps: IApplication[];
     private _subscriptions: Subscription[];
-
-    private _isBusy = false;
 
     private _sortFuncs: { [key: string]: (a: ILog, b: ILog) => number } = {
         "callIdDesc"    : (a: ILog, b: ILog) => b.call_id.localeCompare(a.call_id),
@@ -69,6 +68,7 @@ export class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
         @Inject(Router)         private router: Router,
         @Inject(Location)       private location: Location,
         @Inject(Store)          private store$: Store<TeleportCoreState & APIv1State>,
+        @Inject(TeleportLoaderService) private loader: TeleportLoaderService,
     ) {}
 
 
@@ -76,14 +76,13 @@ export class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
 
         [ this.filters, this._sortOn ] = this.getQueryFromUrl();
 
-        this._isBusy = true;
-
+        this.loader.show("Looking up your logs...");
         this._subscriptions = [
 
             this.logs.Observable
                 .filter(a => !! a)
                 .subscribe((logs: ILogsResponse) => {
-                    this._isBusy = false;
+                    this.loader.hide();
                     this._logs = logs;
                     this.sortLogs();
                     this.filters.beginDate = new Date(String(logs.beginDate)).toLocaleString();
@@ -104,10 +103,6 @@ export class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
         }
         delete this._logs;
         delete this._apps;
-    }
-
-    public get isBusy () {
-        return this._isBusy;
     }
 
     public get Logs () {
@@ -185,17 +180,17 @@ export class TeleportDevPortalDataLogsComponent implements OnInit, OnDestroy {
 
             this.setQueryOnUrl();
 
-            this._isBusy = true;
+            this.loader.show("Looking up your logs...");
             this.logs.loadLogs(filter)
-                .then(() => this._isBusy = false)
+                .then(() => this.loader.hide())
                 .catch(err => {
-                    this._isBusy = false;
+                    this.loader.hide();
                     this.messages.error("Logs Failure", err.message, err);
                 });
 
         } catch (err) {
             console.error(err);
-            this._isBusy = false;
+            this.loader.hide();
             this.messages.error("Logs Failure", err.message, err);
         }
     }

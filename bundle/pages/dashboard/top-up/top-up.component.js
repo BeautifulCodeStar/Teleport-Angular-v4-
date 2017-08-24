@@ -2,26 +2,27 @@ import { Component, Inject } from "@angular/core";
 import "rxjs/add/operator/skipWhile";
 import { TopUpService } from "../../../services/top-up.service";
 import { MessageService } from "../../../services/message.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 var TeleportDevPortalTopUpComponent = (function () {
-    function TeleportDevPortalTopUpComponent(topUp, messages) {
+    function TeleportDevPortalTopUpComponent(topUp, messages, loader) {
         this.topUp = topUp;
         this.messages = messages;
+        this.loader = loader;
         this.isEditTopUp = false;
-        this.isBusy = false;
     }
     TeleportDevPortalTopUpComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.isBusy = true;
+        this.loader.show("Finding your top-up info...");
         this._subscription = this.topUp.Observable
             .skipWhile(function (resp) { return !resp; })
             .subscribe(function (resp) {
             _this._topup = resp;
-            _this.isBusy = false;
+            _this.loader.hide();
             _this.isEditTopUp = false;
             _this.TopUp = Object.assign({}, _this._topup);
         }, function (err) {
             _this.messages.error("Top Up Error", err.message, err);
-            _this.isBusy = false;
+            _this.loader.hide();
             _this.TopUp = Object.assign({}, _this._topup);
         });
     };
@@ -78,7 +79,6 @@ var TeleportDevPortalTopUpComponent = (function () {
         this.onSubmit();
     };
     TeleportDevPortalTopUpComponent.prototype.onSubmit = function () {
-        this.isBusy = true;
         this.isEditTopUp = false;
         this.topUp.updateTopUp(this.TopUp);
         if (this.TopUp.amount > 0) {
@@ -95,6 +95,7 @@ var TeleportDevPortalTopUpComponent = (function () {
     TeleportDevPortalTopUpComponent.ctorParameters = function () { return [
         { type: TopUpService, decorators: [{ type: Inject, args: [TopUpService,] },] },
         { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: TeleportLoaderService, decorators: [{ type: Inject, args: [TeleportLoaderService,] },] },
     ]; };
     return TeleportDevPortalTopUpComponent;
 }());

@@ -6,12 +6,13 @@ import { LoginService } from "teleport-module-services/services/services/login/l
 import { MessageService } from "../../services/message.service";
 import PasswordUtil from "../../utils/PasswordUtil";
 import { EmailValidator } from "../../utils/EmailValidator";
+import { TeleportLoaderService } from "teleport-module-loader";
 var TeleportDevPortalRecoverPasswordComponent = (function () {
-    function TeleportDevPortalRecoverPasswordComponent(route, logins, messages) {
+    function TeleportDevPortalRecoverPasswordComponent(route, logins, messages, loader) {
         this.route = route;
         this.logins = logins;
         this.messages = messages;
-        this.isBusy = false;
+        this.loader = loader;
         this.isSuccess = false;
         this.email = "";
         this.newPassword = "";
@@ -58,18 +59,18 @@ var TeleportDevPortalRecoverPasswordComponent = (function () {
             this.messages.warning("Invalid Password", "Your password must be at least 8 characters and contain caps, lowercase, numbers and special characters.");
             return;
         }
-        this.isBusy = true;
+        this.loader.show("Please wait...");
         var authKey = this.route.snapshot.params.key;
         this.logins.resetPassword({ email: this.email, password: this.newPassword, authKey: authKey, reCaptchaResponse: this.reCaptchaResponse })
             .toPromise()
             .then(function () {
             _this.isSuccess = true;
-            _this.isBusy = false;
+            _this.loader.hide();
         })
             .catch(function (err) {
             console.error("Recovery failure.", err);
             _this.isSuccess = false;
-            _this.isBusy = false;
+            _this.loader.hide();
             _this._resetCaptchaObserver.next(true);
             _this.messages.error("Recovery Failed", err.message, err);
         });
@@ -85,6 +86,7 @@ var TeleportDevPortalRecoverPasswordComponent = (function () {
         { type: ActivatedRoute, decorators: [{ type: Inject, args: [ActivatedRoute,] },] },
         { type: LoginService, decorators: [{ type: Inject, args: [LoginService,] },] },
         { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
+        { type: TeleportLoaderService, decorators: [{ type: Inject, args: [TeleportLoaderService,] },] },
     ]; };
     return TeleportDevPortalRecoverPasswordComponent;
 }());

@@ -7,6 +7,7 @@ import { TopUpService }   from "../../../services/top-up.service";
 import { MessageService } from "../../../services/message.service";
 
 import { ITopUp } from "../../../models/interfaces";
+import { TeleportLoaderService } from "teleport-module-loader";
 
 
 @Component({
@@ -19,7 +20,6 @@ export class TeleportDevPortalTopUpComponent implements OnInit, OnDestroy {
     public TopUp: ITopUp;
 
     public isEditTopUp = false;
-    public isBusy = false;
 
     private _topup: ITopUp;
     private _subscription: Subscription;
@@ -27,23 +27,24 @@ export class TeleportDevPortalTopUpComponent implements OnInit, OnDestroy {
     constructor (
         @Inject(TopUpService)   private topUp: TopUpService,
         @Inject(MessageService) private messages: MessageService,
+        @Inject(TeleportLoaderService) private loader: TeleportLoaderService,
     ) {}
 
     public ngOnInit () {
 
-        this.isBusy = true;
+        this.loader.show("Finding your top-up info...");
         this._subscription = this.topUp.Observable
             .skipWhile(resp => ! resp)
             .subscribe(
                 resp => {
                     this._topup = resp;
-                    this.isBusy = false;
+                    this.loader.hide();
                     this.isEditTopUp = false;
                     this.TopUp = Object.assign({}, this._topup);
                 },
                 err => {
                     this.messages.error("Top Up Error", err.message, err);
-                    this.isBusy = false;
+                    this.loader.hide();
                     this.TopUp = Object.assign({}, this._topup);
                 },
             );
@@ -117,7 +118,6 @@ export class TeleportDevPortalTopUpComponent implements OnInit, OnDestroy {
 
     public onSubmit () {
 
-        this.isBusy = true;
         this.isEditTopUp = false;
 
         this.topUp.updateTopUp(this.TopUp);

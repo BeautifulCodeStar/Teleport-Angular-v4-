@@ -8,6 +8,7 @@ import { APIv1State } from "teleport-module-services/services/v1/ngrx/index";
 import { IApplication } from "teleport-module-services/services/v1/models/Application";
 import { MessageService } from "../../../services/message.service";
 import { UsageService } from "../../../services/usage.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 export interface IFilters {
     beginDate: string;
     endDate: string;
@@ -26,17 +27,16 @@ export declare class TeleportDevPortalDataUsageComponent implements OnInit, OnDe
     private router;
     private location;
     private store$;
+    private loader;
     filters: IFilters;
     private _usage;
     private _apps;
     private _subscription;
-    private _isBusy;
-    constructor(usage: UsageService, messages: MessageService, router: Router, location: Location, store$: Store<TeleportCoreState & APIv1State>);
+    constructor(usage: UsageService, messages: MessageService, router: Router, location: Location, store$: Store<TeleportCoreState & APIv1State>, loader: TeleportLoaderService);
     getQueryFromUrl(): [IFilters];
     setQueryOnUrl(): void;
     ngOnInit(): void;
     ngOnDestroy(): void;
-    readonly isBusy: boolean;
     readonly Usage: IUsageView[];
     readonly Apps: IApplication[];
     loadUsage(): void;

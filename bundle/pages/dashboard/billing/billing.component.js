@@ -35,21 +35,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { Component, Inject } from "@angular/core";
 import { BillingService } from "../../../services/billing.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 var TeleportDevPortalBillingComponent = (function () {
-    function TeleportDevPortalBillingComponent(billing) {
+    function TeleportDevPortalBillingComponent(billing, loader) {
         this.billing = billing;
+        this.loader = loader;
         this.view = {
             historyFrom: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
             historyTo: new Date(),
-            isBusy: false,
             isPaymentFormOpen: false,
         };
     }
     TeleportDevPortalBillingComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.loader.show("Loading payment history...");
         this._subscription = this.billing.Observable
             .subscribe(function (b) {
-            _this.view.isBusy = false;
+            _this.loader.hide();
             _this._balance = b.balance !== undefined ? b.balance : _this._balance;
             _this._payments = b.payments || _this._payments;
             if (b.dateRange) {
@@ -105,11 +107,10 @@ var TeleportDevPortalBillingComponent = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.view.isBusy = true;
+                        this.loader.show("Reloading payment history...");
                         return [4, this.billing.refreshPayments(this.view.historyFrom.getTime(), this.view.historyTo.getTime())];
                     case 1:
                         _a.sent();
-                        this.view.isBusy = false;
                         return [2];
                 }
             });
@@ -124,6 +125,7 @@ var TeleportDevPortalBillingComponent = (function () {
     ];
     TeleportDevPortalBillingComponent.ctorParameters = function () { return [
         { type: BillingService, decorators: [{ type: Inject, args: [BillingService,] },] },
+        { type: TeleportLoaderService, decorators: [{ type: Inject, args: [TeleportLoaderService,] },] },
     ]; };
     return TeleportDevPortalBillingComponent;
 }());

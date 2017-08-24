@@ -6,6 +6,8 @@ import { BillingService } from "../../../services/billing.service";
 import { MessageService } from "../../../services/message.service";
 import { ModalService }   from "../../../services/modal.service";
 
+import { TeleportLoaderService } from "teleport-module-loader";
+
 declare const braintree: any;
 
 
@@ -18,7 +20,6 @@ declare const braintree: any;
 export class TeleportDevPortalBillingPaymentComponent implements AfterViewInit, OnDestroy {
 
     public isReady = false;
-    public isBusy = false;
     public amount = 10;
 
     private _checkout: any;
@@ -29,12 +30,12 @@ export class TeleportDevPortalBillingPaymentComponent implements AfterViewInit, 
         @Inject(MessageService) private messages: MessageService,
         @Inject(ModalService)  private modal: ModalService,
         @Inject(NgZone)         private zone: NgZone,
+        @Inject(TeleportLoaderService) private loader: TeleportLoaderService,
     ) {}
 
     public ngAfterViewInit () {
 
         this.isReady = false;
-        this.isBusy = false;
         this.amount = 10;
 
         this.billing.getBraintreeClientToken()
@@ -85,17 +86,17 @@ export class TeleportDevPortalBillingPaymentComponent implements AfterViewInit, 
             return;
         }
 
-        this.isBusy = true;
+        this.loader.show("Please wait while your payment is applied...");
 
         this.billing.makePayment(this.amount, nonce, method, type, lastFour)
             .then(() => {
                 this.messages.info("Payment Accepted!", `A payment of $${this.amount} was credited to your account.`);
-                this.isBusy = false;
+                this.loader.hide();
                 return this.router.navigate(["/v1/account/payments"]);
             })
             .catch(err => {
                 this.messages.warning("Payment Failure", err.message, err);
-                this.isBusy = false;
+                this.loader.hide();
             });
     }
 }

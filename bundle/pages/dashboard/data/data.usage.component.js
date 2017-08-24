@@ -5,15 +5,16 @@ import "rxjs/add/operator/filter";
 import { Store } from "@ngrx/store";
 import { MessageService } from "../../../services/message.service";
 import { UsageService } from "../../../services/usage.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 var FIND_APPID_IN_URL = /^\/v1\/applications\/([a-z0-9\-]+)\/history\/usage/;
 var TeleportDevPortalDataUsageComponent = (function () {
-    function TeleportDevPortalDataUsageComponent(usage, messages, router, location, store$) {
+    function TeleportDevPortalDataUsageComponent(usage, messages, router, location, store$, loader) {
         this.usage = usage;
         this.messages = messages;
         this.router = router;
         this.location = location;
         this.store$ = store$;
-        this._isBusy = false;
+        this.loader = loader;
     }
     TeleportDevPortalDataUsageComponent.prototype.getQueryFromUrl = function () {
         var params = this.router.parseUrl(this.router.url).queryParams;
@@ -31,7 +32,7 @@ var TeleportDevPortalDataUsageComponent = (function () {
     TeleportDevPortalDataUsageComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.filters = this.getQueryFromUrl()[0];
-        this._isBusy = true;
+        this.loader.show("Looking up your usage...");
         this._subscription = this.store$.select("v1_applications").subscribe(function (apps) { return _this._apps = apps; });
         setImmediate(function () { return _this.loadUsage(); });
     };
@@ -42,13 +43,6 @@ var TeleportDevPortalDataUsageComponent = (function () {
         delete this._usage;
         delete this._apps;
     };
-    Object.defineProperty(TeleportDevPortalDataUsageComponent.prototype, "isBusy", {
-        get: function () {
-            return this._isBusy;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(TeleportDevPortalDataUsageComponent.prototype, "Usage", {
         get: function () {
             return this._usage;
@@ -84,23 +78,23 @@ var TeleportDevPortalDataUsageComponent = (function () {
                 this.messages.error("Usage Failure", "The Begin Date and End Date cannot span more that a month.");
                 return;
             }
-            this._isBusy = true;
+            this.loader.show("Looking up your usage...");
             this.usage.pullUsage(req)
                 .then(function (u) {
-                _this._isBusy = false;
+                _this.loader.hide();
                 _this.filters.beginDate = new Date(u.beginDate).toLocaleString();
                 _this.filters.endDate = new Date(u.endDate).toLocaleString();
                 _this._usage = _this.transformUsage(u.usage);
                 _this.setQueryOnUrl();
             })
                 .catch(function (err) {
-                _this._isBusy = false;
+                _this.loader.hide();
                 _this.messages.error("Usage Failure", err.message, err);
             });
         }
         catch (err) {
             console.error(err);
-            this._isBusy = false;
+            this.loader.hide();
             this.messages.error("Usage Failure", err.message, err);
         }
     };
@@ -167,6 +161,7 @@ var TeleportDevPortalDataUsageComponent = (function () {
         { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
         { type: Location, decorators: [{ type: Inject, args: [Location,] },] },
         { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
+        { type: TeleportLoaderService, decorators: [{ type: Inject, args: [TeleportLoaderService,] },] },
     ]; };
     return TeleportDevPortalDataUsageComponent;
 }());

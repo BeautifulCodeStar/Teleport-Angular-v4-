@@ -4,11 +4,12 @@ import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/toPromise";
 import { LoginService } from "teleport-module-services/services/services/login/login.service";
 import { MessageService } from "../../services/message.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 export declare class TeleportDevPortalRecoverPasswordComponent implements OnInit, OnDestroy {
     private route;
     private logins;
     private messages;
-    isBusy: boolean;
+    private loader;
     isSuccess: boolean;
     email: string;
     newPassword: string;
@@ -17,7 +18,7 @@ export declare class TeleportDevPortalRecoverPasswordComponent implements OnInit
     private reCaptchaResponse;
     private _resetCaptchaObservable;
     private _resetCaptchaObserver;
-    constructor(route: ActivatedRoute, logins: LoginService, messages: MessageService);
+    constructor(route: ActivatedRoute, logins: LoginService, messages: MessageService, loader: TeleportLoaderService);
     ngOnInit(): void;
     ngOnDestroy(): void;
     isPasswordValid(pw: string): boolean;

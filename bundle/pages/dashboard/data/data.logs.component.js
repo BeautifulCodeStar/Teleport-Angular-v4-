@@ -5,15 +5,16 @@ import "rxjs/add/operator/filter";
 import { Store } from "@ngrx/store";
 import { LogsService } from "../../../services/logs.service";
 import { MessageService } from "../../../services/message.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 var FIND_APPID_IN_URL = /^\/v1\/applications\/([a-z0-9\-]+)\/history\/logs/;
 var TeleportDevPortalDataLogsComponent = (function () {
-    function TeleportDevPortalDataLogsComponent(logs, messages, router, location, store$) {
+    function TeleportDevPortalDataLogsComponent(logs, messages, router, location, store$, loader) {
         this.logs = logs;
         this.messages = messages;
         this.router = router;
         this.location = location;
         this.store$ = store$;
-        this._isBusy = false;
+        this.loader = loader;
         this._sortFuncs = {
             "callIdDesc": function (a, b) { return b.call_id.localeCompare(a.call_id); },
             "callIdAsc": function (a, b) { return a.call_id.localeCompare(b.call_id); },
@@ -45,12 +46,12 @@ var TeleportDevPortalDataLogsComponent = (function () {
     TeleportDevPortalDataLogsComponent.prototype.ngOnInit = function () {
         var _this = this;
         _a = this.getQueryFromUrl(), this.filters = _a[0], this._sortOn = _a[1];
-        this._isBusy = true;
+        this.loader.show("Looking up your logs...");
         this._subscriptions = [
             this.logs.Observable
                 .filter(function (a) { return !!a; })
                 .subscribe(function (logs) {
-                _this._isBusy = false;
+                _this.loader.hide();
                 _this._logs = logs;
                 _this.sortLogs();
                 _this.filters.beginDate = new Date(String(logs.beginDate)).toLocaleString();
@@ -69,13 +70,6 @@ var TeleportDevPortalDataLogsComponent = (function () {
         delete this._logs;
         delete this._apps;
     };
-    Object.defineProperty(TeleportDevPortalDataLogsComponent.prototype, "isBusy", {
-        get: function () {
-            return this._isBusy;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(TeleportDevPortalDataLogsComponent.prototype, "Logs", {
         get: function () {
             return this._logs && this._logs.logs || [];
@@ -141,17 +135,17 @@ var TeleportDevPortalDataLogsComponent = (function () {
                 return;
             }
             this.setQueryOnUrl();
-            this._isBusy = true;
+            this.loader.show("Looking up your logs...");
             this.logs.loadLogs(filter)
-                .then(function () { return _this._isBusy = false; })
+                .then(function () { return _this.loader.hide(); })
                 .catch(function (err) {
-                _this._isBusy = false;
+                _this.loader.hide();
                 _this.messages.error("Logs Failure", err.message, err);
             });
         }
         catch (err) {
             console.error(err);
-            this._isBusy = false;
+            this.loader.hide();
             this.messages.error("Logs Failure", err.message, err);
         }
     };
@@ -168,6 +162,7 @@ var TeleportDevPortalDataLogsComponent = (function () {
         { type: Router, decorators: [{ type: Inject, args: [Router,] },] },
         { type: Location, decorators: [{ type: Inject, args: [Location,] },] },
         { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
+        { type: TeleportLoaderService, decorators: [{ type: Inject, args: [TeleportLoaderService,] },] },
     ]; };
     return TeleportDevPortalDataLogsComponent;
 }());

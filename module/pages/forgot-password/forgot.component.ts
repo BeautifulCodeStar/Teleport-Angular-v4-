@@ -12,6 +12,7 @@ import { MessageService }  from "../../services/message.service";
 
 import { EmailValidator } from "../../utils/EmailValidator";
 
+import { TeleportLoaderService } from "teleport-module-loader";
 
 
 @Component({
@@ -23,9 +24,7 @@ export class TeleportDevPortalForgotPasswordComponent {
     
     public userName = "";
 
-    public isBusy = false;
     public isCaptchaOk = false;
-    
     private reCaptchaResponse = "";
     private _resetCaptchaObservable: Observable<boolean>;
     private _resetCaptchaObserver: Observer<boolean>;
@@ -35,6 +34,7 @@ export class TeleportDevPortalForgotPasswordComponent {
         @Inject(Router)         private router: Router,
         @Inject(LoginService)   private logins: LoginService,
         @Inject(MessageService) private messages: MessageService,
+        @Inject(TeleportLoaderService) private loader: TeleportLoaderService,
     ) {
         this._resetCaptchaObservable = Observable.create((observer: Observer<boolean>) => this._resetCaptchaObserver = observer);
     }
@@ -59,19 +59,20 @@ export class TeleportDevPortalForgotPasswordComponent {
     
     public onRecoverPassword () {
         
-        this.isBusy = true;
+        this.loader.show("Please wait...");
 
         this.logins.recoverPassword({ email: this.userName, reCaptchaResponse: this.reCaptchaResponse })
             .toPromise()
             .then(resp => {
                 console.log("Password Recovery Success", resp);
+                this.loader.hide();
                 this.messages.info("Password Recovery Success", `An email will be sent with recovery instructions.`);
                 this.router.navigateByUrl("/login").catch(err => console.error(err));
             })
             .catch(err => {
                 console.error("Password Recovery Failure", err);
                 this._resetCaptchaObserver.next(true);
-                this.isBusy = false;
+                this.loader.hide();
                 this.messages.error("Password Recovery Failure", err.message, err);
             });
     }
