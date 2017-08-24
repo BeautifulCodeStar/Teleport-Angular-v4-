@@ -10,6 +10,7 @@ import { RouterModule }            from "@angular/router";
 
 // Modules
 import { DevPortalDashboardModule } from "./dashboard/dashboard.module";
+import { TeleportLoaderModule } from "teleport-module-loader";
 
 // Components
 import { TeleportDevPortalForgotPasswordComponent }  from "./forgot-password/forgot.component";
@@ -29,6 +30,7 @@ import { TeleportDevPortalRegisterComponent }        from "./register/register.c
         HttpModule,
         RouterModule,
 
+        TeleportLoaderModule,
         DevPortalDashboardModule,
     ],
     declarations: [
