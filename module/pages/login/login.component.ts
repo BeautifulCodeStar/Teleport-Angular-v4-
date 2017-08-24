@@ -20,6 +20,8 @@ import { MessageService }  from "../../services/message.service";
 import PasswordUtil       from "../../utils/PasswordUtil";
 import { EmailValidator } from "../../utils/EmailValidator";
 
+import { TeleportLoaderService } from "teleport-module-loader";
+
 
 @Component({
     moduleId   : String(module.id),
@@ -32,14 +34,13 @@ export class TeleportDevPortalLoginComponent {
     public userName = "";
     public passWord = "";
     
-    public isBusy = new BehaviorSubject<boolean>(false);
-
     public userLogins = new BehaviorSubject<i.ILoginAsRequest[]>([]);
 
     constructor (
         @Inject(LoginService)   private logins: LoginService,
         @Inject(MessageService) private messages: MessageService,
         @Inject(Store)          private store$: Store<any>,
+        @Inject(TeleportLoaderService) private loader: TeleportLoaderService,
     ) {}
 
 
@@ -55,7 +56,7 @@ export class TeleportDevPortalLoginComponent {
 
     public onSubmit () {
 
-        this.isBusy.next(true);
+        this.loader.show("Looking for your accounts...");
         this.logins.login({ userName: this.userName, password: this.passWord })
             .first()
             .subscribe(
@@ -67,11 +68,11 @@ export class TeleportDevPortalLoginComponent {
                     }
 
                     this.userLogins.next(res.v1);
-                    this.isBusy.next(false);
+                    this.loader.hide();
                 },
                 err => {
                     this.userLogins.next([]);
-                    this.isBusy.next(false);
+                    this.loader.hide();
                     this.messages.error("Login Failure", "The username/password combination was not provided.", err);
                 },
             );
@@ -80,19 +81,17 @@ export class TeleportDevPortalLoginComponent {
 
     public loginAs (req: i.ILoginAsRequest) {
 
-        this.isBusy.next(true);
+        this.loader.show("Please wait while you're logged in...");
 
         this.logins.loginAs(req)
             .first()
             .subscribe(
                 res => {
-                    console.log("Login Success", res);
                     this.messages.info(`Welcome, ${res.userData.firstName}.`, "You are now logged in to your account.");
                     this.store$.dispatch(new session.actions.LoginAsSuccess(res));
                 },
                 err => {
-                    console.error("Login Failure", err);
-                    this.isBusy.next(false);
+                    this.loader.hide();
                     this.closeMultiLogin();
                     this.messages.error("Login Failure", "The selected user failed to authenticate.", err);
                 },
