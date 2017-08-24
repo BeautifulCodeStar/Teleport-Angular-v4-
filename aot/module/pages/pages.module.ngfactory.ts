@@ -15,26 +15,28 @@ import * as i5 from '@angular/platform-browser/animations';
 import * as i6 from '@angular/animations';
 import * as i7 from '@angular/forms';
 import * as i8 from '@angular/http';
-import * as i9 from '../../../module/services/account.credentials.service';
-import * as i10 from '@ngrx/store';
-import * as i11 from '../../../module/services/alerts.service';
-import * as i12 from '../../../module/services/message.service';
-import * as i13 from '../../../module/services/billing.service';
-import * as i14 from '../../../module/services/integrations.aws.service';
-import * as i15 from '../../../module/services/integrations.watson.service';
-import * as i16 from '../../../module/services/logs.service';
-import * as i17 from '../../../module/services/modal.service';
-import * as i18 from '../../../module/services/perms-guard.service';
-import * as i19 from '@angular/router';
-import * as i20 from '../../../module/services/top-up.service';
-import * as i21 from '../../../module/services/usage.service';
-import * as i22 from '../../../module/services/user.service';
-import * as i23 from '../../../module/md2/datepicker/dateUtil';
-import * as i24 from '../../../module/components/components.module';
-import * as i25 from '../../../module/pages/dashboard/profile/users/role-picker.module';
-import * as i26 from '../../../module/md2/datepicker/datepicker';
-import * as i27 from '../../../module/services/services.module';
-import * as i28 from '../../../module/pages/dashboard/dashboard.module';
+import * as i9 from 'teleport-module-loader/dist/loader.service';
+import * as i10 from '../../../module/services/account.credentials.service';
+import * as i11 from '@ngrx/store';
+import * as i12 from '../../../module/services/alerts.service';
+import * as i13 from '../../../module/services/message.service';
+import * as i14 from '../../../module/services/billing.service';
+import * as i15 from '../../../module/services/integrations.aws.service';
+import * as i16 from '../../../module/services/integrations.watson.service';
+import * as i17 from '../../../module/services/logs.service';
+import * as i18 from '../../../module/services/modal.service';
+import * as i19 from '../../../module/services/perms-guard.service';
+import * as i20 from '@angular/router';
+import * as i21 from '../../../module/services/top-up.service';
+import * as i22 from '../../../module/services/usage.service';
+import * as i23 from '../../../module/services/user.service';
+import * as i24 from '../../../module/md2/datepicker/dateUtil';
+import * as i25 from 'teleport-module-loader/dist/loader.module';
+import * as i26 from '../../../module/components/components.module';
+import * as i27 from '../../../module/pages/dashboard/profile/users/role-picker.module';
+import * as i28 from '../../../module/md2/datepicker/datepicker';
+import * as i29 from '../../../module/services/services.module';
+import * as i30 from '../../../module/pages/dashboard/dashboard.module';
 export const DevPortalPagesModuleNgFactory:i0.NgModuleFactory<i1.DevPortalPagesModule> = i0.ɵcmf(i1.DevPortalPagesModule,
     ([] as any[]),(_l:any) => {
       return i0.ɵmod([i0.ɵmpd(512,i0.ComponentFactoryResolver,i0.ɵCodegenComponentFactoryResolver,
@@ -65,20 +67,21 @@ export const DevPortalPagesModuleNgFactory:i0.NgModuleFactory<i1.DevPortalPagesM
               ([] as any[])),i0.ɵmpd(5120,i8.XSRFStrategy,i8.ɵb,([] as any[])),i0.ɵmpd(4608,
               i8.XHRBackend,i8.XHRBackend,[i8.BrowserXhr,i8.ResponseOptions,i8.XSRFStrategy]),
           i0.ɵmpd(4608,i8.RequestOptions,i8.BaseRequestOptions,([] as any[])),i0.ɵmpd(5120,
-              i8.Http,i8.ɵc,[i8.XHRBackend,i8.RequestOptions]),i0.ɵmpd(4608,i9.AccountCredentialsService,
-              i9.AccountCredentialsService,[i8.Http,i10.Store]),i0.ɵmpd(4608,i11.AlertsService,
-              i11.AlertsService,[i8.Http,i10.Store]),i0.ɵmpd(4608,i12.MessageService,
-              i12.MessageService,[i3.DOCUMENT,i10.Store,i10.ReducerManagerDispatcher]),
-          i0.ɵmpd(4608,i13.BillingService,i13.BillingService,[i8.Http,i12.MessageService,
-              i10.Store]),i0.ɵmpd(4608,i14.IntegrationsAWSService,i14.IntegrationsAWSService,
-              [i8.Http,i10.Store]),i0.ɵmpd(4608,i15.IntegrationsWatsonService,i15.IntegrationsWatsonService,
-              [i8.Http,i10.Store]),i0.ɵmpd(4608,i16.LogsService,i16.LogsService,[i8.Http,
-              i10.Store]),i0.ɵmpd(4608,i17.ModalService,i17.ModalService,[i3.DOCUMENT]),
-          i0.ɵmpd(4608,i18.PermsGuardCanActivate,i18.PermsGuardCanActivate,[i19.Router,
-              i10.Store]),i0.ɵmpd(4608,i20.TopUpService,i20.TopUpService,[i8.Http,
-              i10.Store]),i0.ɵmpd(4608,i21.UsageService,i21.UsageService,[i8.Http,
-              i10.Store]),i0.ɵmpd(4608,i22.UserService,i22.UserService,[i8.Http,i10.Store]),
-          i0.ɵmpd(4608,i23.Md2DateUtil,i23.Md2DateUtil,([] as any[])),i0.ɵmpd(512,
+              i8.Http,i8.ɵc,[i8.XHRBackend,i8.RequestOptions]),i0.ɵmpd(4608,i9.TeleportLoaderService,
+              i9.TeleportLoaderService,([] as any[])),i0.ɵmpd(4608,i10.AccountCredentialsService,
+              i10.AccountCredentialsService,[i8.Http,i11.Store]),i0.ɵmpd(4608,i12.AlertsService,
+              i12.AlertsService,[i8.Http,i11.Store]),i0.ɵmpd(4608,i13.MessageService,
+              i13.MessageService,[i3.DOCUMENT,i11.Store,i11.ReducerManagerDispatcher]),
+          i0.ɵmpd(4608,i14.BillingService,i14.BillingService,[i8.Http,i13.MessageService,
+              i11.Store]),i0.ɵmpd(4608,i15.IntegrationsAWSService,i15.IntegrationsAWSService,
+              [i8.Http,i11.Store]),i0.ɵmpd(4608,i16.IntegrationsWatsonService,i16.IntegrationsWatsonService,
+              [i8.Http,i11.Store]),i0.ɵmpd(4608,i17.LogsService,i17.LogsService,[i8.Http,
+              i11.Store]),i0.ɵmpd(4608,i18.ModalService,i18.ModalService,[i3.DOCUMENT]),
+          i0.ɵmpd(4608,i19.PermsGuardCanActivate,i19.PermsGuardCanActivate,[i20.Router,
+              i11.Store]),i0.ɵmpd(4608,i21.TopUpService,i21.TopUpService,[i8.Http,
+              i11.Store]),i0.ɵmpd(4608,i22.UsageService,i22.UsageService,[i8.Http,
+              i11.Store]),i0.ɵmpd(4608,i23.UserService,i23.UserService,[i8.Http,i11.Store]),
+          i0.ɵmpd(4608,i24.Md2DateUtil,i24.Md2DateUtil,([] as any[])),i0.ɵmpd(512,
               i2.CommonModule,i2.CommonModule,([] as any[])),i0.ɵmpd(1024,i0.ErrorHandler,
               i3.ɵa,([] as any[])),i0.ɵmpd(1024,i0.APP_INITIALIZER,(p0_0:any,p0_1:any) => {
             return [i3.ɵc(p0_0,p0_1)];
@@ -91,13 +94,14 @@ export const DevPortalPagesModuleNgFactory:i0.NgModuleFactory<i1.DevPortalPagesM
               i5.BrowserAnimationsModule,i5.BrowserAnimationsModule,([] as any[])),
           i0.ɵmpd(512,i7.ɵba,i7.ɵba,([] as any[])),i0.ɵmpd(512,i7.FormsModule,i7.FormsModule,
               ([] as any[])),i0.ɵmpd(512,i8.HttpModule,i8.HttpModule,([] as any[])),
-          i0.ɵmpd(512,i19.RouterModule,i19.RouterModule,[[2,i19.ɵa],[2,i19.Router]]),
-          i0.ɵmpd(512,i24.DevPortalComponentsModule,i24.DevPortalComponentsModule,
-              ([] as any[])),i0.ɵmpd(512,i25.RolePickerModule,i25.RolePickerModule,
-              ([] as any[])),i0.ɵmpd(512,i26.Md2DatepickerModule,i26.Md2DatepickerModule,
-              ([] as any[])),i0.ɵmpd(512,i27.DevPortalServicesModule,i27.DevPortalServicesModule,
-              ([] as any[])),i0.ɵmpd(512,i28.DevPortalDashboardModule,i28.DevPortalDashboardModule,
+          i0.ɵmpd(512,i20.RouterModule,i20.RouterModule,[[2,i20.ɵa],[2,i20.Router]]),
+          i0.ɵmpd(512,i25.TeleportLoaderModule,i25.TeleportLoaderModule,([] as any[])),
+          i0.ɵmpd(512,i26.DevPortalComponentsModule,i26.DevPortalComponentsModule,
+              ([] as any[])),i0.ɵmpd(512,i27.RolePickerModule,i27.RolePickerModule,
+              ([] as any[])),i0.ɵmpd(512,i28.Md2DatepickerModule,i28.Md2DatepickerModule,
+              ([] as any[])),i0.ɵmpd(512,i29.DevPortalServicesModule,i29.DevPortalServicesModule,
+              ([] as any[])),i0.ɵmpd(512,i30.DevPortalDashboardModule,i30.DevPortalDashboardModule,
               ([] as any[])),i0.ɵmpd(512,i1.DevPortalPagesModule,i1.DevPortalPagesModule,
               ([] as any[]))]);
     });
-//# sourceMappingURL=data:application/json;base64,eyJmaWxlIjoiL2hvbWUvcGF0cmlja21hcnRpbi9Eb2N1bWVudHMvU2hvdXRQb2ludFByb2plY3RzL1RlbGVQb3J0L3RlbGVwb3J0LWFwcC1tb2R1bGVzL3RlbGVwb3J0LW1vZHVsZS1kZXYtcG9ydGFsL21vZHVsZS9wYWdlcy9wYWdlcy5tb2R1bGUubmdmYWN0b3J5LnRzIiwidmVyc2lvbiI6Mywic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibmc6Ly8vaG9tZS9wYXRyaWNrbWFydGluL0RvY3VtZW50cy9TaG91dFBvaW50UHJvamVjdHMvVGVsZVBvcnQvdGVsZXBvcnQtYXBwLW1vZHVsZXMvdGVsZXBvcnQtbW9kdWxlLWRldi1wb3J0YWwvbW9kdWxlL3BhZ2VzL3BhZ2VzLm1vZHVsZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyIgIl0sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7In0=
+//# sourceMappingURL=data:application/json;base64,eyJmaWxlIjoiL2hvbWUvcGF0cmlja21hcnRpbi9Eb2N1bWVudHMvU2hvdXRQb2ludFByb2plY3RzL1RlbGVQb3J0L3RlbGVwb3J0LWFwcC1tb2R1bGVzL3RlbGVwb3J0LW1vZHVsZS1kZXYtcG9ydGFsL21vZHVsZS9wYWdlcy9wYWdlcy5tb2R1bGUubmdmYWN0b3J5LnRzIiwidmVyc2lvbiI6Mywic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibmc6Ly8vaG9tZS9wYXRyaWNrbWFydGluL0RvY3VtZW50cy9TaG91dFBvaW50UHJvamVjdHMvVGVsZVBvcnQvdGVsZXBvcnQtYXBwLW1vZHVsZXMvdGVsZXBvcnQtbW9kdWxlLWRldi1wb3J0YWwvbW9kdWxlL3BhZ2VzL3BhZ2VzLm1vZHVsZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyIgIl0sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OyJ9

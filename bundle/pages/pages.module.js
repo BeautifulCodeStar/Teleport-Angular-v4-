@@ -6,6 +6,7 @@ import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
 import { RouterModule } from "@angular/router";
 import { DevPortalDashboardModule } from "./dashboard/dashboard.module";
+import { TeleportLoaderModule } from "teleport-module-loader";
 import { TeleportDevPortalForgotPasswordComponent } from "./forgot-password/forgot.component";
 import { TeleportDevPortalLoginComponent } from "./login/login.component";
 import { TeleportDevPortalRecoverPasswordComponent } from "./recover-password/recover.component";
@@ -22,6 +23,7 @@ var DevPortalPagesModule = (function () {
                         FormsModule,
                         HttpModule,
                         RouterModule,
+                        TeleportLoaderModule,
                         DevPortalDashboardModule,
                     ],
                     declarations: [
