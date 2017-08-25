@@ -7,21 +7,22 @@ import { Store } from "@ngrx/store";
 import { IntegrationsAWSService } from "../../../../services/integrations.aws.service";
 import { ModalService } from "../../../../services/modal.service";
 import { MessageService } from "../../../../services/message.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 var TeleportDevPortalAppIntegrationAwsComponent = (function () {
-    function TeleportDevPortalAppIntegrationAwsComponent(route, aws, modal, message, store$) {
+    function TeleportDevPortalAppIntegrationAwsComponent(route, aws, modal, message, store$, loader) {
         var _this = this;
         this.route = route;
         this.aws = aws;
         this.modal = modal;
         this.message = message;
         this.store$ = store$;
-        this.isBusy = false;
+        this.loader = loader;
         this.isEditing = false;
         this.accessKey = "";
         this.securityKey = "";
         this.bucket = "";
         this.region = "";
-        this.isBusy = true;
+        this.loader.show("Loading your AWS info...");
         this.route.params
             .filter(function (param) { return !!param.appId; })
             .forEach(function (param) {
@@ -36,6 +37,7 @@ var TeleportDevPortalAppIntegrationAwsComponent = (function () {
             })
                 .catch(function (err) {
                 _this.message.error("AWS Credentials Failure", err.message, err);
+                _this.cancel();
             });
         })
             .catch(function (err) { return console.error(err); });
@@ -43,7 +45,7 @@ var TeleportDevPortalAppIntegrationAwsComponent = (function () {
     TeleportDevPortalAppIntegrationAwsComponent.prototype.ngOnDestroy = function () {
         delete this._application;
         delete this._aws;
-        this.isBusy = false;
+        this.loader.hide();
         this.isEditing = false;
         this.accessKey = "";
         this.securityKey = "";
@@ -76,7 +78,7 @@ var TeleportDevPortalAppIntegrationAwsComponent = (function () {
         this.modal.show("Delete AWS Settings", "<p>Clicking OK will delete your AWS settings.</p><p>Are you sure?</p>", { type: "confirm" })
             .then(function (result) {
             if (result) {
-                _this.isBusy = true;
+                _this.loader.show("Deleting your AWS settings...");
                 _this.aws.deleteAWS(_this.App.name)
                     .then(function (r) {
                     _this._aws = r;
@@ -92,7 +94,7 @@ var TeleportDevPortalAppIntegrationAwsComponent = (function () {
     TeleportDevPortalAppIntegrationAwsComponent.prototype.save = function () {
         var _this = this;
         this.isEditing = false;
-        this.isBusy = true;
+        this.loader.show("Saving your AWS settings...");
         var newAWS = {
             accessKey: this.accessKey,
             securityKey: this.securityKey,
@@ -112,7 +114,7 @@ var TeleportDevPortalAppIntegrationAwsComponent = (function () {
         });
     };
     TeleportDevPortalAppIntegrationAwsComponent.prototype.cancel = function () {
-        this.isBusy = false;
+        this.loader.hide();
         this.isEditing = false;
         this.accessKey = this._aws && this._aws.accessKey || "";
         this.securityKey = this._aws.securityKey ? "**********" : "";
@@ -132,6 +134,7 @@ var TeleportDevPortalAppIntegrationAwsComponent = (function () {
         { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
         { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
         { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
+        { type: TeleportLoaderService, decorators: [{ type: Inject, args: [TeleportLoaderService,] },] },
     ]; };
     return TeleportDevPortalAppIntegrationAwsComponent;
 }());

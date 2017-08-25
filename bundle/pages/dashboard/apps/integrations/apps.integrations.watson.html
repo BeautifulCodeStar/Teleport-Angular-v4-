@@ -7,9 +7,9 @@
     <h5>IBM Watson Text To Speech</h5>
     <p>Enter your IBM Watson Text To Speech service credentials below. Watson is an IBM Bluemix service.</p>
 
-    <div class="full-block-busy-container" style="margin-bottom:50px;min-height:200px;">
+    <div style="margin-bottom:50px;min-height:200px;">
 
-        <form *ngIf="App && Watson" class="form-horizontal" (ngSubmit)="save()" #editAppForm="ngForm">
+        <form *ngIf="Watson" class="form-horizontal" (ngSubmit)="save()" #editAppForm="ngForm">
 
             <fieldset [disabled]="! isEditing">
 
@@ -63,6 +63,5 @@
 
         </form>
 
-        <div class="full-block-busy" *ngIf="isBusy || (! App || ! Watson)"></div>
     </div>
 </div>

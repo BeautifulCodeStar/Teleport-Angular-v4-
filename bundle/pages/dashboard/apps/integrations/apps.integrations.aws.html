@@ -6,9 +6,9 @@
     <h5>Amazon S3</h5>
     <p>Write call recordings directly to your own S3 bucket.</p>
 
-    <div class="full-block-busy-container" style="margin-bottom:50px;min-height:200px;">
+    <div style="margin-bottom:50px;min-height:200px;">
 
-        <form *ngIf="App && AWS" class="form-horizontal" (ngSubmit)="save()" #editAppForm="ngForm">
+        <form *ngIf="AWS" class="form-horizontal" (ngSubmit)="save()" #editAppForm="ngForm">
 
             <fieldset [disabled]="! isEditing">
 
@@ -91,7 +91,6 @@
 
         </form>
 
-        <div class="full-block-busy" *ngIf="isBusy || (! App || ! AWS)"></div>
     </div>
 
 </div>

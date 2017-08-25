@@ -16,6 +16,8 @@ import { IWatson } from "../../../../models/interfaces";
 import { ModalService } from "../../../../services/modal.service";
 import { MessageService } from "../../../../services/message.service";
 
+import { TeleportLoaderService } from "teleport-module-loader";
+
 
 @Component({
     moduleId   : String(module.id),
@@ -24,7 +26,6 @@ import { MessageService } from "../../../../services/message.service";
 })
 export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy {
 
-    public isBusy = false;
     public isEditing = false;
 
     public username = "";
@@ -40,8 +41,9 @@ export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy
         @Inject(ModalService)              private modal: ModalService,
         @Inject(MessageService)            private message: MessageService,
         @Inject(Store)                     private store$: Store<TeleportCoreState & APIv1State>,
+        @Inject(TeleportLoaderService)     private loader: TeleportLoaderService,
     ) {
-        this.isBusy = true;
+        this.loader.show("Loading your IBM Watson settings...");
 
         this.route.params
             .filter((param: any) => !!param.appId)
@@ -66,7 +68,7 @@ export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy
     public ngOnDestroy () {
         delete this._application;
         delete this._watson;
-        this.isBusy = false;
+        this.loader.hide();
         this.isEditing = false;
         this.username = "";
         this.password = "";
@@ -94,7 +96,7 @@ export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy
         this.modal.show("Delete Watson Settings", `<p>Clicking OK will delete your Watson settings.</p><p>Are you sure?</p>`, { type: "confirm" })
             .then(result => {
                 if (result) {
-                    this.isBusy = true;
+                    this.loader.show("Deleting your IBM Watson settings...");
                     this.watson.deleteTextToSpeech(this.App.name)
                         .then((r: IWatson) => {
                             this._watson = r;
@@ -112,7 +114,7 @@ export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy
     public save () {
 
         this.isEditing = false;
-        this.isBusy = true;
+        this.loader.show("Saving your IBM Watson settings...");
 
         const newWatson: IWatsonPutRequest = {
             textToSpeech: {
@@ -134,7 +136,7 @@ export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy
 
 
     public cancel () {
-        this.isBusy = false;
+        this.loader.hide();
         this.isEditing = false;
         this.username = this._watson && this._watson.textToSpeech && this._watson.textToSpeech.username || "";
         this.password = this._watson.textToSpeech.password ? "**********" : "";

@@ -11,19 +11,20 @@ import { IntegrationsWatsonService } from "../../../../services/integrations.wat
 import { IWatson } from "../../../../models/interfaces";
 import { ModalService } from "../../../../services/modal.service";
 import { MessageService } from "../../../../services/message.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 export declare class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy {
     private route;
     private watson;
     private modal;
     private message;
     private store$;
-    isBusy: boolean;
+    private loader;
     isEditing: boolean;
     username: string;
     password: string;
     private _application;
     private _watson;
-    constructor(route: ActivatedRoute, watson: IntegrationsWatsonService, modal: ModalService, message: MessageService, store$: Store<TeleportCoreState & APIv1State>);
+    constructor(route: ActivatedRoute, watson: IntegrationsWatsonService, modal: ModalService, message: MessageService, store$: Store<TeleportCoreState & APIv1State>, loader: TeleportLoaderService);
     ngOnDestroy(): void;
     readonly App: IApplication;
     readonly Watson: IWatson;

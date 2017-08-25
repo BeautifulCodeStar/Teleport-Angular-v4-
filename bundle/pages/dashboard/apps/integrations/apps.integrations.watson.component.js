@@ -7,19 +7,20 @@ import { Store } from "@ngrx/store";
 import { IntegrationsWatsonService } from "../../../../services/integrations.watson.service";
 import { ModalService } from "../../../../services/modal.service";
 import { MessageService } from "../../../../services/message.service";
+import { TeleportLoaderService } from "teleport-module-loader";
 var TeleportDevPortalAppIntegrationWatsonComponent = (function () {
-    function TeleportDevPortalAppIntegrationWatsonComponent(route, watson, modal, message, store$) {
+    function TeleportDevPortalAppIntegrationWatsonComponent(route, watson, modal, message, store$, loader) {
         var _this = this;
         this.route = route;
         this.watson = watson;
         this.modal = modal;
         this.message = message;
         this.store$ = store$;
-        this.isBusy = false;
+        this.loader = loader;
         this.isEditing = false;
         this.username = "";
         this.password = "";
-        this.isBusy = true;
+        this.loader.show("Loading your IBM Watson settings...");
         this.route.params
             .filter(function (param) { return !!param.appId; })
             .forEach(function (param) {
@@ -41,7 +42,7 @@ var TeleportDevPortalAppIntegrationWatsonComponent = (function () {
     TeleportDevPortalAppIntegrationWatsonComponent.prototype.ngOnDestroy = function () {
         delete this._application;
         delete this._watson;
-        this.isBusy = false;
+        this.loader.hide();
         this.isEditing = false;
         this.username = "";
         this.password = "";
@@ -70,7 +71,7 @@ var TeleportDevPortalAppIntegrationWatsonComponent = (function () {
         this.modal.show("Delete Watson Settings", "<p>Clicking OK will delete your Watson settings.</p><p>Are you sure?</p>", { type: "confirm" })
             .then(function (result) {
             if (result) {
-                _this.isBusy = true;
+                _this.loader.show("Deleting your IBM Watson settings...");
                 _this.watson.deleteTextToSpeech(_this.App.name)
                     .then(function (r) {
                     _this._watson = r;
@@ -86,7 +87,7 @@ var TeleportDevPortalAppIntegrationWatsonComponent = (function () {
     TeleportDevPortalAppIntegrationWatsonComponent.prototype.save = function () {
         var _this = this;
         this.isEditing = false;
-        this.isBusy = true;
+        this.loader.show("Saving your IBM Watson settings...");
         var newWatson = {
             textToSpeech: {
                 username: this.username,
@@ -104,7 +105,7 @@ var TeleportDevPortalAppIntegrationWatsonComponent = (function () {
         });
     };
     TeleportDevPortalAppIntegrationWatsonComponent.prototype.cancel = function () {
-        this.isBusy = false;
+        this.loader.hide();
         this.isEditing = false;
         this.username = this._watson && this._watson.textToSpeech && this._watson.textToSpeech.username || "";
         this.password = this._watson.textToSpeech.password ? "**********" : "";
@@ -122,6 +123,7 @@ var TeleportDevPortalAppIntegrationWatsonComponent = (function () {
         { type: ModalService, decorators: [{ type: Inject, args: [ModalService,] },] },
         { type: MessageService, decorators: [{ type: Inject, args: [MessageService,] },] },
         { type: Store, decorators: [{ type: Inject, args: [Store,] },] },
+        { type: TeleportLoaderService, decorators: [{ type: Inject, args: [TeleportLoaderService,] },] },
     ]; };
     return TeleportDevPortalAppIntegrationWatsonComponent;
 }());

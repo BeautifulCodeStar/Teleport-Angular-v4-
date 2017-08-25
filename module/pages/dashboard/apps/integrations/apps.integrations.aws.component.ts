@@ -17,6 +17,8 @@ import { IAWS }           from "../../../../models/interfaces";
 import { ModalService }   from "../../../../services/modal.service";
 import { MessageService } from "../../../../services/message.service";
 
+import { TeleportLoaderService } from "teleport-module-loader";
+
 
 @Component({
     moduleId   : String(module.id),
@@ -25,7 +27,6 @@ import { MessageService } from "../../../../services/message.service";
 })
 export class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
 
-    public isBusy = false;
     public isEditing = false;
 
     public accessKey = "";
@@ -43,8 +44,9 @@ export class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
         @Inject(ModalService)           private modal: ModalService,
         @Inject(MessageService)         private message: MessageService,
         @Inject(Store)                  private store$: Store<TeleportCoreState & APIv1State>,
+        @Inject(TeleportLoaderService)  private loader: TeleportLoaderService,
     ) {
-        this.isBusy = true;
+        this.loader.show("Loading your AWS info...");
 
         this.route.params
             .filter((param: any) => !!param.appId)
@@ -61,6 +63,7 @@ export class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
                 })
                 .catch(err => {
                     this.message.error("AWS Credentials Failure", err.message, err);
+                    this.cancel();
                 });
             })
             .catch(err => console.error(err));
@@ -69,7 +72,7 @@ export class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
     public ngOnDestroy () {
         delete this._application;
         delete this._aws;
-        this.isBusy = false;
+        this.loader.hide();
         this.isEditing = false;
         this.accessKey = "";
         this.securityKey = "";
@@ -101,7 +104,7 @@ export class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
         this.modal.show("Delete AWS Settings", `<p>Clicking OK will delete your AWS settings.</p><p>Are you sure?</p>`, { type: "confirm" })
             .then(result => {
                 if (result) {
-                    this.isBusy = true;
+                    this.loader.show("Deleting your AWS settings...");
                     this.aws.deleteAWS(this.App.name)
                         .then((r: IAWS) => {
                             this._aws = r;
@@ -119,7 +122,7 @@ export class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
     public save () {
 
         this.isEditing = false;
-        this.isBusy = true;
+        this.loader.show("Saving your AWS settings...");
 
         const newAWS: IAWSPutRequest = {
             accessKey  : this.accessKey,
@@ -143,7 +146,7 @@ export class TeleportDevPortalAppIntegrationAwsComponent implements OnDestroy {
 
 
     public cancel () {
-        this.isBusy = false;
+        this.loader.hide();
         this.isEditing = false;
         this.accessKey = this._aws && this._aws.accessKey || "";
         this.securityKey = this._aws.securityKey ? "**********" : "";
