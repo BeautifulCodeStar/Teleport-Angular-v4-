@@ -50,7 +50,7 @@ export class TeleportDevPortalAppIntegrationWatsonComponent implements OnDestroy
             .forEach((param: any) => {
 
                 Promise.all([
-                    this.store$.select("v1_applications").first().map(apps => apps.find(app => app.id === param.appId)).toPromise(),
+                    this.store$.select("v1_applications").first().map(apps => apps.find(app => app.name === param.appId)).toPromise(),
                     this.watson.getTextToSpeech(param.appId),
                 ])
                     .then((r: [IApplication, IWatson]) => {

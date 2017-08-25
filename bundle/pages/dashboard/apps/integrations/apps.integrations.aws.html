@@ -8,7 +8,7 @@
 
     <div style="margin-bottom:50px;min-height:200px;">
 
-        <form *ngIf="AWS" class="form-horizontal" (ngSubmit)="save()" #editAppForm="ngForm">
+        <form *ngIf="App && AWS" class="form-horizontal" (ngSubmit)="save()" #editAppForm="ngForm">
 
             <fieldset [disabled]="! isEditing">
 

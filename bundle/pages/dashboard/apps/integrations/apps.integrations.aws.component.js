@@ -27,7 +27,7 @@ var TeleportDevPortalAppIntegrationAwsComponent = (function () {
             .filter(function (param) { return !!param.appId; })
             .forEach(function (param) {
             Promise.all([
-                _this.store$.select("v1_applications").first().map(function (apps) { return apps.find(function (app) { return app.id === param.appId; }); }).toPromise(),
+                _this.store$.select("v1_applications").first().map(function (apps) { return apps.find(function (app) { return app.name === param.appId; }); }).toPromise(),
                 _this.aws.getAWS(param.appId),
             ])
                 .then(function (r) {

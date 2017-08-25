@@ -9,7 +9,7 @@
 
     <div style="margin-bottom:50px;min-height:200px;">
 
-        <form *ngIf="Watson" class="form-horizontal" (ngSubmit)="save()" #editAppForm="ngForm">
+        <form *ngIf="App && Watson" class="form-horizontal" (ngSubmit)="save()" #editAppForm="ngForm">
 
             <fieldset [disabled]="! isEditing">
 
