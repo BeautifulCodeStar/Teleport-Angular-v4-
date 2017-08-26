@@ -1,5 +1,5 @@
 
-role-picker {
+teleport-dev-portal-role-picker {
 
   /**
    * USER ROLES
@@ -56,11 +56,11 @@ role-picker {
       }
     }
 
-    > role-picker-row > ul {
+    > teleport-dev-portal-role-picker-row > ul {
       padding-right: 4px !important;
     }
 
-    role-picker-row {
+    teleport-dev-portal-role-picker-row {
 
       > ul {
 
@@ -136,7 +136,7 @@ role-picker {
             }
           }
 
-          > role-picker-row {
+          > teleport-dev-portal-role-picker-row {
 
             > ul {
 
@@ -156,7 +156,7 @@ role-picker {
               transform: rotate(0deg);
             }
 
-            > role-picker-row > ul {
+            > teleport-dev-portal-role-picker-row > ul {
               height: 0;
               transform: translateX(110px);
               opacity: 0;

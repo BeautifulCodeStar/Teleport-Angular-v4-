@@ -72,7 +72,7 @@ var TeleportDevPortalUserUpdateComponent = (function () {
     };
     TeleportDevPortalUserUpdateComponent.prototype.deleteUser = function () {
         var _this = this;
-        this.modal.show("Delete Application", "<p>Clicking OK will delete the user \"" + this.User.firstName + " " + this.User.lastName + "\".</p><p>Are you sure?</p>", { type: "confirm" })
+        this.modal.show("Delete User", "<p>Clicking OK will delete the user \"" + this.User.firstName + " " + this.User.lastName + "\".</p><p>Are you sure?</p>", { type: "confirm" })
             .then(function (isOk) {
             if (isOk) {
                 _this.isBusy = true;

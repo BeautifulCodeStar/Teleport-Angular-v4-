@@ -70,9 +70,9 @@ export class ModalService {
 
                 let titleEl = modal.getElementsByClassName("modal-title").item(0) as HTMLHeadElement,
                     bodyEl = modal.getElementsByClassName("modal-body").item(0) as HTMLDivElement,
-                    cancelButtonEl: HTMLButtonElement = new HTMLButtonElement(), // Just to shutup the undefined checker.
-                    closeIconEl: HTMLButtonElement = new HTMLButtonElement(),
-                    okButtonEl: HTMLButtonElement = new HTMLButtonElement();
+                    cancelButtonEl: HTMLButtonElement = this.doc.createElement("BUTTON") as HTMLButtonElement, // Just to shutup the undefined checker.
+                    closeIconEl: HTMLButtonElement = this.doc.createElement("BUTTON") as HTMLButtonElement,
+                    okButtonEl: HTMLButtonElement = this.doc.createElement("BUTTON") as HTMLButtonElement;
 
                 titleEl.innerHTML = title;
                 bodyEl.innerHTML = message;

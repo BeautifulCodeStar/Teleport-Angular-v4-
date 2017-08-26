@@ -15,7 +15,7 @@ var ModalService = (function () {
                 var modal_1 = _this.doc.createElement("div");
                 modal_1.innerHTML = MODAL_HTML;
                 modal_1 = modal_1.firstElementChild;
-                var titleEl = modal_1.getElementsByClassName("modal-title").item(0), bodyEl = modal_1.getElementsByClassName("modal-body").item(0), cancelButtonEl = new HTMLButtonElement(), closeIconEl = new HTMLButtonElement(), okButtonEl = new HTMLButtonElement();
+                var titleEl = modal_1.getElementsByClassName("modal-title").item(0), bodyEl = modal_1.getElementsByClassName("modal-body").item(0), cancelButtonEl = _this.doc.createElement("BUTTON"), closeIconEl = _this.doc.createElement("BUTTON"), okButtonEl = _this.doc.createElement("BUTTON");
                 titleEl.innerHTML = title;
                 bodyEl.innerHTML = message;
                 var buttons = modal_1.getElementsByTagName("button");
