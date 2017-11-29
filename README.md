@@ -34,8 +34,3 @@ Coming Soon!
 
 Provide complete documentation for the library. Class and method signatures. Element attributes.
 
-
-## Developers
-
-List of module developers:
-- Patrick Martin <patrick.martin@shoutpoint.com>

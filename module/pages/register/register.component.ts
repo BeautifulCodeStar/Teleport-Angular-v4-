@@ -18,6 +18,7 @@ import { EmailValidator } from "../../utils/EmailValidator";
     moduleId   : String(module.id),
     selector   : "teleport-dev-portal-register",
     templateUrl: "register.html",
+    styleUrls: ["register.css"]
 })
 export class TeleportDevPortalRegisterComponent implements OnInit, OnDestroy {
 
